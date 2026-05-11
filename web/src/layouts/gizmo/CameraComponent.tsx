@@ -1,8 +1,9 @@
 import React, { useCallback } from 'react'
 import { PerspectiveCamera } from '@react-three/drei'
-import { useNuiEvent } from '../../hooks/useNuiEvent'
+import { useNuiValidatedEvent } from '../../hooks/useNuiValidatedEvent'
 import { useThree } from '@react-three/fiber'
 import { MathUtils } from 'three'
+import { cameraPositionSchema } from '../../atoms/object'
 
 export const CameraComponent = React.memo(() => {
   const { camera } = useThree()
@@ -11,7 +12,7 @@ export const CameraComponent = React.memo(() => {
     return t > 0 && t < 90 ? e : (t > -180 && t < -90) || t > 0 ? -e : e
   }, []);
 
-  useNuiEvent('setCameraPosition', ({ position, rotation }: any) => {
+  useNuiValidatedEvent('setCameraPosition', cameraPositionSchema, ({ position, rotation }) => {
     camera.position.set(position.x, position.z, -position.y)
     camera.rotation.order = 'YZX'
 

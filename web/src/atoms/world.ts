@@ -1,4 +1,15 @@
 import { atom, useRecoilValue } from 'recoil'
+import { z } from 'zod'
+
+export const clockDataSchema = z.object({
+    hour: z.number(),
+    minute: z.number(),
+})
+
+export const worldDataSchema = z.object({
+    weather: z.string(),
+    clock: clockDataSchema,
+})
 
 export const worldHourAtom = atom<number>({ key: 'worldHour', default: 0 })
 export const worldMinuteAtom = atom<number>({ key: 'worldMinute', default: 0 })

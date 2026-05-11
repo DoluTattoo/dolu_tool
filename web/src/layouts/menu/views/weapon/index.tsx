@@ -1,12 +1,12 @@
 import { Accordion, Button, Group, Paper, ScrollArea, Stack, Text, Image, Center, Pagination } from '@mantine/core'
 import { useEffect, useState} from 'react'
 import { useRecoilState, useSetRecoilState } from 'recoil'
-import { getSearchWeaponInput, weaponsPageCountAtom, weaponsActivePageAtom, weaponsPageContentAtom, WeaponProp } from '../../../../atoms/weapon'
+import { getSearchWeaponInput, weaponsPageCountAtom, weaponsActivePageAtom, weaponsPageContentAtom, weaponPageContentSchema } from '../../../../atoms/weapon'
 import { displayImageAtom, imagePathAtom } from '../../../../atoms/imgPreview'
 import { setClipboard } from '../../../../utils/setClipboard'
 import WeaponSearch from './components/weaponListSearch'
 import { fetchNui } from '../../../../utils/fetchNui'
-import { useNuiEvent } from '../../../../hooks/useNuiEvent'
+import { useNuiValidatedEvent } from '../../../../hooks/useNuiValidatedEvent'
 import { useLocales } from '../../../../providers/LocaleProvider'
 
 const Weapon: React.FC = () => {
@@ -16,7 +16,7 @@ const Weapon: React.FC = () => {
   const [pageCount, setPageCount] = useRecoilState(weaponsPageCountAtom)
   const [activePage, setPage] = useRecoilState(weaponsActivePageAtom)
 
-  useNuiEvent('setPageContent', (data: {type: string, content: WeaponProp[], maxPages: number}) => {
+  useNuiValidatedEvent('setPageContent', weaponPageContentSchema, (data) => {
     if (data.type === 'weapons') {
       setPageContent(data.content)
       setPageCount(data.maxPages)

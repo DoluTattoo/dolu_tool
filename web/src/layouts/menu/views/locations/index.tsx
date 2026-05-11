@@ -1,14 +1,14 @@
 import { Accordion, Badge, Button, Center, Checkbox, Group, Pagination, Paper, ScrollArea, Stack, Text } from '@mantine/core'
 import { openModal } from '@mantine/modals'
 import CreateLocation from './components/modals/CreateLocation'
-import { Location, getSearchLocationInput, locationsActivePageAtom, locationCustomFilterAtom, locationsPageCountAtom, locationVanillaFilterAtom, locationsPageContentAtom } from '../../../../atoms/location'
+import { getSearchLocationInput, locationsActivePageAtom, locationCustomFilterAtom, locationsPageCountAtom, locationPageContentSchema, locationVanillaFilterAtom, locationsPageContentAtom } from '../../../../atoms/location'
 import LocationSearch from './components/LocationSearch'
 import { setClipboard } from '../../../../utils/setClipboard'
 import { useEffect, useState } from 'react'
 import RenameLocation from './components/modals/RenameLocation'
 import { useRecoilState } from 'recoil'
 import { fetchNui } from '../../../../utils/fetchNui'
-import { useNuiEvent } from '../../../../hooks/useNuiEvent'
+import { useNuiValidatedEvent } from '../../../../hooks/useNuiValidatedEvent'
 import DeleteLocation from './components/modals/DeleteLocation'
 import { useLocales } from '../../../../providers/LocaleProvider'
 
@@ -19,7 +19,7 @@ const Locations: React.FC = () => {
   const [pageCount, setPageCount] = useRecoilState(locationsPageCountAtom)
   const [activePage, setPage] = useRecoilState(locationsActivePageAtom)
 
-  useNuiEvent('setPageContent', (data: {type: string, content: Location[], maxPages: number}) => {
+  useNuiValidatedEvent('setPageContent', locationPageContentSchema, (data) => {
     if (data.type === 'locations') {
       setPageContent(data.content)
       setPageCount(data.maxPages)

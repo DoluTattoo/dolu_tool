@@ -7,10 +7,11 @@ import {
   interiorAtom,
   timecycleAtom,
   timecycleListAtom,
+  timecycleOptionSchema,
 } from "../../../../../atoms/interior";
 import { fetchNui } from "../../../../../utils/fetchNui";
 import { useLocales } from "../../../../../providers/LocaleProvider";
-import { useNuiEvent } from "../../../../../hooks/useNuiEvent";
+import { useNuiValidatedEvent } from "../../../../../hooks/useNuiValidatedEvent";
 
 // Memoized room info row
 const RoomInfoRow = memo(
@@ -71,8 +72,9 @@ const RoomsElement: React.FC = memo(() => {
     timecycleAtom
   );
 
-  useNuiEvent(
+  useNuiValidatedEvent(
     "setTimecycleList",
+    timecycleOptionSchema.array(),
     (data: Array<{ label: string; value: string }>) => {
       setTimecycleList(data);
     }

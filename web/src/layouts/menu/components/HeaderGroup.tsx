@@ -4,9 +4,9 @@ import { TbLogout } from 'react-icons/tb'
 import { AiFillGithub } from 'react-icons/ai'
 import { FaDiscord } from 'react-icons/fa'
 import { SiKofi } from "react-icons/si"
-import { menuVisibilityAtom } from '../../../atoms/visibility'
+import { emptyEventSchema, menuVisibilityAtom } from '../../../atoms/visibility'
 import { Version } from '../../../atoms/version'
-import { useNuiEvent } from '../../../hooks/useNuiEvent'
+import { useNuiValidatedEvent } from '../../../hooks/useNuiValidatedEvent'
 import { fetchNui } from '../../../utils/fetchNui'
 import { useLocales } from '../../../providers/LocaleProvider'
 import { useExitListener } from '../../../hooks/useExitListener'
@@ -17,7 +17,7 @@ const HeaderGroup: React.FC<{data: Version}> = ({ data }) => {
   const { locale } = useLocales()
   const [visible, setVisible] = useRecoilState(menuVisibilityAtom)
 
-  useNuiEvent('setMenuVisible', () => setVisible(true))
+  useNuiValidatedEvent('setMenuVisible', emptyEventSchema, () => setVisible(true))
   useExitListener(setVisible)
 
   const [opened, setOpened] = useState(false)

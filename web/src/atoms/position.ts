@@ -1,4 +1,10 @@
 import { atom, useRecoilValue } from 'recoil'
+import { z } from 'zod'
+
+export const playerCoordsSchema = z.object({
+    coords: z.string(),
+    heading: z.string(),
+})
 
 const mockPosition: string = "0, 0, 0"
 

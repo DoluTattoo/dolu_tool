@@ -1,14 +1,23 @@
 import { atom, useRecoilValue } from 'recoil'
+import { z } from 'zod'
 
-export interface VehicleProp {
-  hash: number,
-  name: string,
-  class: string,
-  displayName: string,
-  type: string,
-  dlc: string,
-  manufacturer: string,
-}
+export const vehiclePropSchema = z.object({
+  hash: z.number(),
+  name: z.string(),
+  class: z.string(),
+  displayName: z.string(),
+  type: z.string(),
+  dlc: z.string(),
+  manufacturer: z.string(),
+})
+
+export type VehicleProp = z.infer<typeof vehiclePropSchema>
+
+export const vehiclePageContentSchema = z.object({
+  type: z.literal('vehicles'),
+  content: z.array(vehiclePropSchema),
+  maxPages: z.number(),
+})
 
 const mockVehicleList: VehicleProp[] = [
     {

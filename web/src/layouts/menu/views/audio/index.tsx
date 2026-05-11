@@ -3,8 +3,8 @@ import { useDebouncedValue } from '@mantine/hooks'
 import { useEffect, useState } from 'react'
 import { BsClipboard, BsFillStopFill, BsPlayFill } from 'react-icons/bs'
 import { useRecoilState } from 'recoil'
-import { drawStaticEmittersAtom, radioStationsListAtom, StaticEmitter, staticEmittersDrawDistanceAtom, staticEmittersListAtom } from '../../../../atoms/audio'
-import { useNuiEvent } from '../../../../hooks/useNuiEvent'
+import { drawStaticEmittersAtom, radioStationsListAtom, selectItemSchema, staticEmitterSchema, staticEmittersDrawDistanceAtom, staticEmittersListAtom } from '../../../../atoms/audio'
+import { useNuiValidatedEvent } from '../../../../hooks/useNuiValidatedEvent'
 import { useLocales } from "../../../../providers/LocaleProvider"
 import { fetchNui } from '../../../../utils/fetchNui'
 import { setClipboard } from '../../../../utils/setClipboard'
@@ -18,12 +18,12 @@ const Audio: React.FC = () => {
     const [radioStationsList, setRadioStationsList] = useRecoilState(radioStationsListAtom)
     const [debouncedDistance] = useDebouncedValue(drawDistance, 200)
     
-    useNuiEvent('setClosestEmitter', (data: StaticEmitter) => {
+    useNuiValidatedEvent('setClosestEmitter', staticEmitterSchema, (data) => {
         setClosestEmitter(data)
         setRadioStation(data.radiostation)
     })
     
-    useNuiEvent('setRadioStationsList', (data: Array<{ label: string, value: string }>) => {
+    useNuiValidatedEvent('setRadioStationsList', selectItemSchema.array(), (data) => {
         setRadioStationsList(data)
     })
 

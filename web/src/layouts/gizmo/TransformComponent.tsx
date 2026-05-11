@@ -2,9 +2,9 @@ import React, { Suspense, useRef, useCallback, useState, useEffect } from 'react
 import { TransformControls } from '@react-three/drei'
 import { Mesh, MathUtils } from 'three'
 import { useRecoilValue } from 'recoil'
-import { useNuiEvent } from '../../hooks/useNuiEvent'
+import { useNuiValidatedEvent } from '../../hooks/useNuiValidatedEvent'
 import { fetchNui } from '../../utils/fetchNui'
-import { RotateSnapAtom, TranslateSnapAtom } from '../../atoms/object'
+import { RotateSnapAtom, transformEntityPayloadSchema, TranslateSnapAtom } from '../../atoms/object'
 
 export const TransformComponent = React.memo(({ space, mode, currentEntity, setCurrentEntity, onMouseUp, onMouseDown }: TransformComponent) => {
   const mesh = useRef<Mesh>(null!);
@@ -12,8 +12,8 @@ export const TransformComponent = React.memo(({ space, mode, currentEntity, setC
   const rotateSnap = useRecoilValue(RotateSnapAtom);
   const [shiftPressed, setShiftPressed] = useState(false);
 
-  useNuiEvent<TransformEntity>('setGizmoEntity', (entity: TransformEntity | undefined): void => {
-    setCurrentEntity(entity);
+  useNuiValidatedEvent('setGizmoEntity', transformEntityPayloadSchema, (entity): void => {
+    setCurrentEntity(entity as TransformEntity | undefined);
 
     // If entity is undefined or missing required data, clear the gizmo
     if (!entity || !entity.position || !entity.rotation) {

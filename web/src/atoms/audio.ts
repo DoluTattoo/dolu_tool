@@ -1,15 +1,23 @@
 import { SelectItem } from "@mantine/core"
 import { atom } from "recoil"
+import { z } from "zod"
 
-export interface StaticEmitter {
-    name: string
-    coords: string
-    distance: number
-    flags: string
-    interior: string
-    room: string
-    radiostation: string
-}
+export const selectItemSchema = z.object({
+    label: z.string(),
+    value: z.string(),
+})
+
+export const staticEmitterSchema = z.object({
+    name: z.string(),
+    coords: z.string(),
+    distance: z.number(),
+    flags: z.string(),
+    interior: z.string(),
+    room: z.string(),
+    radiostation: z.string(),
+})
+
+export type StaticEmitter = z.infer<typeof staticEmitterSchema>
 
 const mockStaticEmitters: StaticEmitter = {
     name: "collision_75oaiz",

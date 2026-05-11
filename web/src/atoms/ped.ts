@@ -1,9 +1,18 @@
 import { atom, useRecoilValue } from 'recoil'
+import { z } from 'zod'
 
-export interface PedProp {
-  name: string,
-  hash?: number
-}
+export const pedPropSchema = z.object({
+  name: z.string(),
+  hash: z.number().optional(),
+})
+
+export type PedProp = z.infer<typeof pedPropSchema>
+
+export const pedPageContentSchema = z.object({
+  type: z.literal('peds'),
+  content: z.array(pedPropSchema),
+  maxPages: z.number(),
+})
 
 const mockPedList: PedProp[] = [
     {

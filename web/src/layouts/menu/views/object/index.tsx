@@ -3,10 +3,10 @@ import { useRecoilState } from 'recoil'
 import { Accordion, ActionIcon, Button, Group, Paper, ScrollArea, Space, Text, TextInput } from '@mantine/core'
 import { openModal } from '@mantine/modals'
 import { MdLibraryAdd, MdDeleteForever } from 'react-icons/md'
-import { Entity, ObjectList, ObjectListAtom } from '../../../../atoms/object'
+import { Entity, ObjectListAtom, objectDataPayloadSchema, objectListPayloadSchema } from '../../../../atoms/object'
 import { fetchNui } from '../../../../utils/fetchNui'
 import AddEntity from './components/modals/AddEntity'
-import { useNuiEvent } from '../../../../hooks/useNuiEvent'
+import { useNuiValidatedEvent } from '../../../../hooks/useNuiValidatedEvent'
 import DeleteAllEntities from './components/modals/DeleteAllEntities'
 import { setClipboard } from '../../../../utils/setClipboard'
 import { useLocales } from '../../../../providers/LocaleProvider'
@@ -79,12 +79,12 @@ const Object: React.FC = () => {
     const [copiedCoords, setCopiedCoords] = useState<boolean>(false)
     const [copiedRotation, setCopiedRotation] = useState<boolean>(false)
 
-    useNuiEvent('setObjectList', (data: { entitiesList: ObjectList | null }) => {
+    useNuiValidatedEvent('setObjectList', objectListPayloadSchema, (data) => {
         if (data.entitiesList === null) return;
         setObjectList(data.entitiesList)
     })
 
-    useNuiEvent('setObjectData', (data: { entity: Entity }) => {
+    useNuiValidatedEvent('setObjectData', objectDataPayloadSchema, (data) => {
         if (!data.entity?.id) {
             setAccordionItem(null)
             return
