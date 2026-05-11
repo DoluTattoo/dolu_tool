@@ -1,38 +1,43 @@
 import { atom, selector, useRecoilValue } from 'recoil'
+import { z } from 'zod'
 
-export interface InteriorData {
-    interiorId: number
-    roomCount?: number
-    portalCount?: number
-    rooms?: Array<{
-        index: number
-        name: string
-        timecycle: string
-        isCurrent: boolean
-        flags: {
-            list: string[]
-            total: number
-        }
-    }>
-    portals?: Array<{
-        index: number
-        roomFrom: number
-        roomTo: number
-        flags: {
-            list: string[]
-            total: number
-        }
-    }>
-    currentRoom?: {
-        index: number
-        name: string
-        timecycle: string
-        flags: {
-            list: string[]
-            total: number
-        }
-    }
-}
+export const timecycleOptionSchema = z.object({
+    label: z.string(),
+    value: z.string(),
+})
+
+const flagValueSchema = z.union([z.string(), z.number()]).transform(String)
+
+const interiorFlagsSchema = z.object({
+    list: z.array(flagValueSchema),
+    total: z.number(),
+})
+
+const roomSchema = z.object({
+    index: z.number(),
+    name: z.string(),
+    timecycle: z.string(),
+    isCurrent: z.boolean().optional(),
+    flags: interiorFlagsSchema,
+})
+
+const portalSchema = z.object({
+    index: z.number(),
+    roomFrom: z.number(),
+    roomTo: z.number(),
+    flags: interiorFlagsSchema,
+})
+
+export const interiorDataSchema = z.object({
+    interiorId: z.number(),
+    roomCount: z.number().optional(),
+    portalCount: z.number().optional(),
+    rooms: z.array(roomSchema).optional(),
+    portals: z.array(portalSchema).optional(),
+    currentRoom: roomSchema.omit({ isCurrent: true }).optional(),
+})
+
+export type InteriorData = z.infer<typeof interiorDataSchema>
 
 const mockInterior: InteriorData = {
     interiorId: -1

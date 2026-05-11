@@ -1,5 +1,6 @@
 import { Context, createContext, useContext, useEffect, useState } from 'react'
-import { useNuiEvent } from '../hooks/useNuiEvent'
+import { z } from 'zod'
+import { useNuiValidatedEvent } from '../hooks/useNuiValidatedEvent'
 import { fetchNui } from '../utils/fetchNui'
 import { debugData } from '../utils/debugData'
 
@@ -147,6 +148,8 @@ interface Locale {
   ui_room: string
   ui_radio_station: string
 }
+
+const localeSchema = z.record(z.string(), z.string()) as unknown as z.ZodSchema<Locale>
 
 debugData(
   [
@@ -458,7 +461,7 @@ const LocaleProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =
     fetchNui('loadLocale')
   }, [])
 
-  useNuiEvent('setLocale', async (data: Locale) => setLocale(data))
+  useNuiValidatedEvent('setLocale', localeSchema, (data) => setLocale(data))
 
   return <LocaleCtx.Provider value={{ locale, setLocale }}>{children}</LocaleCtx.Provider>
 }

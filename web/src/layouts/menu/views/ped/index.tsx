@@ -1,12 +1,12 @@
 import { Accordion, Button, Group, Paper, ScrollArea, Stack, Text, Image, Center, Pagination } from '@mantine/core'
 import { useEffect, useState} from 'react'
 import { useRecoilState, useSetRecoilState } from 'recoil'
-import { getSearchPedInput, PedProp, pedsActivePageAtom, pedsPageContentAtom, pedsPageCountAtom } from '../../../../atoms/ped'
+import { getSearchPedInput, pedPageContentSchema, pedsActivePageAtom, pedsPageContentAtom, pedsPageCountAtom } from '../../../../atoms/ped'
 import { displayImageAtom, imagePathAtom } from '../../../../atoms/imgPreview'
 import { setClipboard } from '../../../../utils/setClipboard'
 import PedSearch from './components/pedListSearch'
 import { fetchNui } from '../../../../utils/fetchNui'
-import { useNuiEvent } from '../../../../hooks/useNuiEvent'
+import { useNuiValidatedEvent } from '../../../../hooks/useNuiValidatedEvent'
 import { useLocales } from '../../../../providers/LocaleProvider'
 
 const Ped: React.FC = () => {
@@ -16,7 +16,7 @@ const Ped: React.FC = () => {
   const [pageCount, setPageCount] = useRecoilState(pedsPageCountAtom)
   const [activePage, setPage] = useRecoilState(pedsActivePageAtom)
 
-  useNuiEvent('setPageContent', (data: {type: string, content: PedProp[], maxPages: number}) => {
+  useNuiValidatedEvent('setPageContent', pedPageContentSchema, (data) => {
     if (data.type === 'peds') {
       setPageContent(data.content)
       setPageCount(data.maxPages)

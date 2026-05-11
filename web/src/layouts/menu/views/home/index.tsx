@@ -8,9 +8,9 @@ import { RiHomeGearFill } from 'react-icons/ri'
 import { useRecoilState } from 'recoil'
 import { getInteriorData } from '../../../../atoms/interior'
 import { getLastLocation } from '../../../../atoms/location'
-import { positionAtom } from '../../../../atoms/position'
+import { playerCoordsSchema, positionAtom } from '../../../../atoms/position'
 import { worldFreezeTimeAtom } from '../../../../atoms/world'
-import { useNuiEvent } from '../../../../hooks/useNuiEvent'
+import { useNuiValidatedEvent } from '../../../../hooks/useNuiValidatedEvent'
 import { useLocales } from '../../../../providers/LocaleProvider'
 import { fetchNui } from '../../../../utils/fetchNui'
 import { setClipboard } from '../../../../utils/setClipboard'
@@ -26,7 +26,7 @@ const Home: React.FC = () => {
   const [timeFrozen, setTimeFrozen] = useRecoilState(worldFreezeTimeAtom)
   const [copiedCoords, setCopiedCoords] = useState(false)
 
-  useNuiEvent('playerCoords', (data: { coords: string, heading: string }) => {
+  useNuiValidatedEvent('playerCoords', playerCoordsSchema, (data) => {
     setCurrentCoords(data.coords)
     setCurrentHeading(data.heading)
   })

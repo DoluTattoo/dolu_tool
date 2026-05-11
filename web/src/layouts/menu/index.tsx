@@ -1,11 +1,11 @@
 import { AppShell, Box, createStyles, Transition } from '@mantine/core'
 import { useRecoilState, useSetRecoilState } from 'recoil'
 import { Route, Routes } from 'react-router-dom'
-import { useNuiEvent } from '../../hooks/useNuiEvent'
-import { menuVisibilityAtom } from '../../atoms/visibility'
-import { Version, versionAtom } from '../../atoms/version'
-import { interiorAtom, InteriorData, timecycleAtom, timecycleListAtom } from '../../atoms/interior'
-import { lastLocationsAtom, Location } from '../../atoms/location'
+import { useNuiValidatedEvent } from '../../hooks/useNuiValidatedEvent'
+import { menuVisibilityAtom, menuVisiblePayloadSchema } from '../../atoms/visibility'
+import { versionAtom } from '../../atoms/version'
+import { interiorAtom, interiorDataSchema, timecycleAtom, timecycleListAtom, timecycleOptionSchema } from '../../atoms/interior'
+import { lastLocationsAtom, locationSchema } from '../../atoms/location'
 import { positionAtom } from '../../atoms/position'
 import HeaderGroup from './components/HeaderGroup'
 import Nav from './components/Nav'
@@ -145,23 +145,23 @@ const Menu: React.FC = () => {
 
   useExitListener(setVisible)
 
-  useNuiEvent('setMenuVisible', (data: {version: Version, lastLocation: Location, position: string}) => {
+  useNuiValidatedEvent('setMenuVisible', menuVisiblePayloadSchema, (data) => {
     setVersion(data.version)
     setLastLocation(data.lastLocation)
     setPosition(data.position)
     setVisible(true)
   })
 
-  useNuiEvent('setLastLocation', (data: Location) => {
+  useNuiValidatedEvent('setLastLocation', locationSchema, (data) => {
     setLastLocation(data)
   })
 
-  useNuiEvent('setIntData', (data: InteriorData) => {
+  useNuiValidatedEvent('setIntData', interiorDataSchema, (data) => {
     setInteriorData(data)
     if (data.currentRoom !== undefined) setTimecycle(data.currentRoom.timecycle)
   })
 
-  useNuiEvent('setTimecycleList', (data: Array<{ label: string, value: string }>) => {
+  useNuiValidatedEvent('setTimecycleList', timecycleOptionSchema.array(), (data) => {
     setTimecycleList(data)
   })
 

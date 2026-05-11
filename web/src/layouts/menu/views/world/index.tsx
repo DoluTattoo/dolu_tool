@@ -2,9 +2,9 @@ import { Text, Stack, SimpleGrid, Paper, Group, Select, NumberInput, Button, Spa
 import { AiOutlineClockCircle } from 'react-icons/ai'
 import { TiWeatherPartlySunny } from 'react-icons/ti'
 import { fetchNui } from '../../../../utils/fetchNui'
-import { useNuiEvent } from '../../../../hooks/useNuiEvent'
+import { useNuiValidatedEvent } from '../../../../hooks/useNuiValidatedEvent'
 import { useRecoilState } from 'recoil'
-import { worldFreezeTimeAtom, worldFreezeWeatherAtom, worldHourAtom, worldMinuteAtom, worldWeatherAtom } from '../../../../atoms/world'
+import { clockDataSchema, worldDataSchema, worldFreezeTimeAtom, worldFreezeWeatherAtom, worldHourAtom, worldMinuteAtom, worldWeatherAtom } from '../../../../atoms/world'
 import { useLocales } from '../../../../providers/LocaleProvider'
 
 const World: React.FC = () => {
@@ -15,13 +15,13 @@ const World: React.FC = () => {
   const [timeFrozen, setTimeFrozen] = useRecoilState(worldFreezeTimeAtom)
   const [weatherFrozen, setWeatherFrozen] = useRecoilState(worldFreezeWeatherAtom)
 
-  useNuiEvent('setWorldData', (data: any) => {
+  useNuiValidatedEvent('setWorldData', worldDataSchema, (data) => {
     setWeatherValue(data.weather)
     setHourValue(data.clock.hour)
     setMinuteValue(data.clock.minute)
   })
 
-  useNuiEvent('setClockData', (data: any) => {
+  useNuiValidatedEvent('setClockData', clockDataSchema, (data) => {
     setHourValue(data.hour)
     setMinuteValue(data.minute)
   })

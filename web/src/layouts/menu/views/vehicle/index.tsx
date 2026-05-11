@@ -1,12 +1,12 @@
 import { Accordion, Button, Group, Paper, ScrollArea, Stack, Text, Image, Center, Pagination } from '@mantine/core'
 import { useEffect, useState} from 'react'
 import { useRecoilState, useSetRecoilState } from 'recoil'
-import { getSearchVehicleInput, vehiclesPageCountAtom, vehiclesActivePageAtom, vehiclesPageContentAtom, VehicleProp } from '../../../../atoms/vehicle'
+import { getSearchVehicleInput, vehiclesPageCountAtom, vehiclesActivePageAtom, vehiclesPageContentAtom, vehiclePageContentSchema } from '../../../../atoms/vehicle'
 import { displayImageAtom, imagePathAtom } from '../../../../atoms/imgPreview'
 import { setClipboard } from '../../../../utils/setClipboard'
 import VehicleSearch from './components/vehicleListSearch'
 import { fetchNui } from '../../../../utils/fetchNui'
-import { useNuiEvent } from '../../../../hooks/useNuiEvent'
+import { useNuiValidatedEvent } from '../../../../hooks/useNuiValidatedEvent'
 import { useLocales } from '../../../../providers/LocaleProvider'
 
 const Vehicle: React.FC = () => {
@@ -16,7 +16,7 @@ const Vehicle: React.FC = () => {
   const [pageCount, setPageCount] = useRecoilState(vehiclesPageCountAtom)
   const [activePage, setPage] = useRecoilState(vehiclesActivePageAtom)
 
-  useNuiEvent('setPageContent', (data: {type: string, content: VehicleProp[], maxPages: number}) => {
+  useNuiValidatedEvent('setPageContent', vehiclePageContentSchema, (data) => {
     if (data.type === 'vehicles') {
       setPageContent(data.content)
       setPageCount(data.maxPages)

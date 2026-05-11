@@ -1,15 +1,24 @@
 import { atom, useRecoilValue } from 'recoil'
+import { z } from 'zod'
 
-export interface Location {
-  name: string,
-  x: number,
-  y: number,
-  z: number,
-  heading?: number,
-  custom?: boolean
-  metadata?: any,
-  isLastLocationUsed?: boolean
-}
+export const locationSchema = z.object({
+  name: z.string(),
+  x: z.number(),
+  y: z.number(),
+  z: z.number(),
+  heading: z.number().optional(),
+  custom: z.boolean().optional(),
+  metadata: z.unknown().optional(),
+  isLastLocationUsed: z.boolean().optional(),
+})
+
+export type Location = z.infer<typeof locationSchema>
+
+export const locationPageContentSchema = z.object({
+  type: z.literal('locations'),
+  content: z.array(locationSchema),
+  maxPages: z.number(),
+})
 
 const mockLocations: Location[] = [
     {

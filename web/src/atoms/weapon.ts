@@ -1,9 +1,18 @@
 import { atom, useRecoilValue } from 'recoil'
+import { z } from 'zod'
 
-export interface WeaponProp {
-  hash: number,
-  name: string,
-}
+export const weaponPropSchema = z.object({
+  hash: z.number(),
+  name: z.string(),
+})
+
+export type WeaponProp = z.infer<typeof weaponPropSchema>
+
+export const weaponPageContentSchema = z.object({
+  type: z.literal('weapons'),
+  content: z.array(weaponPropSchema),
+  maxPages: z.number(),
+})
 
 const mockWeaponList: WeaponProp[] = [
     {
