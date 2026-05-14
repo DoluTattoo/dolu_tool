@@ -6,7 +6,7 @@ import { useNuiEvent } from '../../hooks/useNuiEvent'
 import { fetchNui } from '../../utils/fetchNui'
 import { RotateSnapAtom, TranslateSnapAtom } from '../../atoms/object'
 
-export const TransformComponent = React.memo(({ space, mode, currentEntity, setCurrentEntity, onMouseUp, onMouseDown }: TransformComponent) => {
+export const TransformComponent = React.memo(({ space, mode, currentEntity, setCurrentEntity, onMouseUp, onMouseDown }: TransformComponentProps) => {
   const mesh = useRef<Mesh>(null!);
   const translateSnap = useRecoilValue(TranslateSnapAtom);
   const rotateSnap = useRecoilValue(RotateSnapAtom);
@@ -62,14 +62,16 @@ export const TransformComponent = React.memo(({ space, mode, currentEntity, setC
 
     fetchNui('dolu_tool:updateGizmoTransform', { position, rotation });
 
-    if (currentEntity) {
-      setCurrentEntity({
-        ...currentEntity,
-        position: position as TransformEntity['position'],
-        rotation: rotation as TransformEntity['rotation']
-      });
-    }
-  }, [mesh, currentEntity, setCurrentEntity]);
+    setCurrentEntity((prev) =>
+      prev
+        ? {
+          ...prev,
+          position: position as TransformEntity['position'],
+          rotation: rotation as TransformEntity['rotation']
+        }
+        : prev
+    );
+  }, [mesh, setCurrentEntity]);
 
   const handleMouseDown = useCallback(() => {
     onMouseDown?.()

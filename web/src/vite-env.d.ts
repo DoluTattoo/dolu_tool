@@ -25,10 +25,16 @@ interface ModeSelector {
   currentEntity: TransformEntity | undefined;
 }
 
-interface TransformComponent extends ModeSelector {
+interface TransformComponentProps extends ModeSelector {
   currentEntity: TransformEntity | undefined;
   onChangeSpace?: () => void;
-  setCurrentEntity: (value: TransformEntity | undefined) => void;
+  /** Matches `useState` setter; supports functional updates for stable callbacks. */
+  setCurrentEntity: (
+    value:
+      | TransformEntity
+      | undefined
+      | ((prev: TransformEntity | undefined) => TransformEntity | undefined),
+  ) => void;
   onChangeMode?: (value: GizmoEditorMode) => void;
 
   onMouseUp?: (e?: THREE.Event) => void;
