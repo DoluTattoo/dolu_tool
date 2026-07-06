@@ -138,5 +138,9 @@
   "ui_meters": "米",
   "ui_flags": "Flags属性",
   "ui_room": "Room属性",
-  "ui_radio_station": "广播电台"
+  "ui_radio_station": "广播电台",
+  "ui_copied_rotation": "Copied rotation",
+  "ui_copy_rotation": "Copy rotation",
+  "ui_copy_interior_pos": "Copy Interior Pos",
+  "ui_copied_interior_pos": "Copied Interior Pos"
 }

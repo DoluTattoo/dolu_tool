@@ -140,5 +140,7 @@
   "ui_room": "Raum",
   "ui_radio_station": "Radiosender",
   "ui_copied_rotation": "Rotation kopiert",
-  "ui_copy_rotation": "Rotation kopieren"
+  "ui_copy_rotation": "Rotation kopieren",
+  "ui_copy_interior_pos": "Copy Interior Pos",
+  "ui_copied_interior_pos": "Copied Interior Pos"
 }

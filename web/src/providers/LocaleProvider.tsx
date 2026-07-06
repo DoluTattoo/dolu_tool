@@ -146,6 +146,8 @@ interface Locale {
   ui_flags: string
   ui_room: string
   ui_radio_station: string
+  ui_copy_interior_pos: string
+  ui_copied_interior_pos: string
 }
 
 debugData(
@@ -295,6 +297,8 @@ debugData(
         ui_flags: 'Flags',
         ui_room: 'Room',
         ui_radio_station: 'Radio Station',
+        ui_copy_interior_pos: 'Copy Interior Pos',
+        ui_copied_interior_pos: 'Copied Interior Pos',
       }
     },
   ],
@@ -452,6 +456,8 @@ const LocaleProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =
     ui_flags: '',
     ui_room: '',
     ui_radio_station: '',
+    ui_copy_interior_pos: '',
+    ui_copied_interior_pos: '',
   })
 
   useEffect(() => {

@@ -140,5 +140,7 @@
   "ui_room": "รูม",
   "ui_radio_station": "สถานีวิทยุ",
   "ui_copied_rotation": "คัดลอกมุมหมุนแล้ว",
-  "ui_copy_rotation": "คัดลอกมุมหมุน"
+  "ui_copy_rotation": "คัดลอกมุมหมุน",
+  "ui_copy_interior_pos": "Copy Interior Pos",
+  "ui_copied_interior_pos": "Copied Interior Pos"
 }

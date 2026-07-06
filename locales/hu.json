@@ -140,5 +140,7 @@
   "ui_room": "Szoba",
   "ui_radio_station": "Rádió állomás",
   "ui_copied_rotation": "Copied rotation",
-  "ui_copy_rotation": "Copy rotation"
+  "ui_copy_rotation": "Copy rotation",
+  "ui_copy_interior_pos": "Copy Interior Pos",
+  "ui_copied_interior_pos": "Copied Interior Pos"
 }

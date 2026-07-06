@@ -138,5 +138,9 @@
   "ui_meters": "أمتار",
   "ui_flags": "أعلام",
   "ui_room": "غرفة",
-  "ui_radio_station": "محطة إذاعية"
+  "ui_radio_station": "محطة إذاعية",
+  "ui_copied_rotation": "Copied rotation",
+  "ui_copy_rotation": "Copy rotation",
+  "ui_copy_interior_pos": "Copy Interior Pos",
+  "ui_copied_interior_pos": "Copied Interior Pos"
 }

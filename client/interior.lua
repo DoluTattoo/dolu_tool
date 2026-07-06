@@ -119,6 +119,11 @@ RegisterNUICallback('dolu_tool:flipPortal', function(data, cb)
 
     cb(1)
 end)
+RegisterNUICallback('dolu_tool:getInteriorPos', function(data, cb)
+    local x, y, z = GetInteriorPosition(Client.interiorId)
+    cb({ x = x, y = y, z = z })
+end)
+
 RegisterNUICallback('dolu_tool:setTimecycle', function(data, cb)
     cb(1)
 

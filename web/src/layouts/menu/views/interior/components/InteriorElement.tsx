@@ -1,7 +1,9 @@
-import { memo } from 'react'
-import { Text, Paper, Group, Space } from '@mantine/core'
+import { memo, useState } from 'react'
+import { Text, Paper, Group, Space, Button } from '@mantine/core'
 import { getInteriorData } from '../../../../../atoms/interior'
 import { useLocales } from '../../../../../providers/LocaleProvider'
+import { fetchNui } from '../../../../../utils/fetchNui'
+import { setClipboard } from '../../../../../utils/setClipboard'
 
 // Memoized info row component
 const InfoRow = memo(({ label, value }: { label: string, value: string | number | undefined }) => (
@@ -25,6 +27,16 @@ const CurrentRoomInfo = memo(({ room, locale }: {
 const InteriorElement: React.FC = memo(() => {
   const { locale } = useLocales()
   const interior = getInteriorData()
+  const [copiedPos, setCopiedPos] = useState(false)
+
+  const handleCopyInteriorPos = async () => {
+    const pos = await fetchNui<{ x: number, y: number, z: number }>('dolu_tool:getInteriorPos')
+    if (pos) {
+      setClipboard(`${pos.x.toFixed(4)}, ${pos.y.toFixed(4)}, ${pos.z.toFixed(4)}`)
+      setCopiedPos(true)
+      setTimeout(() => setCopiedPos(false), 1000)
+    }
+  }
 
   return (
     <Paper p='md'>
@@ -34,6 +46,13 @@ const InteriorElement: React.FC = memo(() => {
       <InfoRow label={locale.ui_room_count} value={interior.roomCount} />
       <InfoRow label={locale.ui_portal_count} value={interior.portalCount} />
       <CurrentRoomInfo room={interior.currentRoom} locale={locale} />
+      <Space h='xs' />
+      <Button
+        color={copiedPos ? 'teal' : 'blue.4'}
+        variant='light'
+        size='xs'
+        onClick={handleCopyInteriorPos}
+      >{copiedPos ? locale.ui_copied_interior_pos : locale.ui_copy_interior_pos}</Button>
     </Paper>
   )
 });
