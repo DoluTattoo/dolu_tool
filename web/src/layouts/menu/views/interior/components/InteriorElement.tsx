@@ -43,7 +43,7 @@ const InteriorElement: React.FC = memo(() => {
     <Paper p='md'>
       <SectionHeader title={locale.ui_current_interior} icon={<RiHomeGearFill size={20} />} />
 
-      <Stack spacing={1}>
+      <Stack gap={1}>
         <CopyableRow
           label={locale.ui_interior_id}
           value={interior.interiorId}
@@ -69,33 +69,33 @@ const InteriorElement: React.FC = memo(() => {
 
             <UnstyledButton
               onClick={() => setShowDetails((v) => !v)}
-              sx={(theme) => ({
+              className='dolu-hover-row'
+              style={{
                 width: '100%',
-                borderRadius: theme.radius.sm,
+                borderRadius: 'var(--mantine-radius-sm)',
                 padding: '1px 8px',
                 transition: 'background-color 120ms ease',
-                '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.06)' },
-              })}
+              }}
             >
-              <Group noWrap spacing={6} sx={{ minHeight: 22 }}>
+              <Group wrap='nowrap' gap={6} style={{ minHeight: 22 }}>
                 <Box
-                  sx={(theme) => ({
+                  style={{
                     display: 'flex',
-                    color: theme.colors.dark[2],
+                    color: 'var(--mantine-color-dark-2)',
                     transform: showDetails ? 'rotate(90deg)' : 'rotate(0deg)',
                     transition: 'transform 150ms ease',
-                  })}
+                  }}
                 >
                   <FiChevronRight size={14} />
                 </Box>
-                <Text size='xs' color='dimmed' weight={600} sx={{ textTransform: 'uppercase', letterSpacing: 0.5 }}>
+                <Text size='xs' c='dimmed' fw={600} style={{ textTransform: 'uppercase', letterSpacing: 0.5 }}>
                   {locale.ui_details}
                 </Text>
               </Group>
             </UnstyledButton>
 
-            <Collapse in={showDetails}>
-              <Stack spacing={1} pt={1}>
+            <Collapse expanded={showDetails}>
+              <Stack gap={1} pt={1}>
                 {positionStr &&
                   <CopyableRow
                     label={locale.ui_position}

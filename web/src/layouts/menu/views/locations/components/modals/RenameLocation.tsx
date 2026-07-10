@@ -13,11 +13,10 @@ const RenameLocation = (props: {defaultName: string}) => {
     <Stack>
       <TextInput label={locale.ui_location_name} value={newName} onChange={(e) => setNewName(e.target.value)} />
       <Button
-        uppercase
+        tt='uppercase'
         disabled={newName === '' || newName === defaultName}
         variant='light'
         color='blue.4'
-        placeholder={defaultName}
         onClick={() => {
           closeAllModals()
           if (newName !== '') {

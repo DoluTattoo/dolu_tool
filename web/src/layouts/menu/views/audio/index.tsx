@@ -3,7 +3,7 @@ import { useDebouncedValue } from '@mantine/hooks'
 import { useEffect, useState } from 'react'
 import { BsFillStopFill, BsPlayFill } from 'react-icons/bs'
 import { HiSpeakerWave } from 'react-icons/hi2'
-import { useRecoilState } from 'recoil'
+import { useAtom } from 'jotai'
 import { drawStaticEmittersAtom, radioStationsListAtom, StaticEmitter, staticEmittersDrawDistanceAtom, staticEmittersListAtom } from '../../../../atoms/audio'
 import { useNuiEvent } from '../../../../hooks/useNuiEvent'
 import { useLocales } from "../../../../providers/LocaleProvider"
@@ -12,18 +12,18 @@ import { CopyableRow, Row, SectionHeader } from '../interior/components/Property
 
 const Audio: React.FC = () => {
     const { locale } = useLocales()
-    const [checked, setChecked] = useRecoilState(drawStaticEmittersAtom)
-    const [drawDistance, setDrawDistance] = useRecoilState(staticEmittersDrawDistanceAtom)
-    const [closestEmitter, setClosestEmitter] = useRecoilState(staticEmittersListAtom)
+    const [checked, setChecked] = useAtom(drawStaticEmittersAtom)
+    const [drawDistance, setDrawDistance] = useAtom(staticEmittersDrawDistanceAtom)
+    const [closestEmitter, setClosestEmitter] = useAtom(staticEmittersListAtom)
     const [radioStation, setRadioStation] = useState<string>("Unknown")
-    const [radioStationsList, setRadioStationsList] = useRecoilState(radioStationsListAtom)
+    const [radioStationsList, setRadioStationsList] = useAtom(radioStationsListAtom)
     const [debouncedDistance] = useDebouncedValue(drawDistance, 200)
-    
+
     useNuiEvent('setClosestEmitter', (data: StaticEmitter) => {
         setClosestEmitter(data)
         setRadioStation(data.radiostation)
     })
-    
+
     useNuiEvent('setRadioStationsList', (data: Array<{ label: string, value: string }>) => {
         setRadioStationsList(data)
     })
@@ -38,7 +38,7 @@ const Audio: React.FC = () => {
 
     return (
         <SimpleGrid cols={1}>
-            <Stack spacing='sm'>
+            <Stack gap='sm'>
                 {/* STATIC EMITTERS */}
                 <Paper p='md'>
                     <SectionHeader title={locale.ui_static_emitters} icon={<HiSpeakerWave size={20} />} />
@@ -50,7 +50,7 @@ const Audio: React.FC = () => {
                         onChange={(e) => setChecked(e.currentTarget.checked)}
                     />
 
-                    <Group position='apart' noWrap mt='md'>
+                    <Group justify='space-between' wrap='nowrap' mt='md'>
                         <Text size='sm'>{locale.ui_draw_distance}</Text>
                         <NumberInput
                             disabled={!checked}
@@ -58,13 +58,10 @@ const Audio: React.FC = () => {
                             min={1}
                             max={100}
                             size='sm'
-                            sx={{ maxWidth: 130 }}
-                            onChange={(value) => setDrawDistance(value!)}
-                            formatter={(value) =>
-                                !Number.isNaN(parseFloat(value!))
-                                ? `${value} ${locale.ui_meters}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                                : ` ${locale.ui_meters}`
-                            }
+                            style={{ maxWidth: 130 }}
+                            onChange={(value) => typeof value === 'number' && setDrawDistance(value)}
+                            suffix={` ${locale.ui_meters}`}
+                            thousandSeparator=','
                         />
                     </Group>
 
@@ -82,14 +79,14 @@ const Audio: React.FC = () => {
 
                 {/* CLOSEST EMITTER INFO */}
                 <Paper p='md'>
-                    <Group position='apart' noWrap mb={6}>
-                        <Text size={18} weight={600}>{locale.ui_closest_emitter_info}</Text>
+                    <Group justify='space-between' wrap='nowrap' mb={6}>
+                        <Text fz={18} fw={600}>{locale.ui_closest_emitter_info}</Text>
                         <Button size='xs' color='blue.4' variant='light' onClick={() => fetchNui('dolu_tool:getClosestStaticEmitter')}>
                             {locale.ui_refresh}
                         </Button>
                     </Group>
 
-                    <Stack spacing={1}>
+                    <Stack gap={1}>
                         <CopyableRow label={locale.ui_name} value={closestEmitter.name} copyLabel={locale.ui_copy} copiedLabel={locale.ui_copied} />
                         <CopyableRow label={locale.ui_coords} value={closestEmitter.coords} copyLabel={locale.ui_copy} copiedLabel={locale.ui_copied} />
                         <CopyableRow label={locale.ui_distance} value={`${closestEmitter.distance} ${locale.ui_meters}`} copyLabel={locale.ui_copy} copiedLabel={locale.ui_copied} />
@@ -101,21 +98,21 @@ const Audio: React.FC = () => {
                             <Select
                                 searchable
                                 size='sm'
-                                nothingFound={locale.ui_no_timecycle_found}
+                                nothingFoundMessage={locale.ui_no_timecycle_found}
                                 data={radioStationsList}
                                 value={radioStation}
                                 onChange={(value) => {
                                     setRadioStation(value!)
                                     fetchNui('dolu_tool:setStaticEmitterRadio', { emitterName: closestEmitter.name, radioStation: value })
                                 }}
-                                sx={{ flex: 1, minWidth: 0 }}
+                                style={{ flex: 1, minWidth: 0 }}
                             />
                         </Row>
                     </Stack>
 
                     <Divider my={8} variant='dashed' />
 
-                    <Group grow spacing='xs'>
+                    <Group grow gap='xs'>
                         <Button color='teal.4' variant='light' onClick={() => fetchNui('dolu_tool:toggleStaticEmitter', { emitterName: closestEmitter.name, state: true })}>
                             <BsPlayFill />
                         </Button>

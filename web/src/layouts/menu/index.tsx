@@ -1,5 +1,5 @@
-import { AppShell, Box, createStyles, Transition } from '@mantine/core'
-import { useRecoilState, useSetRecoilState } from 'recoil'
+import { Box, Transition } from '@mantine/core'
+import { useAtom, useSetAtom } from 'jotai'
 import { Route, Routes } from 'react-router-dom'
 import { useNuiEvent } from '../../hooks/useNuiEvent'
 import { menuVisibilityAtom } from '../../atoms/visibility'
@@ -20,23 +20,14 @@ import Weapon from './views/weapon'
 import Audio from './views/audio'
 import { useExitListener } from '../../hooks/useExitListener'
 
-const useStyles = createStyles((theme) => ({
-  wrapper: {
-    width: 600,
-    height: 775,
-    color: theme.colors.dark[1],
-  },
-}))
-
 const Menu: React.FC = () => {
-  const { classes } = useStyles()
-  const [visible, setVisible] = useRecoilState(menuVisibilityAtom)
-  const [version, setVersion] = useRecoilState(versionAtom)
-  const setInteriorData = useSetRecoilState(interiorAtom)
-  const setTimecycle = useSetRecoilState(timecycleAtom)
-  const setTimecycleList = useSetRecoilState(timecycleListAtom)
-  const setLastLocation = useSetRecoilState(lastLocationsAtom)
-  const setPosition = useSetRecoilState(positionAtom)
+  const [visible, setVisible] = useAtom(menuVisibilityAtom)
+  const [version, setVersion] = useAtom(versionAtom)
+  const setInteriorData = useSetAtom(interiorAtom)
+  const setTimecycle = useSetAtom(timecycleAtom)
+  const setTimecycleList = useSetAtom(timecycleListAtom)
+  const setLastLocation = useSetAtom(lastLocationsAtom)
+  const setPosition = useSetAtom(positionAtom)
 
   useExitListener(setVisible)
 
@@ -63,34 +54,24 @@ const Menu: React.FC = () => {
   return (
     <Transition duration={100} transition='slide-right' mounted={visible}>
       {(style) => (
-        <Box sx={{ position: 'absolute', top: '2%', left: '1.5%', zIndex: 3 }} style={style} className={classes.wrapper}>
-          <AppShell
-            padding='md'
-            fixed={false}
-            navbar={<Nav />}
-            header={<HeaderGroup data={version} />}
-            styles={{
-              main: {
-                height: 775,
-                maxHeight: 775,
-                overflowY: 'auto',
-                overflowX: 'hidden',
-                minWidth: 0,
-              },
-            }}
-          >
-            <Routes>
-              <Route path='/' element={<Home />} />
-              <Route path='/world' element={<World />} />
-              <Route path='/interior' element={<Interior />} />
-              <Route path='/object' element={<Object />} />
-              <Route path='/locations' element={<Locations />} />
-              <Route path='/ped' element={<Ped />} />
-              <Route path='/vehicle' element={<Vehicle />} />
-              <Route path='/weapon' element={<Weapon />} />
-              <Route path='/audio' element={<Audio />} />
-            </Routes>
-          </AppShell>
+        <Box className='dolu-menu-wrapper' style={style}>
+          <HeaderGroup data={version} />
+          <Box className='dolu-menu-body'>
+            <Nav />
+            <Box className='dolu-menu-main'>
+              <Routes>
+                <Route path='/' element={<Home />} />
+                <Route path='/world' element={<World />} />
+                <Route path='/interior' element={<Interior />} />
+                <Route path='/object' element={<Object />} />
+                <Route path='/locations' element={<Locations />} />
+                <Route path='/ped' element={<Ped />} />
+                <Route path='/vehicle' element={<Vehicle />} />
+                <Route path='/weapon' element={<Weapon />} />
+                <Route path='/audio' element={<Audio />} />
+              </Routes>
+            </Box>
+          </Box>
         </Box>
       )}
     </Transition>

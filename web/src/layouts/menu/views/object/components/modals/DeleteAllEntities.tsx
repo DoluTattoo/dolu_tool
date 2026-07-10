@@ -10,7 +10,7 @@ const DeleteAllEntities = () => {
     <Stack>
       <Group grow>
         <Button
-          uppercase
+          tt='uppercase'
           variant='light'
           color='green.4'
           onClick={() => {
@@ -21,7 +21,7 @@ const DeleteAllEntities = () => {
           {locale.ui_confirm}
         </Button>
         <Button
-          uppercase
+          tt='uppercase'
           variant='light'
           color='red.4'
           onClick={() => {

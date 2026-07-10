@@ -5,7 +5,7 @@ import { FaMapMarkerAlt } from 'react-icons/fa'
 import { FiFastForward } from 'react-icons/fi'
 import { GiTeleport } from 'react-icons/gi'
 import { RiHomeGearFill } from 'react-icons/ri'
-import { useRecoilState } from 'recoil'
+import { useAtom } from 'jotai'
 import { getInteriorData } from '../../../../atoms/interior'
 import { getLastLocation } from '../../../../atoms/location'
 import { positionAtom } from '../../../../atoms/position'
@@ -22,9 +22,9 @@ const Home: React.FC = () => {
   const { locale } = useLocales()
   const lastLocation = getLastLocation()
   const interior = getInteriorData()
-  const [currentCoords, setCurrentCoords] = useRecoilState(positionAtom)
+  const [currentCoords, setCurrentCoords] = useAtom(positionAtom)
   const [currentHeading, setCurrentHeading] = useState('0.000')
-  const [timeFrozen, setTimeFrozen] = useRecoilState(worldFreezeTimeAtom)
+  const [timeFrozen, setTimeFrozen] = useAtom(worldFreezeTimeAtom)
   const [copiedCoords, setCopiedCoords] = useState(false)
 
   useNuiEvent('playerCoords', (data: { coords: string, heading: string }) => {
@@ -34,19 +34,19 @@ const Home: React.FC = () => {
 
   return (
     <SimpleGrid cols={1}>
-      <Stack spacing='sm'>
+      <Stack gap='sm'>
         {/* CURRENT COORDS */}
         <Paper p='md'>
           <SectionHeader title={locale.ui_current_coords} icon={<FaMapMarkerAlt size={20} />} />
 
-          <Stack spacing={1}>
+          <Stack gap={1}>
             <CopyableRow label={locale.ui_coords} value={currentCoords} copyLabel={locale.ui_copy} copiedLabel={locale.ui_copied} />
             <CopyableRow label={locale.ui_heading} value={currentHeading} copyLabel={locale.ui_copy} copiedLabel={locale.ui_copied} />
           </Stack>
 
           <Divider my={8} variant='dashed' />
 
-          <Group grow spacing='xs'>
+          <Group grow gap='xs'>
             <Button
               color={copiedCoords ? 'teal' : 'blue.4'}
               variant='light'
@@ -95,7 +95,7 @@ const Home: React.FC = () => {
 
           {lastLocation ? (
             <>
-              <Stack spacing={1}>
+              <Stack gap={1}>
                 <InfoRow label={locale.ui_name} value={lastLocation.name} />
                 <CopyableRow
                   label={locale.ui_coords}
@@ -119,7 +119,7 @@ const Home: React.FC = () => {
               </Button>
             </>
           ) : (
-            <Text color='dimmed' size='sm' px={8}>{locale.ui_no_last_location}</Text>
+            <Text c='dimmed' size='sm' px={8}>{locale.ui_no_last_location}</Text>
           )}
         </Paper>
 
@@ -128,12 +128,12 @@ const Home: React.FC = () => {
           <SectionHeader title={locale.ui_current_interior} icon={<RiHomeGearFill size={20} />} />
 
           {interior.interiorId > 0 ? (
-            <Stack spacing={1}>
+            <Stack gap={1}>
               <CopyableRow label={locale.ui_interior_id} value={interior.interiorId} copyLabel={locale.ui_copy} copiedLabel={locale.ui_copied} />
               <InfoRow label={locale.ui_current_room} value={`${interior.currentRoom?.index} - ${interior.currentRoom?.name}`} />
             </Stack>
           ) : (
-            <Text color='dimmed' size='sm' px={8}>{locale.ui_not_in_interior}</Text>
+            <Text c='dimmed' size='sm' px={8}>{locale.ui_not_in_interior}</Text>
           )}
         </Paper>
 
@@ -141,7 +141,7 @@ const Home: React.FC = () => {
         <Paper p='md'>
           <SectionHeader title={locale.ui_quick_actions} icon={<FiFastForward size={20} />} />
 
-          <Group grow spacing='xs'>
+          <Group grow gap='xs'>
             <Button
               color='blue.4'
               variant='light'
@@ -169,7 +169,7 @@ const Home: React.FC = () => {
 
           <Space h='sm' />
 
-          <Group grow spacing='xs'>
+          <Group grow gap='xs'>
             <Button
               color='blue.4'
               variant='light'
@@ -197,7 +197,7 @@ const Home: React.FC = () => {
 
           <Space h='sm' />
 
-          <Group grow spacing='xs'>
+          <Group grow gap='xs'>
             <Button
               color='blue.4'
               variant='light'

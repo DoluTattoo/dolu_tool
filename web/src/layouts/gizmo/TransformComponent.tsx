@@ -1,15 +1,15 @@
 import React, { Suspense, useRef, useCallback, useState, useEffect } from 'react'
 import { TransformControls } from '@react-three/drei'
 import { Mesh, MathUtils } from 'three'
-import { useRecoilValue } from 'recoil'
+import { useAtomValue } from 'jotai'
 import { useNuiEvent } from '../../hooks/useNuiEvent'
 import { fetchNui } from '../../utils/fetchNui'
 import { RotateSnapAtom, TranslateSnapAtom } from '../../atoms/object'
 
 export const TransformComponent = React.memo(({ space, mode, currentEntity, setCurrentEntity, onMouseUp, onMouseDown }: TransformComponent) => {
   const mesh = useRef<Mesh>(null!);
-  const translateSnap = useRecoilValue(TranslateSnapAtom);
-  const rotateSnap = useRecoilValue(RotateSnapAtom);
+  const translateSnap = useAtomValue(TranslateSnapAtom);
+  const rotateSnap = useAtomValue(RotateSnapAtom);
   const [shiftPressed, setShiftPressed] = useState(false);
 
   useNuiEvent<TransformEntity>('setGizmoEntity', (entity: TransformEntity | undefined): void => {

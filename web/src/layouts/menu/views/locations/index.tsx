@@ -6,7 +6,7 @@ import LocationSearch from './components/LocationSearch'
 import { setClipboard } from '../../../../utils/setClipboard'
 import { useEffect, useState } from 'react'
 import RenameLocation from './components/modals/RenameLocation'
-import { useRecoilState } from 'recoil'
+import { useAtom } from 'jotai'
 import { fetchNui } from '../../../../utils/fetchNui'
 import { useNuiEvent } from '../../../../hooks/useNuiEvent'
 import DeleteLocation from './components/modals/DeleteLocation'
@@ -15,9 +15,9 @@ import { useLocales } from '../../../../providers/LocaleProvider'
 const Locations: React.FC = () => {
   const { locale } = useLocales()
   const searchLocationValue = getSearchLocationInput()
-  const [pageContent, setPageContent] = useRecoilState(locationsPageContentAtom)
-  const [pageCount, setPageCount] = useRecoilState(locationsPageCountAtom)
-  const [activePage, setPage] = useRecoilState(locationsActivePageAtom)
+  const [pageContent, setPageContent] = useAtom(locationsPageContentAtom)
+  const [pageCount, setPageCount] = useAtom(locationsPageCountAtom)
+  const [activePage, setPage] = useAtom(locationsActivePageAtom)
 
   useNuiEvent('setPageContent', (data: {type: string, content: Location[], maxPages: number}) => {
     if (data.type === 'locations') {
@@ -27,8 +27,8 @@ const Locations: React.FC = () => {
   })
 
   // Checkboxes
-  const [checkedVanilla, setCheckedVanilla] = useRecoilState(locationVanillaFilterAtom)
-  const [checkedCustom, setCheckedCustom] = useRecoilState(locationCustomFilterAtom)
+  const [checkedVanilla, setCheckedVanilla] = useAtom(locationVanillaFilterAtom)
+  const [checkedCustom, setCheckedCustom] = useAtom(locationCustomFilterAtom)
 
   // Accordion
   const [currentAccordionItem, setAccordionItem] = useState<string|null>('0')
@@ -44,16 +44,16 @@ const Locations: React.FC = () => {
   const Locationlist = pageContent?.map((location: any, index: number) => (
       <Accordion.Item key={index} value={index.toString()}>
         <Accordion.Control>
-          <Stack spacing={0}>
-            <Group position='apart'>
-              <Text color='blue.4' size='md' weight={500}>{location.name}</Text>
+          <Stack gap={0}>
+            <Group justify='space-between'>
+              <Text c='blue.4' size='md' fw={500}>{location.name}</Text>
               <Badge color={location.custom ? 'green.4' : 'blue.4'}>{location.custom ? locale.ui_custom : locale.ui_vanilla}</Badge>
             </Group>
             <Text size='xs'>{locale.ui_coords}: {location.x}, {location.y}, {location.z}</Text>
           </Stack>
         </Accordion.Control>
         <Accordion.Panel>
-          <Group grow spacing='xs'>
+          <Group grow gap='xs'>
             <Button
               variant='light'
               color='blue.4'
@@ -114,8 +114,8 @@ const Locations: React.FC = () => {
   return (
     <>
       <Stack>
-        <Text size={20}>{locale.ui_locations}</Text>
-        <Group grow>            
+        <Text fz={20}>{locale.ui_locations}</Text>
+        <Group grow>
           <Checkbox
             label={locale.ui_show_custom_locations}
             size='sm'
@@ -141,9 +141,9 @@ const Locations: React.FC = () => {
             }}
           />
         </Group>
-        
+
         <Button
-          uppercase
+          tt='uppercase'
           variant='light'
           color='blue.4'
           onClick={() =>
@@ -154,7 +154,7 @@ const Locations: React.FC = () => {
             })
           }
         >{locale.ui_create_custom_location}</Button>
-        
+
         <LocationSearch />
 
         <ScrollArea style={{ height: 480 }} scrollbarSize={0}>
@@ -162,7 +162,7 @@ const Locations: React.FC = () => {
             <Accordion chevronPosition='left' variant='contained' radius='sm' value={currentAccordionItem} onChange={setAccordionItem}>
               {Locationlist ? Locationlist :
                 <Paper p='md'>
-                  <Text size='md' weight={600} color='red.4'>{locale.ui_no_location_found}</Text>
+                  <Text size='md' fw={600} c='red.4'>{locale.ui_no_location_found}</Text>
                 </Paper>
               }
             </Accordion>
@@ -172,7 +172,7 @@ const Locations: React.FC = () => {
           <Pagination
             color='blue.4'
             size='sm'
-            page={activePage}
+            value={activePage}
             onChange={(value) => {
               fetchNui('dolu_tool:loadPages', { type: 'locations', activePage: value, filter: searchLocationValue, checkboxes: {vanilla: checkedVanilla, custom: checkedCustom} })
               setPage(value)

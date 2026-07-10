@@ -1,6 +1,6 @@
 import { Accordion, Button, Group, Paper, ScrollArea, Stack, Text, Image, Center, Pagination } from '@mantine/core'
 import { useEffect, useState} from 'react'
-import { useRecoilState, useSetRecoilState } from 'recoil'
+import { useAtom, useSetAtom } from 'jotai'
 import { getSearchPedInput, PedProp, pedsActivePageAtom, pedsPageContentAtom, pedsPageCountAtom } from '../../../../atoms/ped'
 import { displayImageAtom, imagePathAtom } from '../../../../atoms/imgPreview'
 import { setClipboard } from '../../../../utils/setClipboard'
@@ -12,9 +12,9 @@ import { useLocales } from '../../../../providers/LocaleProvider'
 const Ped: React.FC = () => {
   const { locale } = useLocales()
   const searchPedValue = getSearchPedInput()
-  const [pageContent, setPageContent] = useRecoilState(pedsPageContentAtom)
-  const [pageCount, setPageCount] = useRecoilState(pedsPageCountAtom)
-  const [activePage, setPage] = useRecoilState(pedsActivePageAtom)
+  const [pageContent, setPageContent] = useAtom(pedsPageContentAtom)
+  const [pageCount, setPageCount] = useAtom(pedsPageCountAtom)
+  const [activePage, setPage] = useAtom(pedsActivePageAtom)
 
   useNuiEvent('setPageContent', (data: {type: string, content: PedProp[], maxPages: number}) => {
     if (data.type === 'peds') {
@@ -27,8 +27,8 @@ const Ped: React.FC = () => {
   const [copiedPedHash, setCopiedPedHash] = useState(false)
   const [currentAccordionItem, setAccordionItem] = useState<string|null>('0')
 
-  const displayImage = useSetRecoilState(displayImageAtom)
-  const imagePath = useSetRecoilState(imagePathAtom)
+  const displayImage = useSetAtom(displayImageAtom)
+  const imagePath = useSetAtom(imagePathAtom)
 
   // Copied name button
   useEffect(() => {
@@ -46,28 +46,22 @@ const Ped: React.FC = () => {
   const PedList = pageContent?.map((pedList: any, index: number) => (
       <Accordion.Item key={index} value={index.toString()}>
         <Accordion.Control>
-          <Text size='md' weight={500}>• {pedList.name}</Text>
+          <Text size='md' fw={500}>• {pedList.name}</Text>
           <Text size='xs'>{locale.ui_hash}: {pedList.hash}</Text>
         </Accordion.Control>
         <Accordion.Panel>
-          <Group grow spacing='xs'> 
+          <Group grow gap='xs'>
             <Image
               onMouseEnter={() => {
                 displayImage(true)
                 imagePath(`https://gta-images.s3.fr-par.scw.cloud/ped/${pedList.name.toLowerCase()}.webp`)
               }}
               onMouseLeave={() => {displayImage(false)}}
-              height={50}
+              h={50}
               fit='contain'
               alt={`${pedList.name}`}
               src={`https://gta-images.s3.fr-par.scw.cloud/ped/${pedList.name.toLowerCase()}.webp`}
-              withPlaceholder={true}
-              sx={{
-                '&:hover':{
-                  borderRadius: '5px',
-                  backgroundColor: 'rgba(35, 35, 35, 0.75)'
-                }
-              }}
+              className='dolu-hover-img'
             />
             <Button
               variant='light'
@@ -98,7 +92,7 @@ const Ped: React.FC = () => {
               }}
             >
               {copiedPedHash ? locale.ui_copied_hash : locale.ui_copy_hash}
-            </Button>                     
+            </Button>
           </Group>
         </Accordion.Panel>
       </Accordion.Item>
@@ -106,12 +100,12 @@ const Ped: React.FC = () => {
 
   return(
     <Stack>
-      <Text size={20}>{locale.ui_peds}</Text>
+      <Text fz={20}>{locale.ui_peds}</Text>
       <Group grow>
         <PedSearch/>
         <Button
           disabled={searchPedValue === ''}
-          uppercase
+          tt='uppercase'
           variant='light'
           color='blue.4'
           onClick={() => { fetchNui('dolu_tool:changePed', { name: `${searchPedValue}` }) }}
@@ -122,9 +116,9 @@ const Ped: React.FC = () => {
       <ScrollArea style={{ height: 575 }} scrollbarSize={0}>
         <Stack>
           <Accordion variant='contained' radius='sm' value={currentAccordionItem} onChange={setAccordionItem}>
-            {PedList ? PedList : 
+            {PedList ? PedList :
               <Paper p='md'>
-                <Text size='md' weight={600} color='red.4'>{locale.ui_no_ped_found}</Text>
+                <Text size='md' fw={600} c='red.4'>{locale.ui_no_ped_found}</Text>
               </Paper>
             }
             </Accordion>
@@ -134,7 +128,7 @@ const Ped: React.FC = () => {
         <Pagination
           color='blue.4'
           size='sm'
-          page={activePage}
+          value={activePage}
           onChange={(value) => {
             fetchNui('dolu_tool:loadPages', { type: 'peds', activePage: value, filter: searchPedValue })
             setPage(value)

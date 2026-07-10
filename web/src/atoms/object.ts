@@ -1,4 +1,4 @@
-import { atom, useRecoilValue } from 'recoil'
+import { atom, useAtomValue } from 'jotai'
 
 export interface Entity {
     id: string
@@ -20,10 +20,10 @@ export interface Entity {
 
 export type ObjectList = Array<Entity>
 
-export const ObjectListAtom = atom<ObjectList>({key: "ObjectList", default: []})
-export const ObjectNameAtom = atom<string>({ key: 'ObjectCurrentAccordionItem', default: 'prop_alien_egg_01' })
-export const KeyboardLayoutAtom = atom<'QWERTY' | 'AZERTY'>({ key: 'KeyboardLayout', default: 'QWERTY' })
-export const TranslateSnapAtom = atom<number | undefined>({ key: 'TranslateSnap', default: 0 })
-export const RotateSnapAtom = atom<number | undefined>({ key: 'RotateSnap', default: 0 })
+export const ObjectListAtom = atom<ObjectList>([])
+export const ObjectNameAtom = atom<string>('prop_alien_egg_01')
+export const KeyboardLayoutAtom = atom<'QWERTY' | 'AZERTY'>('QWERTY')
+export const TranslateSnapAtom = atom<number | undefined>(0)
+export const RotateSnapAtom = atom<number | undefined>(0)
 
-export const getObjectList = () => useRecoilValue(ObjectListAtom)
+export const getObjectList = () => useAtomValue(ObjectListAtom)

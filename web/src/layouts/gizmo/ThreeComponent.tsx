@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { Canvas } from '@react-three/fiber'
-import { useRecoilValue } from 'recoil'
+import { useAtomValue } from 'jotai'
 import { CameraComponent } from './CameraComponent'
 import { TransformComponent } from './TransformComponent'
 import { ModeSelector } from './ModeSelector'
@@ -12,7 +12,7 @@ export const ThreeComponent = React.memo(() => {
   const [spaceMode, setSpaceMode] = useState<GizmoSpaceMode>('world')
   const [entity, setEntity] = useState<TransformEntity | undefined>()
   const [drag, setDrag] = useState<boolean>(false)
-  const layout = useRecoilValue(KeyboardLayoutAtom)
+  const layout = useAtomValue(KeyboardLayoutAtom)
 
   const toggleSpaceMode = useCallback((): void => {
     setSpaceMode(spaceMode === 'world' ? 'local' : 'world')

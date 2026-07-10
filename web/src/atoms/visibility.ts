@@ -1,3 +1,3 @@
-import { atom } from 'recoil'
+import { atom } from 'jotai'
 
-export const menuVisibilityAtom = atom({ key: 'menuVisibility', default: false })
+export const menuVisibilityAtom = atom(false)

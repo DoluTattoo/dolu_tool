@@ -1,6 +1,6 @@
 import { ActionIcon, Checkbox, Divider, Group, NumberInput, NumberInputHandlers, Paper, Stack, Text } from "@mantine/core";
 import { useCallback, useEffect, useRef, memo } from "react";
-import { useRecoilState } from "recoil";
+import { useAtom } from "jotai";
 import { FaArrowLeft, FaArrowRight, FaExchangeAlt } from "react-icons/fa";
 import { RiFocus3Fill } from "react-icons/ri";
 import { useLocales } from "../../../../../providers/LocaleProvider";
@@ -11,26 +11,26 @@ import { PORTAL_FLAGS } from "./flags";
 
 const DebugCheckboxGroup = memo(({ locale, value, onChange }: { locale: any, value: string[], onChange: (value: string[]) => void }) => (
   <Checkbox.Group
-    orientation='horizontal'
-    spacing='xs'
     size='md'
     value={value}
     onChange={onChange}
   >
-    <Checkbox color='blue.4' value='portalInfos' label={locale.ui_infos} />
-    <Checkbox color='blue.4' value='portalPoly' label={locale.ui_fill_portals} />
-    <Checkbox color='blue.4' value='portalLines' label={locale.ui_outline_portals} />
-    <Checkbox color='blue.4' value='portalCorners' label={locale.ui_corcers_portals} />
+    <Group gap='xs'>
+      <Checkbox color='blue.4' value='portalInfos' label={locale.ui_infos} />
+      <Checkbox color='blue.4' value='portalPoly' label={locale.ui_fill_portals} />
+      <Checkbox color='blue.4' value='portalLines' label={locale.ui_outline_portals} />
+      <Checkbox color='blue.4' value='portalCorners' label={locale.ui_corcers_portals} />
+    </Group>
   </Checkbox.Group>
 ));
 
 const PortalsElement: React.FC = () => {
   const { locale } = useLocales()
   const interior = getInteriorData()
-  const [portalEditingIndex, setPortalEditingIndex] = useRecoilState(portalEditingIndexAtom)
-  const handlers = useRef<NumberInputHandlers>()
-  const [portalData, setPortalData] = useRecoilState(portalDataAtom)
-  const [portalDebugCheckboxesValue, setPortalDebugCheckboxesValue] = useRecoilState(portalDebuggingAtom)
+  const [portalEditingIndex, setPortalEditingIndex] = useAtom(portalEditingIndexAtom)
+  const handlers = useRef<NumberInputHandlers>(undefined)
+  const [portalData, setPortalData] = useAtom(portalDataAtom)
+  const [portalDebugCheckboxesValue, setPortalDebugCheckboxesValue] = useAtom(portalDebuggingAtom)
 
   useEffect(() => {
     if (interior) {
@@ -62,10 +62,10 @@ const PortalsElement: React.FC = () => {
 
           <Divider my='sm' variant='dashed' />
 
-          <Stack spacing={2}>
+          <Stack gap={2}>
             {/* PORTAL INDEX STEPPER */}
             <Row label={locale.ui_index}>
-              <Group spacing={5} noWrap>
+              <Group gap={5} wrap='nowrap'>
                 <ActionIcon size={30} variant='default' onClick={() => { handlers.current?.decrement() }}>
                   <FaArrowLeft size={13} />
                 </ActionIcon>
@@ -79,9 +79,10 @@ const PortalsElement: React.FC = () => {
                   min={0}
                   step={1}
                   onChange={(val) => {
-                    val !== undefined &&
-                      setPortalEditingIndex(val || 0)
-                      setPortalData(interior.portals![val!])
+                    const index = typeof val === 'number' ? val : parseInt(val, 10)
+                    if (Number.isNaN(index)) return
+                    setPortalEditingIndex(index || 0)
+                    setPortalData(interior.portals![index])
                   }}
                   styles={{ input: { width: 54, textAlign: 'center' } }}
                 />
@@ -132,7 +133,7 @@ const PortalsElement: React.FC = () => {
           </Stack>
         </>
         :
-        <Text color='dimmed' size='sm'>No portal found</Text>
+        <Text c='dimmed' size='sm'>No portal found</Text>
       }
     </Paper>
   )

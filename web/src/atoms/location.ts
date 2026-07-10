@@ -1,4 +1,4 @@
-import { atom, useRecoilValue } from 'recoil'
+import { atom, useAtomValue } from 'jotai'
 
 export interface Location {
   name: string,
@@ -46,17 +46,17 @@ const mockLocations: Location[] = [
     },
 ]
 
-export const lastLocationsAtom = atom<Location|null>({ key: 'lastLocations', default: null })
-export const selectedLocationIdAtom = atom<string | null>({ key: 'selectedLocationId', default: null })
+export const lastLocationsAtom = atom<Location|null>(null)
+export const selectedLocationIdAtom = atom<string | null>(null)
 
-export const locationSearchAtom = atom<string>({ key: 'locationSearch', default: '' })
-export const locationsActivePageAtom = atom<number>({ key: 'locationsActivePage', default: 1 })
-export const locationsPageCountAtom = atom<number>({ key: 'locationsPageCount', default: 1 })
-export const locationsPageContentAtom = atom<Location[]>({ key: 'locationsPageContent', default: mockLocations })
+export const locationSearchAtom = atom<string>('')
+export const locationsActivePageAtom = atom<number>(1)
+export const locationsPageCountAtom = atom<number>(1)
+export const locationsPageContentAtom = atom<Location[]>(mockLocations)
 
 // Filter Checkboxes
-export const locationVanillaFilterAtom = atom<boolean>({ key: 'locationVanillaFilter', default: false })
-export const locationCustomFilterAtom = atom<boolean>({ key: 'locationCustomFilter', default: true })
+export const locationVanillaFilterAtom = atom<boolean>(false)
+export const locationCustomFilterAtom = atom<boolean>(true)
 
-export const getLastLocation = () => useRecoilValue(lastLocationsAtom)
-export const getSearchLocationInput = () => useRecoilValue(locationSearchAtom) as string
+export const getLastLocation = () => useAtomValue(lastLocationsAtom)
+export const getSearchLocationInput = () => useAtomValue(locationSearchAtom) as string

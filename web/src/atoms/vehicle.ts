@@ -1,4 +1,4 @@
-import { atom, useRecoilValue } from 'recoil'
+import { atom, useAtomValue } from 'jotai'
 
 export interface VehicleProp {
   hash: number,
@@ -31,9 +31,9 @@ const mockVehicleList: VehicleProp[] = [
     },
 ]
 
-export const vehicleListSearchAtom = atom<string>({ key: 'vehicleListSearch', default: '' })
-export const vehiclesActivePageAtom = atom<number>({ key: 'vehicleActivePage', default: 1 })
-export const vehiclesPageCountAtom = atom<number>({ key: 'vehiclePageCount', default: 1})
-export const vehiclesPageContentAtom = atom<VehicleProp[]>({ key: 'vehiclesPageContent', default: mockVehicleList })
+export const vehicleListSearchAtom = atom<string>('')
+export const vehiclesActivePageAtom = atom<number>(1)
+export const vehiclesPageCountAtom = atom<number>(1)
+export const vehiclesPageContentAtom = atom<VehicleProp[]>(mockVehicleList)
 
-export const getSearchVehicleInput = () => useRecoilValue(vehicleListSearchAtom) as string
+export const getSearchVehicleInput = () => useAtomValue(vehicleListSearchAtom) as string

@@ -2,20 +2,20 @@ import { useState } from 'react'
 import { closeAllModals } from '@mantine/modals'
 import { Stack, Button, TextInput } from '@mantine/core'
 import { fetchNui } from '../../../../../../utils/fetchNui'
-import { useSetRecoilState } from 'recoil'
+import { useSetAtom } from 'jotai'
 import { locationCustomFilterAtom } from '../../../../../../atoms/location'
 import { useLocales } from '../../../../../../providers/LocaleProvider'
 
 const CreateLocation: React.FC = () => {
   const { locale } = useLocales()
   const [locationName, setLocationName] = useState('')
-  const setCustomLocationCheckbox = useSetRecoilState(locationCustomFilterAtom)
+  const setCustomLocationCheckbox = useSetAtom(locationCustomFilterAtom)
 
   return (
     <Stack>
       <TextInput label={locale.ui_location_name} description={locale.ui_create_location_description} value={locationName} onChange={(e) => setLocationName(e.target.value)} />
       <Button
-        uppercase
+        tt='uppercase'
         disabled={locationName === ''}
         variant='light'
         color='blue.4'

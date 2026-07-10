@@ -1,4 +1,4 @@
-import { atom, useRecoilValue } from 'recoil'
+import { atom, useAtomValue } from 'jotai'
 
 export interface PedProp {
   name: string,
@@ -16,9 +16,9 @@ const mockPedList: PedProp[] = [
     },
 ]
 
-export const pedListSearchAtom = atom<string>({ key: 'pedListSearch', default: '' })
-export const pedsActivePageAtom = atom<number>({ key: 'pedsActivePage', default: 1 })
-export const pedsPageCountAtom = atom<number>({ key: 'pedsPageCount', default: 1 })
-export const pedsPageContentAtom = atom<PedProp[]>({ key: 'pedsPageContent', default: mockPedList })
+export const pedListSearchAtom = atom<string>('')
+export const pedsActivePageAtom = atom<number>(1)
+export const pedsPageCountAtom = atom<number>(1)
+export const pedsPageContentAtom = atom<PedProp[]>(mockPedList)
 
-export const getSearchPedInput = () => useRecoilValue(pedListSearchAtom) as string
+export const getSearchPedInput = () => useAtomValue(pedListSearchAtom) as string

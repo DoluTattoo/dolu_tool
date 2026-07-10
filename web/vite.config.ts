@@ -6,10 +6,7 @@ export default defineConfig({
   plugins: [react()],
   base: './',
   build: {
-    chunkSizeWarningLimit: 1500,
+    chunkSizeWarningLimit: 1600,
     outDir: 'build'
-  },
-  esbuild: {
-    logOverride: { 'this-is-undefined-in-esm': 'silent' },
   },
 })

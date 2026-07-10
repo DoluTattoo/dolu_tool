@@ -1,10 +1,10 @@
 import { Image, Paper, Transition } from '@mantine/core'
-import { useRecoilValue } from 'recoil'
+import { useAtomValue } from 'jotai'
 import { displayImageAtom, imagePathAtom } from '../../atoms/imgPreview'
 
 const ImgPreview: React.FC = () => {
-  const isDisplayImage = useRecoilValue(displayImageAtom)
-  const imagePath = useRecoilValue(imagePathAtom)
+  const isDisplayImage = useAtomValue(displayImageAtom)
+  const imagePath = useAtomValue(imagePathAtom)
 
   return (
     <Transition transition='slide-right' mounted={isDisplayImage}>
@@ -12,12 +12,12 @@ const ImgPreview: React.FC = () => {
         <Paper
           p='xs'
           shadow='xs'
-          style={style}
-          sx={{
+          style={{
+            ...style,
             zIndex: 2,
             position: 'absolute',
-            top: '2%',
-            left: '650px',
+            top: '15px',
+            left: '630px',
             maxWidth: '600px',
             borderRadius: '10px',
           }}
@@ -26,7 +26,6 @@ const ImgPreview: React.FC = () => {
             fit='contain'
             alt={'Display selected image'}
             src={imagePath}
-            withPlaceholder={true}
           />
         </Paper>
       )}

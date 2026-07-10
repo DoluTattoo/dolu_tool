@@ -1,5 +1,4 @@
-import { SelectItem } from "@mantine/core"
-import { atom } from "recoil"
+import { atom } from "jotai"
 
 export interface StaticEmitter {
     name: string
@@ -21,7 +20,7 @@ const mockStaticEmitters: StaticEmitter = {
     radiostation: "HIDDEN_RADIO_07_DANCE_01"
 }
 
-export const staticEmittersListAtom = atom<StaticEmitter>({ key: 'staticEmittersList', default: mockStaticEmitters })
-export const drawStaticEmittersAtom = atom<boolean>({ key: 'drawStaticEmittersAtom', default: false })
-export const staticEmittersDrawDistanceAtom = atom<number>({ key: 'staticEmittersDrawDistance', default: 20 })
-export const radioStationsListAtom = atom<Array<{ label: string, value: string }>>({ key: 'radioStationsList', default: [{label: "Unknown", value: "0" }]})
+export const staticEmittersListAtom = atom<StaticEmitter>(mockStaticEmitters)
+export const drawStaticEmittersAtom = atom<boolean>(false)
+export const staticEmittersDrawDistanceAtom = atom<number>(20)
+export const radioStationsListAtom = atom<Array<{ label: string, value: string }>>([{label: "Unknown", value: "0" }])

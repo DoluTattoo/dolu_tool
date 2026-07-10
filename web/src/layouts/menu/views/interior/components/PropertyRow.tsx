@@ -1,5 +1,5 @@
 import { memo, useCallback, useEffect, useState } from 'react'
-import { ActionIcon, Box, Checkbox, Group, Popover, Text, Tooltip, UnstyledButton } from '@mantine/core'
+import { ActionIcon, Box, Checkbox, Group, Popover, Stack, Text, Tooltip, UnstyledButton } from '@mantine/core'
 import { AiFillEdit } from 'react-icons/ai'
 import { setClipboard } from '../../../../../utils/setClipboard'
 import { FlagOption, flagsToValues } from './flags'
@@ -12,8 +12,8 @@ const ROW_MIN_HEIGHT = 23
 export const Label = memo(({ children }: { children: React.ReactNode }) => (
   <Text
     size='sm'
-    color='dimmed'
-    sx={{ minWidth: LABEL_WIDTH, flexShrink: 0, whiteSpace: 'nowrap' }}
+    c='dimmed'
+    style={{ minWidth: LABEL_WIDTH, flexShrink: 0, whiteSpace: 'nowrap' }}
   >
     {children}
   </Text>
@@ -25,9 +25,9 @@ export const SectionHeader = memo(({ title, icon }: {
   title: string,
   icon?: React.ReactNode
 }) => (
-  <Group position='apart' noWrap mb={6}>
-    <Text size={18} weight={600}>{title}</Text>
-    {icon && <Box sx={{ display: 'flex', flexShrink: 0, opacity: 0.6 }}>{icon}</Box>}
+  <Group justify='space-between' wrap='nowrap' mb={6}>
+    <Text fz={18} fw={600}>{title}</Text>
+    {icon && <Box style={{ display: 'flex', flexShrink: 0, opacity: 0.6 }}>{icon}</Box>}
   </Group>
 ));
 SectionHeader.displayName = 'SectionHeader'
@@ -38,7 +38,7 @@ export const Row = memo(({ label, children, minHeight = ROW_MIN_HEIGHT }: {
   children: React.ReactNode,
   minHeight?: number
 }) => (
-  <Group noWrap spacing='xs' px={8} sx={{ minHeight }}>
+  <Group wrap='nowrap' gap='xs' px={8} style={{ minHeight }}>
     <Label>{label}</Label>
     {children}
   </Group>
@@ -55,8 +55,8 @@ export const InfoRow = memo(({ label, value, monospace, color = 'blue.4' }: {
   <Row label={label}>
     <Text
       size='sm'
-      color={color}
-      sx={(theme) => (monospace ? { fontFamily: theme.fontFamilyMonospace } : {})}
+      c={color}
+      style={monospace ? { fontFamily: 'var(--mantine-font-family-monospace)' } : undefined}
     >
       {value}
     </Text>
@@ -91,23 +91,23 @@ export const CopyableValue = memo(({ value, copyLabel, copiedLabel, monospace = 
     >
       <UnstyledButton
         onClick={handleCopy}
-        sx={(theme) => ({
+        className='dolu-hover-row'
+        style={{
           flex: 1,
           minWidth: 0,
-          borderRadius: theme.radius.sm,
+          borderRadius: 'var(--mantine-radius-sm)',
           padding: '1px 6px',
           transition: 'background-color 120ms ease',
-          '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.06)' },
-        })}
+        }}
       >
         <Text
           size='sm'
-          color={copied ? 'teal.4' : color}
-          sx={(theme) => ({
+          c={copied ? 'teal.4' : color}
+          style={{
             minWidth: 0,
             wordBreak: 'break-word',
-            ...(monospace ? { fontFamily: theme.fontFamilyMonospace } : {}),
-          })}
+            ...(monospace ? { fontFamily: 'var(--mantine-font-family-monospace)' } : {}),
+          }}
         >
           {value}
         </Text>
@@ -167,27 +167,27 @@ export const FlagRow = memo(({ label, total, options, onChange, copyLabel, copie
       <CopyableValue value={total} copyLabel={copyLabel} copiedLabel={copiedLabel} />
       <Popover position='right-start' withArrow shadow='md'>
         <Popover.Target>
-          <ActionIcon size='md' variant='default' sx={{ flexShrink: 0 }}>
+          <ActionIcon size='md' variant='default' style={{ flexShrink: 0 }}>
             <AiFillEdit fontSize={16} />
           </ActionIcon>
         </Popover.Target>
         <Popover.Dropdown p='sm'>
           <Checkbox.Group
-            orientation='vertical'
-            spacing={8}
             size='sm'
             value={selected}
             onChange={handleChange}
           >
-            {options.map((o) => (
-              <Checkbox
-                key={o.value}
-                color='blue.4'
-                value={o.value}
-                label={`${o.value} - ${o.label}`}
-                styles={{ label: { whiteSpace: 'nowrap' } }}
-              />
-            ))}
+            <Stack gap={8}>
+              {options.map((o) => (
+                <Checkbox
+                  key={o.value}
+                  color='blue.4'
+                  value={o.value}
+                  label={`${o.value} - ${o.label}`}
+                  styles={{ label: { whiteSpace: 'nowrap' } }}
+                />
+              ))}
+            </Stack>
           </Checkbox.Group>
         </Popover.Dropdown>
       </Popover>

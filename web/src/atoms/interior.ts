@@ -1,4 +1,4 @@
-import { atom, selector, useRecoilValue } from 'recoil'
+import { atom, useAtomValue } from 'jotai'
 
 export interface InteriorData {
     interiorId: number
@@ -61,33 +61,25 @@ const mockInterior: InteriorData = {
     interiorId: -1
 }
 
-export const interiorAtom = atom<InteriorData>({ key: 'interior', default: mockInterior })
+export const interiorAtom = atom<InteriorData>(mockInterior)
 export type TimecycleOption = { label: string, value: string, varCount?: number }
-export const timecycleListAtom = atom<TimecycleOption[]>({ key: 'timecycleList', default: [{label: "Unknown", value: '0'}] })
-export const timecycleAtom = atom<string | null>({ key: 'timecycle', default: null })
-export const portalDebuggingAtom = atom<string[]>({ key: 'portalDebugging', default: [] })
-export const portalEditingIndexAtom = atom<number>({ key: 'portalEditingIndex', default: 0 })
-export const portalDataAtom = atom<any>({ key: 'portalData', default: null })
-export const portalFlagsAtom = atom<string[]|null>({ key: 'portalFlags', default: null })
+export const timecycleListAtom = atom<TimecycleOption[]>([{label: "Unknown", value: '0'}])
+export const timecycleAtom = atom<string | null>(null)
+export const portalDebuggingAtom = atom<string[]>([])
+export const portalEditingIndexAtom = atom<number>(0)
+export const portalDataAtom = atom<any>(null)
+export const portalFlagsAtom = atom<string[]|null>(null)
 
-export const getInteriorAtom = selector({
-    key: 'getInterior',
-    get: ({ get }) => {
-        return get(interiorAtom)
-    },
+export const getInteriorAtom = atom((get) => get(interiorAtom))
+
+export const getPortalFlagListAtom = atom((get) => {
+    const interior = get(interiorAtom)
+    const index = get(portalEditingIndexAtom)
+
+    if (!interior.portals) return []
+
+    return interior.portals[index].flags.list
 })
 
-export const getPortalFlagListAtom = selector({
-    key: 'getPortalFlagList',
-    get: ({ get }) => {
-        const interior = get(interiorAtom)
-        const index = get(portalEditingIndexAtom)
-
-        if (!interior.portals) return []
-
-        return interior.portals[index].flags.list
-    },
-})
-
-export const getInteriorData = () => useRecoilValue(getInteriorAtom)
-export const getPortalFlagsList = () => useRecoilValue(getPortalFlagListAtom)
+export const getInteriorData = () => useAtomValue(getInteriorAtom)
+export const getPortalFlagsList = () => useAtomValue(getPortalFlagListAtom)

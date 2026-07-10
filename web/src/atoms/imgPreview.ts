@@ -1,4 +1,4 @@
-import { atom } from 'recoil'
+import { atom } from 'jotai'
 
-export const displayImageAtom = atom<boolean>({ key: 'displayImage', default: false })
-export const imagePathAtom = atom<string>({ key: 'imagePath', default: '' })
+export const displayImageAtom = atom<boolean>(false)
+export const imagePathAtom = atom<string>('')

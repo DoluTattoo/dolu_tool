@@ -13,13 +13,13 @@ const Interior: React.FC = () => {
 
   return (
     <SimpleGrid cols={1}>
-      <Stack spacing='sm'>
+      <Stack gap='sm'>
         {
           interior?.interiorId <= 0
             ?
             <Paper p='md'>
               <SectionHeader title={locale.ui_current_interior} icon={<RiHomeGearFill size={22} />} />
-              <Text color='dimmed' size='sm' px={8}>{locale.ui_not_in_interior}</Text>
+              <Text c='dimmed' size='sm' px={8}>{locale.ui_not_in_interior}</Text>
             </Paper>
             :
             <>

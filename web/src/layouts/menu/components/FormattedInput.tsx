@@ -15,12 +15,11 @@ const FormattedInput: React.FC<Props> = ({ value, onChange, description }) => {
     <NumberInput
       label={locale.amount}
       value={value}
-      onChange={onChange}
+      onChange={(val) => onChange(typeof val === 'number' ? val : undefined)}
       hideControls
       description={description}
-      icon={<TbCurrencyDollar size={20} />}
-      parser={(value) => (value ? value.replace(/\$\s?|(,*)/g, '') : '')}
-      formatter={(value) => (value ? value.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : '')}
+      leftSection={<TbCurrencyDollar size={20} />}
+      thousandSeparator=','
     />
   )
 }

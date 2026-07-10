@@ -1,8 +1,8 @@
-import { atom } from 'recoil'
+import { atom } from 'jotai'
 
 export interface Version {
     currentVersion: string
     url?: string
 }
 
-export const versionAtom = atom<Version>({ key: 'version', default: { currentVersion: "" } })
+export const versionAtom = atom<Version>({ currentVersion: "" })

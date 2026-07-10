@@ -1,6 +1,6 @@
 import { Accordion, Button, Group, Paper, ScrollArea, Stack, Text, Image, Center, Pagination } from '@mantine/core'
 import { useEffect, useState} from 'react'
-import { useRecoilState, useSetRecoilState } from 'recoil'
+import { useAtom, useSetAtom } from 'jotai'
 import { getSearchVehicleInput, vehiclesPageCountAtom, vehiclesActivePageAtom, vehiclesPageContentAtom, VehicleProp } from '../../../../atoms/vehicle'
 import { displayImageAtom, imagePathAtom } from '../../../../atoms/imgPreview'
 import { setClipboard } from '../../../../utils/setClipboard'
@@ -12,9 +12,9 @@ import { useLocales } from '../../../../providers/LocaleProvider'
 const Vehicle: React.FC = () => {
   const { locale } = useLocales()
   const searchVehicleValue = getSearchVehicleInput()
-  const [pageContent, setPageContent] = useRecoilState(vehiclesPageContentAtom)
-  const [pageCount, setPageCount] = useRecoilState(vehiclesPageCountAtom)
-  const [activePage, setPage] = useRecoilState(vehiclesActivePageAtom)
+  const [pageContent, setPageContent] = useAtom(vehiclesPageContentAtom)
+  const [pageCount, setPageCount] = useAtom(vehiclesPageCountAtom)
+  const [activePage, setPage] = useAtom(vehiclesActivePageAtom)
 
   useNuiEvent('setPageContent', (data: {type: string, content: VehicleProp[], maxPages: number}) => {
     if (data.type === 'vehicles') {
@@ -27,8 +27,8 @@ const Vehicle: React.FC = () => {
   const [copiedVehicleHash, setCopiedVehicleHash] = useState(false)
   const [currentAccordionItem, setAccordionItem] = useState<string|null>('0')
 
-  const displayImage = useSetRecoilState(displayImageAtom)
-  const imagePath = useSetRecoilState(imagePathAtom)
+  const displayImage = useSetAtom(displayImageAtom)
+  const imagePath = useSetAtom(imagePathAtom)
 
   // Copied name button
   useEffect(() => {
@@ -46,28 +46,22 @@ const Vehicle: React.FC = () => {
   const VehicleList = pageContent?.map((vehicleList: any, index: number) => (
       <Accordion.Item key={index} value={index.toString()}>
         <Accordion.Control>
-          <Text size='md' weight={500}>• {vehicleList.name}</Text>
+          <Text size='md' fw={500}>• {vehicleList.name}</Text>
           <Text size='xs'>{locale.ui_hash}: {vehicleList.hash}</Text>
         </Accordion.Control>
         <Accordion.Panel>
-          <Group grow spacing='xs'> 
+          <Group grow gap='xs'>
             <Image
               onMouseEnter={() => {
                 displayImage(true)
                 imagePath(`https://gta-images.s3.fr-par.scw.cloud/vehicle/${vehicleList.name.toLowerCase()}.webp`)
               }}
               onMouseLeave={() => {displayImage(false)}}
-              height={50}
+              h={50}
               fit='contain'
               alt={`${vehicleList.name}`}
               src={`https://gta-images.s3.fr-par.scw.cloud/vehicle/${vehicleList.name.toLowerCase()}.webp`}
-              withPlaceholder={true}
-              sx={{
-                '&:hover':{
-                  borderRadius: '5px',
-                  backgroundColor: 'rgba(35, 35, 35, 0.75)'
-                }
-              }}
+              className='dolu-hover-img'
             />
             <Button
               variant='light'
@@ -98,7 +92,7 @@ const Vehicle: React.FC = () => {
               }}
             >
               {copiedVehicleHash ? locale.ui_copied_hash : locale.ui_copy_hash}
-            </Button>                     
+            </Button>
           </Group>
         </Accordion.Panel>
       </Accordion.Item>
@@ -106,12 +100,12 @@ const Vehicle: React.FC = () => {
 
   return(
     <Stack>
-      <Text size={20}>{locale.ui_vehicles}</Text>
+      <Text fz={20}>{locale.ui_vehicles}</Text>
       <Group grow>
         <VehicleSearch/>
         <Button
           disabled={searchVehicleValue === ''}
-          uppercase
+          tt='uppercase'
           variant='light'
           color='blue.4'
           onClick={() => fetchNui('dolu_tool:spawnVehicle', searchVehicleValue)}
@@ -122,9 +116,9 @@ const Vehicle: React.FC = () => {
       <ScrollArea style={{ height: 575 }} scrollbarSize={0}>
         <Stack>
           <Accordion variant='contained' radius='sm' value={currentAccordionItem} onChange={setAccordionItem}>
-            {VehicleList ? VehicleList : 
+            {VehicleList ? VehicleList :
               <Paper p='md'>
-                <Text size='md' weight={600} color='red.4'>No vehicle found</Text>
+                <Text size='md' fw={600} c='red.4'>No vehicle found</Text>
               </Paper>
             }
             </Accordion>
@@ -134,7 +128,7 @@ const Vehicle: React.FC = () => {
         <Pagination
           color='blue.4'
           size='sm'
-          page={activePage}
+          value={activePage}
           onChange={(value) => {
             fetchNui('dolu_tool:loadPages', { type: 'vehicles', activePage: value, filter: searchVehicleValue })
             setPage(value)

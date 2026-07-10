@@ -1,4 +1,4 @@
-import { atom, useRecoilValue } from 'recoil'
+import { atom, useAtomValue } from 'jotai'
 
 export interface WeaponProp {
   hash: number,
@@ -16,9 +16,9 @@ const mockWeaponList: WeaponProp[] = [
     },
 ]
 
-export const weaponsListSearchAtom = atom<string>({ key: 'weaponsListSearch', default: '' })
-export const weaponsActivePageAtom = atom<number>({ key: 'weaponsActivePage', default: 1 })
-export const weaponsPageCountAtom = atom<number>({ key: 'weaponsPageCount', default: 1})
-export const weaponsPageContentAtom = atom<WeaponProp[]>({ key: 'weaponsPageContent', default: mockWeaponList })
+export const weaponsListSearchAtom = atom<string>('')
+export const weaponsActivePageAtom = atom<number>(1)
+export const weaponsPageCountAtom = atom<number>(1)
+export const weaponsPageContentAtom = atom<WeaponProp[]>(mockWeaponList)
 
-export const getSearchWeaponInput = () => useRecoilValue(weaponsListSearchAtom) as string
+export const getSearchWeaponInput = () => useAtomValue(weaponsListSearchAtom) as string

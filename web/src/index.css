@@ -60,3 +60,123 @@ code {
   background: transparent;
 }
 
+/* --- Menu layout (replaces Mantine v5 AppShell/Header/Navbar) --- */
+.dolu-menu-wrapper {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  z-index: 3;
+  width: 600px;
+  color: var(--mantine-color-dark-1);
+  display: flex;
+  flex-direction: column;
+}
+
+.dolu-menu-header {
+  height: 50px;
+  background-color: rgba(24, 24, 27, 0.95);
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.dolu-menu-body {
+  display: flex;
+  height: 775px;
+}
+
+.dolu-menu-nav {
+  width: 80px;
+  flex-shrink: 0;
+  padding: var(--mantine-spacing-md);
+  background-color: rgba(24, 24, 27, 0.95);
+  border-bottom-left-radius: 10px;
+}
+
+.dolu-menu-main {
+  flex: 1;
+  min-width: 0;
+  padding: var(--mantine-spacing-md);
+  background-color: rgba(24, 24, 27, 0.95);
+  border-bottom-right-radius: 10px;
+  height: 775px;
+  max-height: 775px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* --- Hover helpers (replace v5 sx nested selectors) --- */
+.dolu-hover-row:hover {
+  background-color: rgba(255, 255, 255, 0.06);
+}
+
+.dolu-hover-img:hover {
+  border-radius: 5px;
+  background-color: rgba(35, 35, 35, 0.75);
+}
+
+/* --- Accordion (variant=contained): replace the light-grey active item
+   background with a subtle, neutral tint. Kept unlayered so it wins over
+   Mantine's @layer defaults. --- */
+.mantine-Accordion-item {
+  background-color: rgba(0, 0, 0, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.mantine-Accordion-item[data-active] {
+  background-color: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.mantine-Accordion-control,
+.mantine-Accordion-control[data-active] {
+  background-color: transparent;
+}
+
+.mantine-Accordion-control:hover {
+  background-color: rgba(255, 255, 255, 0.04);
+}
+
+.dolu-nav-icon {
+  width: 50px;
+  height: 50px;
+  transition: 300ms;
+}
+
+.dolu-nav-icon-inactive:hover {
+  background-color: var(--mantine-color-dark-6);
+}
+
+/* --- Gizmo mode selector (replaces v5 createStyles) --- */
+.dolu-gizmo-selector {
+  display: flex;
+  position: absolute;
+  color: var(--mantine-color-dark-1);
+  align-items: flex-start;
+  justify-content: space-between;
+  top: 2%;
+  width: 390px;
+  right: 10px;
+  gap: 0.1rem;
+  z-index: 3;
+}
+
+.dolu-gizmo-infos {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  color: var(--mantine-color-dark-1);
+  justify-content: space-between;
+  top: 7%;
+  padding: 10px;
+  width: 390px;
+  right: 10px;
+  gap: 0.7rem;
+  z-index: 2;
+  background-color: var(--mantine-color-dark-7);
+  border-radius: var(--mantine-radius-sm);
+}
+
+.dolu-gizmo-active {
+  color: var(--mantine-color-blue-4);
+}
+

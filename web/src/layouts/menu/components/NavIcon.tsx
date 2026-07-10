@@ -1,5 +1,5 @@
-import { ActionIcon, createStyles, Tooltip } from '@mantine/core'
-import { FloatingPosition } from '@mantine/core/lib/Floating'
+import { ActionIcon, Tooltip } from '@mantine/core'
+import type { FloatingPosition } from '@mantine/core'
 import { IconBaseProps } from 'react-icons'
 import { Link, useLocation } from 'react-router-dom'
 
@@ -13,17 +13,9 @@ interface Props {
   toolTipPosition?: FloatingPosition
 }
 
-const useStyles = createStyles((theme, color) => ({
-  icon: {
-    width: 50,
-    height: 50,
-    transition: '300ms',
-  },
-}))
-
 const NavIcon: React.FC<Props> = ({ tooltip, Icon, color, to, handleClick, toolTipPosition }) => {
-  const { classes } = useStyles()
   const location = useLocation()
+  const isActive = location.pathname === to
 
   return (
     <Tooltip label={tooltip} position={toolTipPosition ? toolTipPosition : 'right'}>
@@ -35,14 +27,8 @@ const NavIcon: React.FC<Props> = ({ tooltip, Icon, color, to, handleClick, toolT
         component={Link}
         to={to}
         color={color ? color : 'blue.4'}
-        className={classes.icon}
-        variant={location.pathname === to ? 'light' : 'transparent'}
-        sx={(theme) => ({
-          '&:hover': {
-            color: theme.colors.gray[6] ? color  : 'blue.4',
-            backgroundColor: location.pathname !== to ? theme.colors.dark[6] : undefined,
-          },
-        })}
+        className={`dolu-nav-icon${isActive ? '' : ' dolu-nav-icon-inactive'}`}
+        variant={isActive ? 'light' : 'transparent'}
       >
         <Icon fontSize={24} />
       </ActionIcon>

@@ -1,4 +1,4 @@
-import { ActionIcon, Box, Button, Flex, Group, Indicator, Menu, NumberInput, Overlay, Text, TextInput, Tooltip, createStyles } from "@mantine/core"
+import { ActionIcon, Box, Button, Flex, Group, Indicator, Menu, NumberInput, Overlay, Text, TextInput, Tooltip } from "@mantine/core"
 import { LuRotate3D, LuMove, LuMagnet } from "react-icons/lu"
 import { BiWorld } from "react-icons/bi"
 import { TbGizmo } from "react-icons/tb"
@@ -6,52 +6,11 @@ import { FaKeyboard } from "react-icons/fa"
 import { BsCheckLg, BsClipboard } from "react-icons/bs"
 import { RxCross2 } from "react-icons/rx"
 import { FiEdit } from "react-icons/fi"
-import { useRecoilState } from "recoil"
+import { useAtom } from "jotai"
 import React, { useCallback, useState } from "react"
 import { KeyboardLayoutAtom, RotateSnapAtom, TranslateSnapAtom } from "../../atoms/object"
 import { setClipboard } from "../../utils/setClipboard"
 import { fetchNui } from "../../utils/fetchNui"
-
-const useStyles = createStyles((theme) => ({
-  selector: {
-    display: 'flex',
-    position: 'absolute',
-    color: theme.colors.dark[1],
-    alignItems: 'flex-start',
-    justifyContent: 'space-between',
-    top: '2%',
-    width: 390,
-    right: 10,
-    gap: '0.1rem',
-    zIndex: 3,
-  },
-  infos: {
-    display: 'flex',
-    flexDirection: 'column',
-    position: 'absolute',
-    color: theme.colors.dark[1],
-    // alignItems: 'flex-start',
-    justifyContent: 'space-between',
-    top: '7%',
-    padding: 10,
-    width: 390,
-    right: 10,
-    gap: '0.7rem',
-    zIndex: 2,
-    backgroundColor: theme.colors.dark[7],
-    borderRadius: theme.radius.sm,
-  },
-  group: {
-    display: 'flex',
-    justifyContent: 'space-between',
-  },
-  active: {
-    color: theme.colors.blue[4],
-  },
-  dropdown: {
-    backgroundColor: theme.colors.dark[7],
-  }
-}))
 
 const stringToVec3 = (input: string): [number, number, number] | null => {
   // Remove leading and trailing whitespace, then split on comma or space
@@ -76,8 +35,7 @@ const stringToVec3 = (input: string): [number, number, number] | null => {
 }
 
 export const ModeSelector = React.memo(({ onChangeSpace, onChangeMode, space, mode, currentEntity }: ModeSelector) => {
-  const { classes } = useStyles();
-  const [layout, setLayout] = useRecoilState(KeyboardLayoutAtom);
+  const [layout, setLayout] = useAtom(KeyboardLayoutAtom);
 
   const positionString = `${currentEntity?.position.x.toFixed(3)}, ${currentEntity?.position.y.toFixed(3)}, ${currentEntity?.position.z.toFixed(3)}`
   const rotationString = `${currentEntity?.rotation.x.toFixed(3)}, ${currentEntity?.rotation.y.toFixed(3)}, ${currentEntity?.rotation.z.toFixed(3)}`
@@ -133,14 +91,14 @@ export const ModeSelector = React.memo(({ onChangeSpace, onChangeMode, space, mo
   const [rotEditMode, setRotEditMode] = useState(false)
 
   const [snapMenuOpened, setSnapMenuOpened] = useState(false)
-  const [translateSnap, setTranslateSnap] = useRecoilState(TranslateSnapAtom)
-  const [rotateSnap, setRotateSnap] = useRecoilState(RotateSnapAtom)
+  const [translateSnap, setTranslateSnap] = useAtom(TranslateSnapAtom)
+  const [rotateSnap, setRotateSnap] = useAtom(RotateSnapAtom)
 
   return (
     <>
-      <Box className={classes.selector}>
+      <Box className='dolu-gizmo-selector'>
         <Tooltip label='Transformation orientation (Shortcut: Q)'>
-          <Button color="dark.7" radius="sm" className={classes.active} onClick={onChangeSpace}>
+          <Button variant="filled" color="dark.7" radius="sm" className='dolu-gizmo-active' onClick={onChangeSpace}>
             {space === 'local' ? <TbGizmo fontSize={'1.5rem'} /> : <BiWorld fontSize={'1.5rem'} />}
           </Button>
         </Tooltip>
@@ -148,7 +106,7 @@ export const ModeSelector = React.memo(({ onChangeSpace, onChangeMode, space, mo
         <Button.Group>
           <Tooltip label='Translate mode (Shortcut: W)'>
             <Indicator label={<LuMagnet fontSize={'0.8rem'} />} size={0} position="top-start" offset={10} disabled={translateSnap === undefined || translateSnap < 0.0176}>
-              <Button color="dark.7" radius="sm" className={mode === 'translate' ? classes.active : ''} onClick={handleTranslateClick}>
+              <Button variant="filled" color="dark.7" radius="sm" className={mode === 'translate' ? 'dolu-gizmo-active' : ''} onClick={handleTranslateClick}>
                 <LuMove fontSize={'1.5rem'} />
               </Button>
             </Indicator>
@@ -156,16 +114,16 @@ export const ModeSelector = React.memo(({ onChangeSpace, onChangeMode, space, mo
 
           <Tooltip label='Rotate mode (Shortcut: R)'>
             <Indicator label={<LuMagnet fontSize={'0.8rem'} />} size={0} position="top-start" offset={10} disabled={rotateSnap === undefined || rotateSnap < 0.0176}>
-              <Button color="dark.7" radius="sm" className={mode === 'rotate' ? classes.active : ''} onClick={handleRotateClick}>
+              <Button variant="filled" color="dark.7" radius="sm" className={mode === 'rotate' ? 'dolu-gizmo-active' : ''} onClick={handleRotateClick}>
                 <LuRotate3D fontSize={'1.5rem'} />
               </Button>
             </Indicator>
           </Tooltip>
         </Button.Group>
 
-        <Menu classNames={classes} shadow="md" opened={snapMenuOpened} onChange={setSnapMenuOpened} withArrow>
+        <Menu styles={{ dropdown: { backgroundColor: 'var(--mantine-color-dark-7)' } }} shadow="md" opened={snapMenuOpened} onChange={setSnapMenuOpened} withArrow>
           <Menu.Target>
-            <Button color="dark.7" radius="sm" className={classes.active}>
+            <Button variant="filled" color="dark.7" radius="sm" className='dolu-gizmo-active'>
               <LuMagnet fontSize={'1.5rem'} />
             </Button>
           </Menu.Target>
@@ -175,16 +133,16 @@ export const ModeSelector = React.memo(({ onChangeSpace, onChangeMode, space, mo
               Translation Snap
             </Menu.Label>
             <Menu.Label>
-              <Group position="apart">
+              <Group justify="space-between">
                 <NumberInput
                   value={translateSnap !== undefined ? translateSnap * (180 / Math.PI) : 0}
-                  onChange={(value) => value && setTranslateSnap(value * (Math.PI / 180))}
+                  onChange={(value) => typeof value === 'number' && value && setTranslateSnap(value * (Math.PI / 180))}
                   min={0}
                   max={90}
                   step={1}
                   stepHoldDelay={500}
                   stepHoldInterval={(t) => Math.max(1000 / t ** 2, 25)}
-                  icon={<LuMove size='1rem' />}
+                  leftSection={<LuMove size='1rem' />}
                   maw={100}
                 />
                 <ActionIcon size="md" variant="light" color="red" onClick={() => setTranslateSnap(0)}><RxCross2 /></ActionIcon>
@@ -200,13 +158,13 @@ export const ModeSelector = React.memo(({ onChangeSpace, onChangeMode, space, mo
               <Group>
                 <NumberInput
                   value={rotateSnap !== undefined ? rotateSnap * (180 / Math.PI) : 0}
-                  onChange={(value) => value && setRotateSnap(value * (Math.PI / 180))}
+                  onChange={(value) => typeof value === 'number' && value && setRotateSnap(value * (Math.PI / 180))}
                   min={0}
                   max={90}
                   step={1}
                   stepHoldDelay={500}
                   stepHoldInterval={(t) => Math.max(1000 / t ** 2, 25)}
-                  icon={<LuRotate3D size='1rem' />}
+                  leftSection={<LuRotate3D size='1rem' />}
                   maw={100}
                 />
                 <ActionIcon size="md" variant="light" color="red" onClick={() => setRotateSnap(0)}><RxCross2 /></ActionIcon>
@@ -216,40 +174,43 @@ export const ModeSelector = React.memo(({ onChangeSpace, onChangeMode, space, mo
         </Menu>
 
         <Tooltip zIndex={1} label={`Switch to ${layout === 'QWERTY' ? 'AZERTY' : 'QWERTY'} keyboard layout`}>
-          <Button color="dark.7" radius="sm" leftIcon={<FaKeyboard fontSize={'1.5rem'} />} className={classes.active} onClick={handleLayoutSwitch}>
+          <Button variant="filled" color="dark.7" radius="sm" leftSection={<FaKeyboard fontSize={'1.5rem'} />} className='dolu-gizmo-active' onClick={handleLayoutSwitch}>
             {layout}
           </Button>
         </Tooltip>
       </Box>
 
-      <Box className={classes.infos}>
-        <Group position="apart">
+      <Box className='dolu-gizmo-infos'>
+        <Group justify="space-between">
           <Group>
             <Text>{`Model:`}</Text>
-            <Text color='blue.4' >{currentEntity?.name}</Text>
+            <Text c='blue.4' >{currentEntity?.name}</Text>
           </Group>
 
           <ActionIcon
+            variant='subtle'
             onClick={() => { currentEntity?.name && setClipboard(currentEntity.name.toString()) }}
           ><BsClipboard /></ActionIcon>
         </Group>
 
-        <Group position="apart">
+        <Group justify="space-between">
           <Group>
             <Text>{`Hash:`}</Text>
-            <Text color='blue.4' >{currentEntity?.hash}</Text>
+            <Text c='blue.4' >{currentEntity?.hash}</Text>
           </Group>
           <ActionIcon
+            variant='subtle'
             onClick={() => { currentEntity?.hash && setClipboard(currentEntity.hash.toString()) }}
           ><BsClipboard /></ActionIcon>
         </Group>
 
-        <Group position="apart">
+        <Group justify="space-between">
           <Group>
             <Text>{`Handle:`}</Text>
-            <Text color='blue.4' >{currentEntity?.handle}</Text>
+            <Text c='blue.4' >{currentEntity?.handle}</Text>
           </Group>
           <ActionIcon
+            variant='subtle'
             onClick={() => { currentEntity?.handle && setClipboard(currentEntity.handle.toString()) }}
           ><BsClipboard /></ActionIcon>
         </Group>
@@ -284,12 +245,13 @@ export const ModeSelector = React.memo(({ onChangeSpace, onChangeMode, space, mo
             />
           </Group>
           :
-          <Group position="apart">
+          <Group justify="space-between">
             <Group>
               <Text>{`Position:`}</Text>
-              <Text color='blue.4' >{positionString}</Text>
+              <Text c='blue.4' >{positionString}</Text>
             </Group>
             <ActionIcon
+              variant='subtle'
               onClick={() => { !rotEditMode && setPosEditMode(true) }}
             ><FiEdit /></ActionIcon>
           </Group>
@@ -325,12 +287,13 @@ export const ModeSelector = React.memo(({ onChangeSpace, onChangeMode, space, mo
             />
           </Group>
           :
-          <Group position="apart">
+          <Group justify="space-between">
             <Group>
               <Text>{`Rotation:`}</Text>
-              <Text color='blue.4' >{rotationString}</Text>
+              <Text c='blue.4' >{rotationString}</Text>
             </Group>
             <ActionIcon
+              variant='subtle'
               onClick={() => { !posEditMode && setRotEditMode(true) }}
             ><FiEdit /></ActionIcon>
           </Group>
@@ -339,7 +302,7 @@ export const ModeSelector = React.memo(({ onChangeSpace, onChangeMode, space, mo
         {snapMenuOpened && (
           <Overlay
             color="black"
-            opacity={0.75}
+            backgroundOpacity={0.75}
             radius='sm'
           />
         )}

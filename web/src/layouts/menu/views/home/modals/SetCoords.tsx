@@ -10,13 +10,13 @@ const SetCoords: React.FC = () => {
     const [coordX, setCoordX] = useState(0)
     const [coordY, setCoordY] = useState(0)
     const [coordZ, setCoordZ] = useState(0)
-    
+
     return (
         <Stack>
-            <Text weight={500}>{locale.ui_set_coords_as_string}</Text>
+            <Text fw={500}>{locale.ui_set_coords_as_string}</Text>
             <TextInput value={coordString} onChange={(e) => setCoordString(e.target.value)} />
             <Button
-                uppercase
+                tt='uppercase'
                 disabled={coordString === ''}
                 variant='light'
                 color='blue.4'
@@ -25,18 +25,18 @@ const SetCoords: React.FC = () => {
                     fetchNui('dolu_tool:setCustomCoords', { coordString: coordString })
                 }}
             >{locale.ui_confirm}</Button>
-            
+
             <Divider my='sm' />
-            <Text weight={500}>{locale.ui_set_coords_separate}</Text>
-            
-            <Group grow sx={{ maxWidth:300 }}>
-                <NumberInput noClampOnBlur defaultValue={0.0} label="X" value={coordX} onChange={(value) => value && setCoordX(value)} step={0.5} stepHoldDelay={500} stepHoldInterval={(t) => Math.max(1000 / t ** 2, 25)} />
-                <NumberInput noClampOnBlur defaultValue={0.0} label="Y" value={coordY} onChange={(value) => value && setCoordY(value)} step={0.5} stepHoldDelay={500} stepHoldInterval={(t) => Math.max(1000 / t ** 2, 25)} />
-                <NumberInput noClampOnBlur defaultValue={0.0} label="Z" value={coordZ} onChange={(value) => value && setCoordZ(value)} step={0.5} stepHoldDelay={500} stepHoldInterval={(t) => Math.max(1000 / t ** 2, 25)} />
+            <Text fw={500}>{locale.ui_set_coords_separate}</Text>
+
+            <Group grow style={{ maxWidth:300 }}>
+                <NumberInput clampBehavior='none' defaultValue={0.0} label="X" value={coordX} onChange={(value) => typeof value === 'number' && setCoordX(value)} step={0.5} stepHoldDelay={500} stepHoldInterval={(t) => Math.max(1000 / t ** 2, 25)} />
+                <NumberInput clampBehavior='none' defaultValue={0.0} label="Y" value={coordY} onChange={(value) => typeof value === 'number' && setCoordY(value)} step={0.5} stepHoldDelay={500} stepHoldInterval={(t) => Math.max(1000 / t ** 2, 25)} />
+                <NumberInput clampBehavior='none' defaultValue={0.0} label="Z" value={coordZ} onChange={(value) => typeof value === 'number' && setCoordZ(value)} step={0.5} stepHoldDelay={500} stepHoldInterval={(t) => Math.max(1000 / t ** 2, 25)} />
             </Group>
 
             <Button
-                uppercase
+                tt='uppercase'
                 disabled={coordString === ''}
                 variant='light'
                 color='blue.4'
@@ -48,5 +48,5 @@ const SetCoords: React.FC = () => {
         </Stack>
         )
     }
-    
+
     export default SetCoords

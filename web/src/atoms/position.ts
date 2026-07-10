@@ -1,6 +1,6 @@
-import { atom, useRecoilValue } from 'recoil'
+import { atom, useAtomValue } from 'jotai'
 
 const mockPosition: string = "0, 0, 0"
 
-export const positionAtom = atom<string>({ key: 'position', default: mockPosition })
-export const getPosition = () => useRecoilValue(positionAtom)
+export const positionAtom = atom<string>(mockPosition)
+export const getPosition = () => useAtomValue(positionAtom)

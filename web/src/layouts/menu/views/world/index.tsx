@@ -3,17 +3,17 @@ import { AiOutlineClockCircle } from 'react-icons/ai'
 import { TiWeatherPartlySunny } from 'react-icons/ti'
 import { fetchNui } from '../../../../utils/fetchNui'
 import { useNuiEvent } from '../../../../hooks/useNuiEvent'
-import { useRecoilState } from 'recoil'
+import { useAtom } from 'jotai'
 import { worldFreezeTimeAtom, worldFreezeWeatherAtom, worldHourAtom, worldMinuteAtom, worldWeatherAtom } from '../../../../atoms/world'
 import { useLocales } from '../../../../providers/LocaleProvider'
 
 const World: React.FC = () => {
   const { locale } = useLocales()
-  const [hourValue, setHourValue] = useRecoilState(worldHourAtom)
-  const [minuteValue, setMinuteValue] = useRecoilState(worldMinuteAtom)
-  const [weatherValue, setWeatherValue] = useRecoilState(worldWeatherAtom)
-  const [timeFrozen, setTimeFrozen] = useRecoilState(worldFreezeTimeAtom)
-  const [weatherFrozen, setWeatherFrozen] = useRecoilState(worldFreezeWeatherAtom)
+  const [hourValue, setHourValue] = useAtom(worldHourAtom)
+  const [minuteValue, setMinuteValue] = useAtom(worldMinuteAtom)
+  const [weatherValue, setWeatherValue] = useAtom(worldWeatherAtom)
+  const [timeFrozen, setTimeFrozen] = useAtom(worldFreezeTimeAtom)
+  const [weatherFrozen, setWeatherFrozen] = useAtom(worldFreezeWeatherAtom)
 
   useNuiEvent('setWorldData', (data: any) => {
     setWeatherValue(data.weather)
@@ -31,8 +31,8 @@ const World: React.FC = () => {
       <Stack>
         {/* Time    */}
         <Paper p='md'>
-          <Group position='apart'>
-            <Text size={20} weight={600}>{locale.ui_time}</Text>
+          <Group justify='space-between'>
+            <Text fz={20} fw={600}>{locale.ui_time}</Text>
             <AiOutlineClockCircle size={24} />
           </Group>
 
@@ -48,8 +48,8 @@ const World: React.FC = () => {
               min={0}
               stepHoldDelay={500}
               stepHoldInterval={(t) => Math.max(1000 / t ** 2, 25)}
-              onChange={(value: number) => {
-                if (value) {
+              onChange={(value) => {
+                if (typeof value === 'number') {
                   setHourValue(value)
                   fetchNui('dolu_tool:setClock', { hour: value, minute: minuteValue})
                 }
@@ -64,7 +64,8 @@ const World: React.FC = () => {
               min={0}
               stepHoldDelay={500}
               stepHoldInterval={(t) => Math.max(1000 / t ** 2, 25)}
-              onChange={(value: number) => {
+              onChange={(value) => {
+                if (typeof value !== 'number') return
                 setMinuteValue(value)
                 fetchNui('dolu_tool:setClock', { hour: hourValue, minute: value})
               }}
@@ -91,8 +92,8 @@ const World: React.FC = () => {
 
         {/* Weather */}
         <Paper p='md'>
-          <Group position='apart'>
-            <Text size={20} weight={600}>{locale.ui_weather}</Text>
+          <Group justify='space-between'>
+            <Text fz={20} fw={600}>{locale.ui_weather}</Text>
             <TiWeatherPartlySunny size={24} />
           </Group>
 

@@ -1,6 +1,6 @@
-import { forwardRef, memo, useCallback, useEffect } from "react";
+import { memo, useCallback, useEffect } from "react";
 import { ActionIcon, Divider, Group, Paper, Select, Stack, Text } from "@mantine/core";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useAtom, useAtomValue } from "jotai";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { GiCancel } from "react-icons/gi";
 import { RiDoorOpenFill } from "react-icons/ri";
@@ -15,39 +15,6 @@ import { useLocales, type Locale } from "../../../../../providers/LocaleProvider
 import { useNuiEvent } from "../../../../../hooks/useNuiEvent";
 import { CopyableRow, FlagRow, Row, SectionHeader } from "./PropertyRow";
 import { ROOM_FLAGS } from "./flags";
-
-// Custom dropdown item: name on the left, variable count discreetly on the right
-interface TimecycleItemProps extends React.ComponentPropsWithoutRef<"div"> {
-  label: string;
-  varCount?: number;
-}
-
-const TimecycleItem = forwardRef<HTMLDivElement, TimecycleItemProps>(
-  ({ label, varCount, ...others }, ref) => (
-    <div ref={ref} {...others}>
-      <Group position="apart" noWrap spacing="xs" sx={{ width: "100%" }}>
-        <Text
-          size="sm"
-          sx={{
-            flex: 1,
-            minWidth: 0,
-            whiteSpace: "nowrap",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-          }}
-        >
-          {label}
-        </Text>
-        {!!varCount && (
-          <Text size="xs" color="dimmed">
-            {varCount}
-          </Text>
-        )}
-      </Group>
-    </div>
-  )
-);
-TimecycleItem.displayName = "TimecycleItem";
 
 // Memoized timecycle controls
 const TimecycleControls = memo(
@@ -68,29 +35,40 @@ const TimecycleControls = memo(
     onChange: (value: string | null) => void;
     locale: Locale;
   }) => (
-    <Group spacing={5} noWrap sx={{ flex: 1, minWidth: 0 }}>
+    <Group gap={5} wrap="nowrap" style={{ flex: 1, minWidth: 0 }}>
       <Select
         size="sm"
         searchable
-        nothingFound={locale.ui_no_timecycle_found}
+        nothingFoundMessage={locale.ui_no_timecycle_found}
         data={timecycleList}
-        itemComponent={TimecycleItem}
+        renderOption={({ option }) => {
+          const { label, varCount } = option as TimecycleOption;
+          return (
+            <Group justify="space-between" wrap="nowrap" gap="xs" style={{ width: "100%" }}>
+              <Text
+                size="sm"
+                style={{
+                  flex: 1,
+                  minWidth: 0,
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                }}
+              >
+                {label}
+              </Text>
+              {!!varCount && (
+                <Text size="xs" c="dimmed">
+                  {varCount}
+                </Text>
+              )}
+            </Group>
+          );
+        }}
         value={timecycle}
         onChange={onChange}
-        sx={{ flex: 1, minWidth: 0 }}
-        styles={{
-          dropdown: {
-            width: "320px !important",
-            minWidth: "320px !important",
-            // ScrollArea wraps items in a `display: table` element that grows to
-            // the widest item; force it to block so labels ellipsize to the
-            // dropdown width instead of triggering a horizontal scrollbar.
-            "& .mantine-ScrollArea-viewport > div": { display: "block !important" },
-            '& .mantine-ScrollArea-scrollbar[data-orientation="horizontal"]': {
-              display: "none",
-            },
-          },
-        }}
+        style={{ flex: 1, minWidth: 0 }}
+        comboboxProps={{ width: 320, position: "bottom-start" }}
       />
       <ActionIcon size={30} variant="default" onClick={onPrev}>
         <FaArrowLeft size={13} />
@@ -108,11 +86,9 @@ TimecycleControls.displayName = "TimecycleControls";
 
 const RoomsElement: React.FC = memo(() => {
   const { locale } = useLocales();
-  const interior = useRecoilValue(interiorAtom);
-  const [timecycleList, setTimecycleList] = useRecoilState(timecycleListAtom);
-  const [timecycle, setTimecycle] = useRecoilState<string | null>(
-    timecycleAtom
-  );
+  const interior = useAtomValue(interiorAtom);
+  const [timecycleList, setTimecycleList] = useAtom(timecycleListAtom);
+  const [timecycle, setTimecycle] = useAtom(timecycleAtom);
 
   useNuiEvent(
     "setTimecycleList",
@@ -176,7 +152,7 @@ const RoomsElement: React.FC = memo(() => {
         icon={<RiDoorOpenFill size={22} />}
       />
 
-      <Stack spacing={2}>
+      <Stack gap={2}>
         <CopyableRow
           label={locale.ui_index}
           value={interior.currentRoom?.index}

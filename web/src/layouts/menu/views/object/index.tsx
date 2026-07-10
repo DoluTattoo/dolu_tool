@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useRecoilState } from 'recoil'
+import { useAtom } from 'jotai'
 import { Accordion, ActionIcon, Button, Group, Paper, ScrollArea, Space, Text, TextInput } from '@mantine/core'
 import { openModal } from '@mantine/modals'
 import { MdLibraryAdd, MdDeleteForever } from 'react-icons/md'
@@ -13,7 +13,7 @@ import { useLocales } from '../../../../providers/LocaleProvider'
 
 const Object: React.FC = () => {
     const { locale } = useLocales()
-    const [objectList, setObjectList] = useRecoilState(ObjectListAtom)
+    const [objectList, setObjectList] = useAtom(ObjectListAtom)
     const [currentAccordionItem, setAccordionItem] = useState<string|null>(null)
 
     const [copiedName, setCopiedName] = useState<boolean>(false)
@@ -51,10 +51,11 @@ const Object: React.FC = () => {
     return (
         <>
         {/* TITLE */}
-        <Group position='apart'>
-            <Text size={20}>{locale.ui_object_spawner}</Text>
-            <Group position='apart'>
+        <Group justify='space-between'>
+            <Text fz={20}>{locale.ui_object_spawner}</Text>
+            <Group justify='space-between'>
             <ActionIcon
+                variant='subtle'
                 size='xl'
                 color='blue.4'
                 onClick={() =>
@@ -68,6 +69,7 @@ const Object: React.FC = () => {
                 <MdLibraryAdd fontSize={30} />
             </ActionIcon>
             <ActionIcon
+                variant='subtle'
                 disabled={objectList.length < 1}
                 size='xl'
                 color='red.4'
@@ -87,7 +89,7 @@ const Object: React.FC = () => {
         <Space h='sm' />
 
         {/* OBJECT LIST*/}
-        <Paper p='md' sx={{ height:685 }}>
+        <Paper p='md' style={{ height:685 }}>
             <ScrollArea style={{ height: 650, borderRadius: '5px' }} offsetScrollbars scrollbarSize={12}>
                 <Accordion
                     variant='contained'
