@@ -140,5 +140,13 @@
   "ui_room": "Rum",
   "ui_radio_station": "Radiostation",
   "ui_copied_rotation": "Kopieret rotation",
-  "ui_copy_rotation": "Kopier rotation"
+  "ui_copy_rotation": "Kopier rotation",
+  "ui_position": "Position",
+  "ui_rotation": "Rotation",
+  "ui_extents_min": "Udstrækning min",
+  "ui_extents_max": "Udstrækning maks",
+  "ui_size": "Størrelse",
+  "ui_copy": "Kopiér",
+  "ui_copied": "Kopieret!",
+  "ui_details": "Detaljer"
 }

@@ -140,5 +140,13 @@
   "ui_room": "部屋",
   "ui_radio_station": "ラジオ局",
   "ui_copied_rotation": "回転をコピーしました",
-  "ui_copy_rotation": "回転をコピー"
+  "ui_copy_rotation": "回転をコピー",
+  "ui_position": "位置",
+  "ui_rotation": "回転",
+  "ui_extents_min": "範囲 最小",
+  "ui_extents_max": "範囲 最大",
+  "ui_size": "サイズ",
+  "ui_copy": "コピー",
+  "ui_copied": "コピーしました！",
+  "ui_details": "詳細"
 }

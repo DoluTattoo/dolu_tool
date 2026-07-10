@@ -3,150 +3,7 @@ import { useNuiEvent } from '../hooks/useNuiEvent'
 import { fetchNui } from '../utils/fetchNui'
 import { debugData } from '../utils/debugData'
 
-interface Locale {
-  cannot_goback: string
-  no_marker: string
-  command_tpm: string
-  command_noclip: string
-  command_openui: string
-  command_weather_notfound: string
-  teleport_invalid_coords: string
-  model_doesnt_exist: string
-  copied_coords_clipboard: string
-  copied_model_clipboard: string
-  press_escape_exit: string
-  custom_location_created: string
-  vehicle_upgraded: string
-  weapon_gave: string
-  weapon_cant_carry: string
-  max_health_set: string
-  entity_cant_be_loaded: string
-  entity_doesnt_exist: string
-  entity_deleted: string
-  teleport_success: string
-  ui_home: string
-  ui_world: string
-  ui_exit: string
-  ui_copy_coords: string
-  ui_copied_coords: string
-  ui_copied_rotation: string
-  ui_copy_rotation: string
-  ui_copy_name: string
-  ui_copied_name: string
-  ui_copy_hash: string
-  ui_copied_hash: string
-  ui_name: string
-  ui_hash: string
-  ui_coords: string
-  ui_heading: string
-  ui_interior_id: string
-  ui_current_room: string
-  ui_teleport: string
-  ui_not_in_interior: string
-  ui_no_last_location: string
-  ui_current_coords: string
-  ui_set_coords: string
-  ui_save_location: string
-  ui_last_location: string
-  ui_current_interior: string
-  ui_quick_actions: string
-  ui_clean_zone: string
-  ui_clean_ped: string
-  ui_upgrade_vehicle: string
-  ui_repair_vehicle: string
-  ui_delete_vehicle: string
-  ui_set_sunny_day: string
-  ui_spawn_vehicle: string
-  ui_max_health: string
-  ui_time_freeze: string
-  ui_time_not_freeze: string
-  ui_time: string
-  ui_sync: string
-  ui_freeze_time: string
-  ui_weather: string
-  ui_choose_weather: string
-  ui_current_weather: string
-  ui_freeze_weather: string
-  ui_interior: string
-  ui_room_count: string
-  ui_portal_count: string
-  ui_portals: string
-  ui_infos: string
-  ui_fill_portals: string
-  ui_outline_portals: string
-  ui_corcers_portals: string
-  ui_flag: string
-  ui_room_from: string
-  ui_room_to: string
-  ui_index: string
-  ui_timecycle: string
-  ui_no_timecycle_found: string
-  ui_object_spawner: string
-  ui_locations: string
-  ui_snap_to_ground: string
-  ui_duplicate: string
-  ui_no_location_found: string
-  ui_goto: string
-  ui_show_custom_locations: string
-  ui_show_vanilla_locations: string
-  ui_create_custom_location: string
-  ui_search: string
-  ui_rename: string
-  ui_delete: string
-  ui_vanilla: string
-  ui_custom: string
-  ui_peds: string
-  ui_no_ped_found: string
-  ui_set_by_name: string
-  ui_set_ped: string
-  ui_vehicles: string
-  ui_spawn: string
-  ui_spawn_by_name: string
-  ui_no_vehicle_found: string
-  ui_weapons: string
-  ui_give_weapon_by_name: string
-  ui_give_weapon: string
-  ui_no_weapon_found: string
-  ui_set_coords_as_string: string
-  ui_set_coords_separate: string
-  ui_confirm: string
-  ui_cancel: string
-  ui_location_name: string
-  ui_create_location_description: string
-  ui_add_entity: string
-  ui_add_entity_description: string
-  ui_delete_all_entities: string
-  ui_amount: string
-  ui_portal_flag_1: string
-  ui_portal_flag_2: string
-  ui_portal_flag_4: string
-  ui_portal_flag_8: string
-  ui_portal_flag_16: string
-  ui_portal_flag_32: string
-  ui_portal_flag_64: string
-  ui_portal_flag_128: string
-  ui_portal_flag_256: string
-  ui_portal_flag_512: string
-  ui_portal_flag_1024: string
-  ui_portal_flag_2048: string
-  ui_portal_flag_4096: string
-  ui_portal_flag_8192: string
-  ui_update_warning: string
-  ui_github: string
-  ui_discord: string
-  ui_support: string
-  ui_audio: string
-  ui_static_emitters: string
-  ui_draw_static_emitters: string
-  ui_draw_distance: string
-  ui_closest_emitter_info: string
-  ui_refresh: string
-  ui_distance: string
-  ui_meters: string
-  ui_flags: string
-  ui_room: string
-  ui_radio_station: string
-}
+interface Locale { [key: string]: string }
 
 debugData(
   [
@@ -295,6 +152,14 @@ debugData(
         ui_flags: 'Flags',
         ui_room: 'Room',
         ui_radio_station: 'Radio Station',
+        ui_position: 'Position',
+        ui_rotation: 'Rotation',
+        ui_extents_min: 'Extents min',
+        ui_extents_max: 'Extents max',
+        ui_size: 'Size',
+        ui_copy: 'Copy',
+        ui_copied: 'Copied!',
+        ui_details: 'Details',
       }
     },
   ],
@@ -452,6 +317,14 @@ const LocaleProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =
     ui_flags: '',
     ui_room: '',
     ui_radio_station: '',
+    ui_position: '',
+    ui_rotation: '',
+    ui_extents_min: '',
+    ui_extents_max: '',
+    ui_size: '',
+    ui_copy: '',
+    ui_copied: '',
+    ui_details: '',
   })
 
   useEffect(() => {

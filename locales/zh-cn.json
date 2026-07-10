@@ -138,5 +138,13 @@
   "ui_meters": "米",
   "ui_flags": "Flags属性",
   "ui_room": "Room属性",
-  "ui_radio_station": "广播电台"
+  "ui_radio_station": "广播电台",
+  "ui_position": "位置",
+  "ui_rotation": "旋转",
+  "ui_extents_min": "范围最小值",
+  "ui_extents_max": "范围最大值",
+  "ui_size": "尺寸",
+  "ui_copy": "复制",
+  "ui_copied": "已复制！",
+  "ui_details": "详情"
 }

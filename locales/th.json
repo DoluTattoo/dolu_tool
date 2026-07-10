@@ -140,5 +140,13 @@
   "ui_room": "รูม",
   "ui_radio_station": "สถานีวิทยุ",
   "ui_copied_rotation": "คัดลอกมุมหมุนแล้ว",
-  "ui_copy_rotation": "คัดลอกมุมหมุน"
+  "ui_copy_rotation": "คัดลอกมุมหมุน",
+  "ui_position": "ตำแหน่ง",
+  "ui_rotation": "การหมุน",
+  "ui_extents_min": "ขอบเขต ต่ำสุด",
+  "ui_extents_max": "ขอบเขต สูงสุด",
+  "ui_size": "ขนาด",
+  "ui_copy": "คัดลอก",
+  "ui_copied": "คัดลอกแล้ว!",
+  "ui_details": "รายละเอียด"
 }

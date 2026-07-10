@@ -138,5 +138,13 @@
   "ui_meters": "أمتار",
   "ui_flags": "أعلام",
   "ui_room": "غرفة",
-  "ui_radio_station": "محطة إذاعية"
+  "ui_radio_station": "محطة إذاعية",
+  "ui_position": "الموضع",
+  "ui_rotation": "الدوران",
+  "ui_extents_min": "أدنى امتداد",
+  "ui_extents_max": "أقصى امتداد",
+  "ui_size": "الحجم",
+  "ui_copy": "نسخ",
+  "ui_copied": "تم النسخ!",
+  "ui_details": "تفاصيل"
 }

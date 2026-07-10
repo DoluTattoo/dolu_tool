@@ -140,5 +140,13 @@
   "ui_room": "Szoba",
   "ui_radio_station": "Rádió állomás",
   "ui_copied_rotation": "Copied rotation",
-  "ui_copy_rotation": "Copy rotation"
+  "ui_copy_rotation": "Copy rotation",
+  "ui_position": "Pozíció",
+  "ui_rotation": "Forgatás",
+  "ui_extents_min": "Kiterjedés min",
+  "ui_extents_max": "Kiterjedés max",
+  "ui_size": "Méret",
+  "ui_copy": "Másolás",
+  "ui_copied": "Másolva!",
+  "ui_details": "Részletek"
 }

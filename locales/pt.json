@@ -140,5 +140,13 @@
   "ui_room": "Divisão",
   "ui_radio_station": "Estação de rádio",
   "ui_copied_rotation": "Copied rotation",
-  "ui_copy_rotation": "Copy rotation"
+  "ui_copy_rotation": "Copy rotation",
+  "ui_position": "Posição",
+  "ui_rotation": "Rotação",
+  "ui_extents_min": "Extensão mín",
+  "ui_extents_max": "Extensão máx",
+  "ui_size": "Tamanho",
+  "ui_copy": "Copiar",
+  "ui_copied": "Copiado!",
+  "ui_details": "Detalhes"
 }

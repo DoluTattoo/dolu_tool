@@ -138,5 +138,13 @@
   "ui_meters": "米",
   "ui_flags": "Flags屬性",
   "ui_room": "Room屬性",
-  "ui_radio_station": "廣播電颱"
+  "ui_radio_station": "廣播電㑕",
+  "ui_position": "位置",
+  "ui_rotation": "旋轉",
+  "ui_extents_min": "範圍最小值",
+  "ui_extents_max": "範圍最大值",
+  "ui_size": "尺寸",
+  "ui_copy": "複製",
+  "ui_copied": "已複製！",
+  "ui_details": "詳情"
 }

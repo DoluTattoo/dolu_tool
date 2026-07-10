@@ -140,5 +140,13 @@
   "ui_room": "Room",
   "ui_radio_station": "Radio Station",
   "ui_copied_rotation": "Copied rotation",
-  "ui_copy_rotation": "Copy rotation"
+  "ui_copy_rotation": "Copy rotation",
+  "ui_position": "Position",
+  "ui_rotation": "Rotation",
+  "ui_extents_min": "Extents min",
+  "ui_extents_max": "Extents max",
+  "ui_size": "Size",
+  "ui_copy": "Copy",
+  "ui_copied": "Copied!",
+  "ui_details": "Details"
 }

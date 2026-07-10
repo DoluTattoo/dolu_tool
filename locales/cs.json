@@ -140,5 +140,13 @@
   "ui_room": "Room",
   "ui_radio_station": "Rádiová stanice",
   "ui_copied_rotation": "Copied rotation",
-  "ui_copy_rotation": "Copy rotation"
+  "ui_copy_rotation": "Copy rotation",
+  "ui_position": "Pozice",
+  "ui_rotation": "Rotace",
+  "ui_extents_min": "Rozsah min",
+  "ui_extents_max": "Rozsah max",
+  "ui_size": "Velikost",
+  "ui_copy": "Kopírovat",
+  "ui_copied": "Zkopírováno!",
+  "ui_details": "Podrobnosti"
 }
