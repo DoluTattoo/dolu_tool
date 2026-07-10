@@ -41,10 +41,28 @@ function GetInteriorData(fromThread)
             }
         end
 
+        -- Interior transform & bounds (only valid when actually inside an interior;
+        -- calling these natives with an invalid interior id crashes the game)
+        local position, rotation, extents
+        if Client.interiorId and Client.interiorId ~= 0 then
+            local posX, posY, posZ = GetInteriorPosition(Client.interiorId)
+            local rotX, rotY, rotZ, rotW = GetInteriorRotation(Client.interiorId)
+            local minX, minY, minZ, maxX, maxY, maxZ = GetInteriorEntitiesExtents(Client.interiorId)
+            position = { x = posX, y = posY, z = posZ }
+            rotation = { x = rotX, y = rotY, z = rotZ, w = rotW }
+            extents = {
+                min = { x = minX, y = minY, z = minZ },
+                max = { x = maxX, y = maxY, z = maxZ }
+            }
+        end
+
         local intData = {
             interiorId = Client.interiorId,
             roomCount = roomCount,
             portalCount = portalCount,
+            position = position,
+            rotation = rotation,
+            extents = extents,
             rooms = rooms,
             portals = portals,
             currentRoom = {
@@ -96,6 +114,28 @@ RegisterNUICallback('dolu_tool:setPortalFlagCheckbox', function(data, cb)
     end
 
     SetInteriorPortalFlag(Client.interiorId, data.portalIndex, flag)
+    Wait(10)
+    RefreshInterior(Client.interiorId)
+
+    -- Update flag back in nui
+    GetInteriorData()
+
+    cb(1)
+end)
+
+RegisterNUICallback('dolu_tool:setRoomFlagCheckbox', function(data, cb)
+    local flag = 0
+
+    for _, v in ipairs(data.flags) do
+        flag += tonumber(v)
+    end
+
+    local roomId = data.roomId
+    if roomId == nil then
+        roomId = GetInteriorRoomIndexByHash(Client.interiorId, GetRoomKeyFromEntity(cache.ped))
+    end
+
+    SetInteriorRoomFlag(Client.interiorId, roomId, flag)
     Wait(10)
     RefreshInterior(Client.interiorId)
 

@@ -4,6 +4,29 @@ export interface InteriorData {
     interiorId: number
     roomCount?: number
     portalCount?: number
+    position?: {
+        x: number
+        y: number
+        z: number
+    }
+    rotation?: {
+        x: number
+        y: number
+        z: number
+        w: number
+    }
+    extents?: {
+        min: {
+            x: number
+            y: number
+            z: number
+        }
+        max: {
+            x: number
+            y: number
+            z: number
+        }
+    }
     rooms?: Array<{
         index: number
         name: string
