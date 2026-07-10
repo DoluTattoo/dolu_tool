@@ -13,7 +13,7 @@ const FormattedInput: React.FC<Props> = ({ value, onChange, description }) => {
 
   return (
     <NumberInput
-      label={locale.ui_amount}
+      label={locale.amount}
       value={value}
       onChange={onChange}
       hideControls
