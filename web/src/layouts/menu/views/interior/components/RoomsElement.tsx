@@ -1,8 +1,9 @@
 import { memo, useCallback, useEffect } from "react";
-import { ActionIcon, Group, Paper, Select, Space, Text } from "@mantine/core";
+import { ActionIcon, Divider, Group, Paper, Select, Stack } from "@mantine/core";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { GiCancel } from "react-icons/gi";
+import { RiDoorOpenFill } from "react-icons/ri";
 import {
   interiorAtom,
   timecycleAtom,
@@ -11,16 +12,8 @@ import {
 import { fetchNui } from "../../../../../utils/fetchNui";
 import { useLocales } from "../../../../../providers/LocaleProvider";
 import { useNuiEvent } from "../../../../../hooks/useNuiEvent";
-
-// Memoized room info row
-const RoomInfoRow = memo(
-  ({ label, value }: { label: string; value: string | number | undefined }) => (
-    <Group>
-      <Text>{label}:</Text>
-      <Text color="blue.4">{value}</Text>
-    </Group>
-  )
-);
+import { CopyableRow, FlagRow, Row, SectionHeader } from "./PropertyRow";
+import { ROOM_FLAGS } from "./flags";
 
 // Memoized timecycle controls
 const TimecycleControls = memo(
@@ -41,27 +34,29 @@ const TimecycleControls = memo(
     onChange: (value: string | null) => void;
     locale: { ui_no_timecycle_found: string };
   }) => (
-    <Group spacing={5}>
+    <Group spacing={5} noWrap sx={{ flex: 1, minWidth: 0 }}>
       <Select
+        size="sm"
         searchable
         nothingFound={locale.ui_no_timecycle_found}
         data={timecycleList}
         value={timecycle}
         onChange={onChange}
-        width={170}
+        sx={{ flex: 1, minWidth: 0 }}
       />
-      <ActionIcon size={36} variant="default" onClick={onPrev}>
-        <FaArrowLeft />
+      <ActionIcon size={30} variant="default" onClick={onPrev}>
+        <FaArrowLeft size={13} />
       </ActionIcon>
-      <ActionIcon size={36} variant="default" onClick={onNext}>
-        <FaArrowRight />
+      <ActionIcon size={30} variant="default" onClick={onNext}>
+        <FaArrowRight size={13} />
       </ActionIcon>
-      <ActionIcon size={36} variant="default" onClick={onReset}>
-        <GiCancel />
+      <ActionIcon size={30} variant="default" onClick={onReset}>
+        <GiCancel size={15} />
       </ActionIcon>
     </Group>
   )
 );
+TimecycleControls.displayName = "TimecycleControls";
 
 const RoomsElement: React.FC = memo(() => {
   const { locale } = useLocales();
@@ -128,36 +123,55 @@ const RoomsElement: React.FC = memo(() => {
 
   return (
     <Paper p="md">
-      <Text size={20} weight={600}>
-        {locale.ui_current_room}
-      </Text>
-      <Space h="xs" />
-        <RoomInfoRow
+      <SectionHeader
+        title={locale.ui_current_room}
+        icon={<RiDoorOpenFill size={22} />}
+      />
+
+      <Stack spacing={2}>
+        <CopyableRow
           label={locale.ui_index}
           value={interior.currentRoom?.index}
+          copyLabel={locale.ui_copy}
+          copiedLabel={locale.ui_copied}
         />
-        <RoomInfoRow
+        <CopyableRow
           label={locale.ui_name}
           value={interior.currentRoom?.name}
+          copyLabel={locale.ui_copy}
+          copiedLabel={locale.ui_copied}
         />
-        <RoomInfoRow
+        <FlagRow
           label={locale.ui_flag}
-          value={interior.currentRoom?.flags.total}
+          total={interior.currentRoom?.flags.total}
+          options={ROOM_FLAGS}
+          onChange={(values) =>
+            fetchNui('dolu_tool:setRoomFlagCheckbox', {
+              flags: values,
+              roomId: interior.currentRoom?.index,
+            })
+          }
+          copyLabel={locale.ui_copy}
+          copiedLabel={locale.ui_copied}
         />
-        <Group>
-          <Text>{locale.ui_timecycle}:</Text>
-          {timecycle && (
-            <TimecycleControls
-              timecycle={timecycle}
-              timecycleList={timecycleList}
-              onPrev={handlePrevClick}
-              onNext={handleNextClick}
-              onReset={handleResetClick}
-              onChange={handleTimecycleChange}
-              locale={locale}
-            />
-          )}
-        </Group>
+
+        {timecycle && (
+          <>
+            <Divider my={6} variant="dashed" />
+            <Row label={locale.ui_timecycle}>
+              <TimecycleControls
+                timecycle={timecycle}
+                timecycleList={timecycleList}
+                onPrev={handlePrevClick}
+                onNext={handleNextClick}
+                onReset={handleResetClick}
+                onChange={handleTimecycleChange}
+                locale={locale}
+              />
+            </Row>
+          </>
+        )}
+      </Stack>
     </Paper>
   );
 });
