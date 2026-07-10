@@ -24,3 +24,39 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* Modern, compact scrollbars (applies to every scrollbar in the app) */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 4px 0;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.18);
+  border-radius: 9999px;
+  min-height: 40px;
+  transition: background-color 150ms ease;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(77, 171, 247, 0.7);
+}
+
+*::-webkit-scrollbar-thumb:active {
+  background-color: rgba(77, 171, 247, 0.9);
+}
+
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}
+

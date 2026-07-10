@@ -174,6 +174,15 @@ const Menu: React.FC = () => {
             fixed={false}
             navbar={<Nav />}
             header={<HeaderGroup data={version} />}
+            styles={{
+              main: {
+                height: 775,
+                maxHeight: 775,
+                overflowY: 'auto',
+                overflowX: 'hidden',
+                minWidth: 0,
+              },
+            }}
           >
             <Routes>
               <Route path='/' element={<Home />} />
