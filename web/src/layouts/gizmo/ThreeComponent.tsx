@@ -7,30 +7,6 @@ import { ModeSelector } from './ModeSelector'
 import { fetchNui } from '../../utils/fetchNui'
 import { KeyboardLayoutAtom } from '../../atoms/object'
 
-
-import { debugData } from '../../utils/debugData'
-
-debugData([
-  {
-    action: 'setGizmoEntity',
-    data: {
-      handle: 123456,
-      position: {
-        x: 4123,
-        y: -4456,
-        z: 4789
-      },
-      rotation: {
-        x: 3210,
-        y: -3211,
-        z: 3212
-      },
-      name: 'test_entity',
-      hash: 168542,
-    }
-  }
-], 10)
-
 export const ThreeComponent = React.memo(() => {
   const [editorMode, setEditorMode] = useState<GizmoEditorMode>('translate')
   const [spaceMode, setSpaceMode] = useState<GizmoSpaceMode>('world')

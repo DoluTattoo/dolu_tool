@@ -10,65 +10,6 @@ import { useNuiEvent } from '../../../../hooks/useNuiEvent'
 import DeleteAllEntities from './components/modals/DeleteAllEntities'
 import { setClipboard } from '../../../../utils/setClipboard'
 import { useLocales } from '../../../../providers/LocaleProvider'
-import { debugData } from '../../../../utils/debugData'
-
-debugData([
-    {
-        action: 'setObjectList',
-        data: {
-            entitiesList: [
-                {
-                    handle: 123456,
-                    name: 'object 1',
-                    position: {
-                        x: 0,
-                        y: 0,
-                        z: 0
-                    },
-                    rotation: {
-                        x: 0,
-                        y: 0,
-                        z: 0
-                    },
-                    frozen: false,
-                    invalid: false
-                },
-                {
-                    handle: 1234567,
-                    name: 'object 2',
-                    position: {
-                        x: 0,
-                        y: 0,
-                        z: 0
-                    },
-                    rotation: {
-                        x: 0,
-                        y: 0,
-                        z: 0
-                    },
-                    frozen: false,
-                    invalid: false
-                },
-                {
-                    handle: 12345678,
-                    name: 'object 3',
-                    position: {
-                        x: 0,
-                        y: 0,
-                        z: 0
-                    },
-                    rotation: {
-                        x: 0,
-                        y: 0,
-                        z: 0
-                    },
-                    frozen: false,
-                    invalid: false
-                }
-            ]
-        }
-    }
-])
 
 const Object: React.FC = () => {
     const { locale } = useLocales()
@@ -91,11 +32,11 @@ const Object: React.FC = () => {
         };
 
         setObjectList(currentList => {
-            return currentList.map(entity => 
+            return currentList.map(entity =>
                 entity.id === data.entity.id ? data.entity : entity
             );
         });
-        
+
         setAccordionItem(data.entity.id);
     });
 
@@ -106,7 +47,7 @@ const Object: React.FC = () => {
             setCopiedName(false)
         }, 1000)
     }, [copiedCoords, copiedRotation, copiedName])
-    
+
     return (
         <>
         {/* TITLE */}
@@ -142,9 +83,9 @@ const Object: React.FC = () => {
             </ActionIcon>
             </Group>
         </Group>
-        
+
         <Space h='sm' />
-        
+
         {/* OBJECT LIST*/}
         <Paper p='md' sx={{ height:685 }}>
             <ScrollArea style={{ height: 650, borderRadius: '5px' }} offsetScrollbars scrollbarSize={12}>
