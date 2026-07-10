@@ -1,5 +1,5 @@
-import { memo, useCallback, useEffect } from "react";
-import { ActionIcon, Divider, Group, Paper, Select, Stack } from "@mantine/core";
+import { forwardRef, memo, useCallback, useEffect } from "react";
+import { ActionIcon, Divider, Group, Paper, Select, Stack, Text } from "@mantine/core";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { GiCancel } from "react-icons/gi";
@@ -8,12 +8,46 @@ import {
   interiorAtom,
   timecycleAtom,
   timecycleListAtom,
+  type TimecycleOption,
 } from "../../../../../atoms/interior";
 import { fetchNui } from "../../../../../utils/fetchNui";
 import { useLocales, type Locale } from "../../../../../providers/LocaleProvider";
 import { useNuiEvent } from "../../../../../hooks/useNuiEvent";
 import { CopyableRow, FlagRow, Row, SectionHeader } from "./PropertyRow";
 import { ROOM_FLAGS } from "./flags";
+
+// Custom dropdown item: name on the left, variable count discreetly on the right
+interface TimecycleItemProps extends React.ComponentPropsWithoutRef<"div"> {
+  label: string;
+  varCount?: number;
+}
+
+const TimecycleItem = forwardRef<HTMLDivElement, TimecycleItemProps>(
+  ({ label, varCount, ...others }, ref) => (
+    <div ref={ref} {...others}>
+      <Group position="apart" noWrap spacing="xs" sx={{ width: "100%" }}>
+        <Text
+          size="sm"
+          sx={{
+            flex: 1,
+            minWidth: 0,
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+          }}
+        >
+          {label}
+        </Text>
+        {!!varCount && (
+          <Text size="xs" color="dimmed">
+            {varCount}
+          </Text>
+        )}
+      </Group>
+    </div>
+  )
+);
+TimecycleItem.displayName = "TimecycleItem";
 
 // Memoized timecycle controls
 const TimecycleControls = memo(
@@ -27,7 +61,7 @@ const TimecycleControls = memo(
     locale,
   }: {
     timecycle: string | null;
-    timecycleList: Array<{ label: string; value: string }>;
+    timecycleList: TimecycleOption[];
     onPrev: () => void;
     onNext: () => void;
     onReset: () => void;
@@ -40,9 +74,23 @@ const TimecycleControls = memo(
         searchable
         nothingFound={locale.ui_no_timecycle_found}
         data={timecycleList}
+        itemComponent={TimecycleItem}
         value={timecycle}
         onChange={onChange}
         sx={{ flex: 1, minWidth: 0 }}
+        styles={{
+          dropdown: {
+            width: "320px !important",
+            minWidth: "320px !important",
+            // ScrollArea wraps items in a `display: table` element that grows to
+            // the widest item; force it to block so labels ellipsize to the
+            // dropdown width instead of triggering a horizontal scrollbar.
+            "& .mantine-ScrollArea-viewport > div": { display: "block !important" },
+            '& .mantine-ScrollArea-scrollbar[data-orientation="horizontal"]': {
+              display: "none",
+            },
+          },
+        }}
       />
       <ActionIcon size={30} variant="default" onClick={onPrev}>
         <FaArrowLeft size={13} />
@@ -68,7 +116,7 @@ const RoomsElement: React.FC = memo(() => {
 
   useNuiEvent(
     "setTimecycleList",
-    (data: Array<{ label: string; value: string }>) => {
+    (data: TimecycleOption[]) => {
       setTimecycleList(data);
     }
   );

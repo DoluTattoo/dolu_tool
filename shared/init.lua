@@ -93,6 +93,7 @@ elseif lib.context == 'client' then
 
     -- Get data from shared/data json files
     lib.callback('dolu_tool:getData', false, function(data)
+        data.timecycles = Utils.getTimecycleModifiers()
         Client.data = data
     end)
 

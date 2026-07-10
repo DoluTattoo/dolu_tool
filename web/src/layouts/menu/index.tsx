@@ -4,7 +4,7 @@ import { Route, Routes } from 'react-router-dom'
 import { useNuiEvent } from '../../hooks/useNuiEvent'
 import { menuVisibilityAtom } from '../../atoms/visibility'
 import { Version, versionAtom } from '../../atoms/version'
-import { interiorAtom, InteriorData, timecycleAtom, timecycleListAtom } from '../../atoms/interior'
+import { interiorAtom, InteriorData, timecycleAtom, timecycleListAtom, type TimecycleOption } from '../../atoms/interior'
 import { lastLocationsAtom, Location } from '../../atoms/location'
 import { positionAtom } from '../../atoms/position'
 import HeaderGroup from './components/HeaderGroup'
@@ -56,7 +56,7 @@ const Menu: React.FC = () => {
     if (data.currentRoom !== undefined) setTimecycle(data.currentRoom.timecycle)
   })
 
-  useNuiEvent('setTimecycleList', (data: Array<{ label: string, value: string }>) => {
+  useNuiEvent('setTimecycleList', (data: TimecycleOption[]) => {
     setTimecycleList(data)
   })
 

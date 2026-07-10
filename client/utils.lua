@@ -64,6 +64,32 @@ Utils.Lerp = function(a, b, t)
     return a + (b - a) * t
 end
 
+--- Builds the timecycle modifiers list from game natives at startup.
+--- Avoids shipping a heavy json file and always matches the timecycles
+--- actually loaded by the game. The variable count is exposed as a separate
+--- field so the UI can display it discreetly next to each item.
+---@return { label: string, value: string, varCount: number }[]
+Utils.getTimecycleModifiers = function()
+    local modifiers = {}
+    local count = GetTimecycleModifierCount()
+
+    for index = 0, count - 1 do
+        local name = GetTimecycleModifierNameByIndex(index)
+
+        if name then
+            modifiers[#modifiers + 1] = {
+                label = name,
+                value = tostring(joaat(name)),
+                varCount = GetTimecycleModifierVarCount(name)
+            }
+        end
+    end
+
+    table.sort(modifiers, function(a, b) return a.label < b.label end)
+
+    return modifiers
+end
+
 Utils.setTimecycle = function(timecycle, roomId)
     if Client.interiorId ~= 0 then
         if not roomId then

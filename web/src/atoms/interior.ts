@@ -62,7 +62,8 @@ const mockInterior: InteriorData = {
 }
 
 export const interiorAtom = atom<InteriorData>({ key: 'interior', default: mockInterior })
-export const timecycleListAtom = atom<Array<{ label: string, value: string }>>({ key: 'timecycleList', default: [{label: "Unknown", value: '0'}] })
+export type TimecycleOption = { label: string, value: string, varCount?: number }
+export const timecycleListAtom = atom<TimecycleOption[]>({ key: 'timecycleList', default: [{label: "Unknown", value: '0'}] })
 export const timecycleAtom = atom<string | null>({ key: 'timecycle', default: null })
 export const portalDebuggingAtom = atom<string[]>({ key: 'portalDebugging', default: [] })
 export const portalEditingIndexAtom = atom<number>({ key: 'portalEditingIndex', default: 0 })
