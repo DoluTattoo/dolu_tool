@@ -1,4 +1,4 @@
-import { Button, Group, Paper, SimpleGrid, Space, Stack, Text } from '@mantine/core'
+import { Button, Divider, Group, Paper, SimpleGrid, Space, Stack, Text } from '@mantine/core'
 import { openModal } from '@mantine/modals'
 import { useState } from 'react'
 import { FaMapMarkerAlt } from 'react-icons/fa'
@@ -16,6 +16,7 @@ import { fetchNui } from '../../../../utils/fetchNui'
 import { setClipboard } from '../../../../utils/setClipboard'
 import CreateLocation from '../locations/components/modals/CreateLocation'
 import SetCoords from './modals/SetCoords'
+import { CopyableRow, InfoRow, SectionHeader } from '../interior/components/PropertyRow'
 
 const Home: React.FC = () => {
   const { locale } = useLocales()
@@ -33,23 +34,17 @@ const Home: React.FC = () => {
 
   return (
     <SimpleGrid cols={1}>
-      <Stack>
+      <Stack spacing='sm'>
         {/* CURRENT COORDS */}
         <Paper p='md'>
+          <SectionHeader title={locale.ui_current_coords} icon={<FaMapMarkerAlt size={20} />} />
 
-          <Group position='apart'>
-            <Text size={20} weight={600}>{locale.ui_current_coords}</Text>
-            <FaMapMarkerAlt size={24}/>
-          </Group>
-
-          <Space h='sm' />
-
-          <Stack spacing={0}>
-            <Group><Text>{locale.ui_coords}:</Text><Text color='blue.4'>{currentCoords}</Text></Group>
-            <Group><Text>{locale.ui_heading}:</Text><Text color='blue.4'>{currentHeading}</Text></Group>
+          <Stack spacing={1}>
+            <CopyableRow label={locale.ui_coords} value={currentCoords} copyLabel={locale.ui_copy} copiedLabel={locale.ui_copied} />
+            <CopyableRow label={locale.ui_heading} value={currentHeading} copyLabel={locale.ui_copy} copiedLabel={locale.ui_copied} />
           </Stack>
 
-          <Space h='sm' />
+          <Divider my={8} variant='dashed' />
 
           <Group grow spacing='xs'>
             <Button
@@ -96,71 +91,55 @@ const Home: React.FC = () => {
 
         {/* LAST LOCATION */}
         <Paper p='md'>
-          <Group position='apart'>
-            <Text size={20} weight={600}>{locale.ui_last_location}</Text>
-            <GiTeleport size={24} />
-          </Group>
+          <SectionHeader title={locale.ui_last_location} icon={<GiTeleport size={20} />} />
 
-          <Space h='sm' />
+          {lastLocation ? (
+            <>
+              <Stack spacing={1}>
+                <InfoRow label={locale.ui_name} value={lastLocation.name} />
+                <CopyableRow
+                  label={locale.ui_coords}
+                  value={`${lastLocation.x}, ${lastLocation.y}, ${lastLocation.z}`}
+                  copyLabel={locale.ui_copy}
+                  copiedLabel={locale.ui_copied}
+                />
+              </Stack>
 
-          {
-            lastLocation
-            ?
-              <>
-                <Group><Text>{locale.ui_name}:</Text><Text color='blue.4' >{lastLocation.name}</Text></Group>
+              <Divider my={8} variant='dashed' />
 
-                <Group position='apart'>
-                  <Group><Text>{locale.ui_coords}:</Text><Text color='blue.4' >{lastLocation.x}, {lastLocation.y}, {lastLocation.z}</Text></Group>
-                  <Button
-                    color='blue.4'
-                    variant='light'
-                    onClick={() =>
-                      fetchNui('dolu_tool:teleport', { name: lastLocation.name, x: lastLocation.x, y: lastLocation.y, z: lastLocation.z, heading: lastLocation.heading })
-                    }
-                    value={lastLocation.name}
-                  >
-                    {locale.ui_teleport}
-                  </Button>
-                </Group>
-              </>
-            :
-              <>
-                <Space h='sm' />
-                <Text color='dimmed'>{locale.ui_no_last_location}</Text>
-              </>
-          }
+              <Button
+                fullWidth
+                color='blue.4'
+                variant='light'
+                onClick={() =>
+                  fetchNui('dolu_tool:teleport', { name: lastLocation.name, x: lastLocation.x, y: lastLocation.y, z: lastLocation.z, heading: lastLocation.heading })
+                }
+              >
+                {locale.ui_teleport}
+              </Button>
+            </>
+          ) : (
+            <Text color='dimmed' size='sm' px={8}>{locale.ui_no_last_location}</Text>
+          )}
         </Paper>
 
         {/* CURRENT INTERIOR */}
         <Paper p='md'>
-          <Group position='apart'>
-            <Text size={20} weight={600}>{locale.ui_current_interior}</Text>
-            <RiHomeGearFill size={24} />
-          </Group>
+          <SectionHeader title={locale.ui_current_interior} icon={<RiHomeGearFill size={20} />} />
 
-          {
-            interior.interiorId > 0
-            ?
-              <>
-                <Group><Text>{locale.ui_interior_id}:</Text><Text color='blue.4' >{interior.interiorId}</Text></Group>
-                <Group><Text>{locale.ui_current_room}:</Text><Text color='blue.4' >{interior.currentRoom?.index} - {interior.currentRoom?.name}</Text></Group>
-              </>
-            :
-              <>
-                <Space h='sm' />
-                <Text color='dimmed'>{locale.ui_not_in_interior}</Text>
-              </>
-          }
+          {interior.interiorId > 0 ? (
+            <Stack spacing={1}>
+              <CopyableRow label={locale.ui_interior_id} value={interior.interiorId} copyLabel={locale.ui_copy} copiedLabel={locale.ui_copied} />
+              <InfoRow label={locale.ui_current_room} value={`${interior.currentRoom?.index} - ${interior.currentRoom?.name}`} />
+            </Stack>
+          ) : (
+            <Text color='dimmed' size='sm' px={8}>{locale.ui_not_in_interior}</Text>
+          )}
         </Paper>
 
         {/* QUICK ACTIONS */}
         <Paper p='md'>
-          <Group position='apart'>
-            <Text size={20} weight={600}>{locale.ui_quick_actions}</Text>
-            <FiFastForward size={24} />
-          </Group>
-
-          <Space h='sm' />
+          <SectionHeader title={locale.ui_quick_actions} icon={<FiFastForward size={20} />} />
 
           <Group grow spacing='xs'>
             <Button

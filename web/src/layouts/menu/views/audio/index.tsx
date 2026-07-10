@@ -1,13 +1,14 @@
-import { ActionIcon, Button, Checkbox, Divider, Group, NumberInput, Paper, Select, Slider, Space, Text } from '@mantine/core'
+import { Button, Checkbox, Divider, Group, NumberInput, Paper, Select, SimpleGrid, Slider, Stack, Text } from '@mantine/core'
 import { useDebouncedValue } from '@mantine/hooks'
 import { useEffect, useState } from 'react'
-import { BsClipboard, BsFillStopFill, BsPlayFill } from 'react-icons/bs'
+import { BsFillStopFill, BsPlayFill } from 'react-icons/bs'
+import { HiSpeakerWave } from 'react-icons/hi2'
 import { useRecoilState } from 'recoil'
 import { drawStaticEmittersAtom, radioStationsListAtom, StaticEmitter, staticEmittersDrawDistanceAtom, staticEmittersListAtom } from '../../../../atoms/audio'
 import { useNuiEvent } from '../../../../hooks/useNuiEvent'
 import { useLocales } from "../../../../providers/LocaleProvider"
 import { fetchNui } from '../../../../utils/fetchNui'
-import { setClipboard } from '../../../../utils/setClipboard'
+import { CopyableRow, Row, SectionHeader } from '../interior/components/PropertyRow'
 
 const Audio: React.FC = () => {
     const { locale } = useLocales()
@@ -36,191 +37,95 @@ const Audio: React.FC = () => {
     }, [checked])
 
     return (
-        <>
-            <Text size={20}>{locale.ui_audio}</Text>
+        <SimpleGrid cols={1}>
+            <Stack spacing='sm'>
+                {/* STATIC EMITTERS */}
+                <Paper p='md'>
+                    <SectionHeader title={locale.ui_static_emitters} icon={<HiSpeakerWave size={20} />} />
 
-            <Space h='sm' />
+                    <Checkbox
+                        color='blue.4'
+                        label={locale.ui_draw_static_emitters}
+                        checked={checked}
+                        onChange={(e) => setChecked(e.currentTarget.checked)}
+                    />
 
-            <Paper p='md'>
-                <Text size={22}>{locale.ui_static_emitters}</Text>
-                
-                <Space h='md' />
-                
-                <Checkbox
-                    label={locale.ui_draw_static_emitters}
-                    checked={checked}
-                    onChange={(e) => setChecked(e.currentTarget.checked)}
-                />
-                
-                <Space h='sm' />
+                    <Group position='apart' noWrap mt='md'>
+                        <Text size='sm'>{locale.ui_draw_distance}</Text>
+                        <NumberInput
+                            disabled={!checked}
+                            value={drawDistance}
+                            min={1}
+                            max={100}
+                            size='sm'
+                            sx={{ maxWidth: 130 }}
+                            onChange={(value) => setDrawDistance(value!)}
+                            formatter={(value) =>
+                                !Number.isNaN(parseFloat(value!))
+                                ? `${value} ${locale.ui_meters}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                                : ` ${locale.ui_meters}`
+                            }
+                        />
+                    </Group>
 
-                <Group position='apart'>
-                    <Text size={14}>{locale.ui_draw_distance}</Text>
-                    <NumberInput
+                    <Slider
+                        mt='sm'
                         disabled={!checked}
-                        defaultValue={drawDistance}
                         value={drawDistance}
+                        label={(value) => `${value} ${locale.ui_meters}`}
+                        onChange={(value) => setDrawDistance(value)}
                         min={1}
                         max={100}
-                        size='sm'
-                        style={{ maxWidth: '110px' }}
-                        onChange={(value) => setDrawDistance(value!)}
-                        formatter={(value) =>
-                            !Number.isNaN(parseFloat(value!))
-                            ? `${value} ${locale.ui_meters}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                            : ` ${locale.ui_meters}`
-                        }
+                        marks={[{ value: 20 }, { value: 40 }, { value: 60 }, { value: 80 }]}
                     />
-                </Group>
-                <Space h='xs' />
-                <Slider
-                    disabled={!checked}
-                    value={drawDistance}
-                    label={(value) => `${value} ${locale.ui_meters}`}
-                    onChange={(value) => setDrawDistance(value)}
-                    min={1}
-                    max={100}
-                    marks={[
-                        { value: 20 },
-                        { value: 40 },
-                        { value: 60 },
-                        { value: 80 }
-                    ]}
-                />
-                
-                <Space h='sm' />
-            </Paper>
+                </Paper>
 
-            <Space h='sm' />
-                
-            <Paper p='md'>
-                <Group position='apart'>
-                    <Text size={22}>{locale.ui_closest_emitter_info}</Text>
-                    <Button
-                        color='blue.4'
-                        variant='light'
-                        onClick={() => fetchNui('dolu_tool:getClosestStaticEmitter')}
-                    >
-                        {locale.ui_refresh}
-                    </Button>
-                </Group>
-
-                <Space h='md' />
-
-                <Group position='apart'>
-                    <Text size={14}>{locale.ui_name}</Text>
-                    <Group>
-                        <Text color='blue.4' size={14}>{closestEmitter.name}</Text>
-                        <ActionIcon
-                            onClick={() => setClipboard(closestEmitter.name)}
-                        ><BsClipboard /></ActionIcon>
+                {/* CLOSEST EMITTER INFO */}
+                <Paper p='md'>
+                    <Group position='apart' noWrap mb={6}>
+                        <Text size={18} weight={600}>{locale.ui_closest_emitter_info}</Text>
+                        <Button size='xs' color='blue.4' variant='light' onClick={() => fetchNui('dolu_tool:getClosestStaticEmitter')}>
+                            {locale.ui_refresh}
+                        </Button>
                     </Group>
-                </Group>
 
-                <Divider my={5} />
+                    <Stack spacing={1}>
+                        <CopyableRow label={locale.ui_name} value={closestEmitter.name} copyLabel={locale.ui_copy} copiedLabel={locale.ui_copied} />
+                        <CopyableRow label={locale.ui_coords} value={closestEmitter.coords} copyLabel={locale.ui_copy} copiedLabel={locale.ui_copied} />
+                        <CopyableRow label={locale.ui_distance} value={`${closestEmitter.distance} ${locale.ui_meters}`} copyLabel={locale.ui_copy} copiedLabel={locale.ui_copied} />
+                        <CopyableRow label={locale.ui_flags} value={closestEmitter.flags} copyLabel={locale.ui_copy} copiedLabel={locale.ui_copied} />
+                        <CopyableRow label={locale.ui_interior} value={closestEmitter.interior} copyLabel={locale.ui_copy} copiedLabel={locale.ui_copied} />
+                        <CopyableRow label={locale.ui_room} value={closestEmitter.room} copyLabel={locale.ui_copy} copiedLabel={locale.ui_copied} />
 
-                <Group position='apart'>
-                    <Text size={14}>{locale.ui_coords}</Text>
-                    <Group>
-                        <Text color='blue.4' size={14}>{closestEmitter.coords}</Text>
-                        <ActionIcon
-                            onClick={() => setClipboard(closestEmitter.coords)}
-                        ><BsClipboard /></ActionIcon>
+                        <Row label={locale.ui_radio_station}>
+                            <Select
+                                searchable
+                                size='sm'
+                                nothingFound={locale.ui_no_timecycle_found}
+                                data={radioStationsList}
+                                value={radioStation}
+                                onChange={(value) => {
+                                    setRadioStation(value!)
+                                    fetchNui('dolu_tool:setStaticEmitterRadio', { emitterName: closestEmitter.name, radioStation: value })
+                                }}
+                                sx={{ flex: 1, minWidth: 0 }}
+                            />
+                        </Row>
+                    </Stack>
+
+                    <Divider my={8} variant='dashed' />
+
+                    <Group grow spacing='xs'>
+                        <Button color='teal.4' variant='light' onClick={() => fetchNui('dolu_tool:toggleStaticEmitter', { emitterName: closestEmitter.name, state: true })}>
+                            <BsPlayFill />
+                        </Button>
+                        <Button color='red.4' variant='light' onClick={() => fetchNui('dolu_tool:toggleStaticEmitter', { emitterName: closestEmitter.name, state: false })}>
+                            <BsFillStopFill />
+                        </Button>
                     </Group>
-                </Group>
-
-                <Divider my={5} />
-
-                <Group position='apart'>
-                    <Text size={14}>{locale.ui_distance}</Text>
-                    <Group>
-                        <Text color='blue.4' size={14}>{closestEmitter.distance} {locale.ui_meters}</Text>
-                        <ActionIcon
-                            onClick={() => setClipboard(closestEmitter.distance.toString())}
-                        ><BsClipboard /></ActionIcon>
-                    </Group>
-                </Group>
-
-                <Divider my={5} />
-
-                <Group position='apart'>
-                    <Text size={14}>{locale.ui_flags}</Text>
-                    <Group>
-                        <Text color='blue.4' size={14}>{closestEmitter.flags}</Text>
-                        <ActionIcon
-                            onClick={() => setClipboard(closestEmitter.flags)}
-                        ><BsClipboard /></ActionIcon>
-                    </Group>
-                </Group>
-
-                <Divider my={5} />
-
-                <Group position='apart'>
-                    <Text size={14}>{locale.ui_interior}</Text>
-                    <Group>
-                        <Text color='blue.4' size={14}>{closestEmitter.interior}</Text>
-                        <ActionIcon
-                            onClick={() => setClipboard(closestEmitter.interior)}
-                        ><BsClipboard /></ActionIcon>
-                    </Group>
-                </Group>
-
-                <Divider my={5} />
-
-                <Group position='apart'>
-                    <Text size={14}>{locale.ui_room}</Text>
-                    <Group>
-                        <Text color='blue.4' size={14}>{closestEmitter.room}</Text>
-                        <ActionIcon
-                            onClick={() => setClipboard(closestEmitter.room)}
-                        ><BsClipboard /></ActionIcon>
-                    </Group>
-                </Group>
-
-                <Divider my={5} />
-
-                <Group position='apart'>
-                    <Text size={14}>{locale.ui_radio_station}</Text>
-                    <Group>
-                        <Select
-                            color='blue.4'
-                            searchable
-                            nothingFound={locale.ui_no_timecycle_found}
-                            data={radioStationsList}
-                            value={radioStation}
-                            onChange={(value) => {
-                                setRadioStation(value!)
-                                fetchNui('dolu_tool:setStaticEmitterRadio', { emitterName: closestEmitter.name, radioStation: value })
-                            }}
-                            style={{ minWidth: '300px' }}
-                        />
-                        <ActionIcon
-                            onClick={() => setClipboard(closestEmitter.radiostation)}
-                        ><BsClipboard /></ActionIcon>
-                    </Group>
-                </Group>
-
-                <Space h='md' />
-
-                <Group grow>
-                    <Button
-                        color='teal.4'
-                        variant='light'
-                        onClick={() => fetchNui('dolu_tool:toggleStaticEmitter', { emitterName: closestEmitter.name, state: true})}
-                    >
-                        <BsPlayFill />
-                    </Button>
-                    <Button
-                        color='red.4'
-                        variant='light'
-                        onClick={() => fetchNui('dolu_tool:toggleStaticEmitter', { emitterName: closestEmitter.name, state: false})}
-                    >
-                        <BsFillStopFill />
-                    </Button>
-                </Group>
-
-            </Paper>
-        </>
+                </Paper>
+            </Stack>
+        </SimpleGrid>
     )
 }
 
