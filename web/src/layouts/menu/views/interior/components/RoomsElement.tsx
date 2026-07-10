@@ -10,7 +10,7 @@ import {
   timecycleListAtom,
 } from "../../../../../atoms/interior";
 import { fetchNui } from "../../../../../utils/fetchNui";
-import { useLocales } from "../../../../../providers/LocaleProvider";
+import { useLocales, type Locale } from "../../../../../providers/LocaleProvider";
 import { useNuiEvent } from "../../../../../hooks/useNuiEvent";
 import { CopyableRow, FlagRow, Row, SectionHeader } from "./PropertyRow";
 import { ROOM_FLAGS } from "./flags";
@@ -32,7 +32,7 @@ const TimecycleControls = memo(
     onNext: () => void;
     onReset: () => void;
     onChange: (value: string | null) => void;
-    locale: { ui_no_timecycle_found: string };
+    locale: Locale;
   }) => (
     <Group spacing={5} noWrap sx={{ flex: 1, minWidth: 0 }}>
       <Select

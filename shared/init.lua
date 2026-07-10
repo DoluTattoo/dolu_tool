@@ -18,7 +18,43 @@ if GetResourceState('ox_inventory'):find('start') then
     Shared.ox_inventory = true
 end
 
-lib.locale()
+-- Localization
+-- Load the configured language once (with a per-key fallback on English) and
+-- share it between the Lua scripts and the NUI.
+local localeData do
+    local data = json.decode(LoadResourceFile(cache.resource, 'locales/en.json') or '{}')
+    local lang = Config.language or 'en'
+
+    if lang ~= 'en' then
+        local file = LoadResourceFile(cache.resource, ('locales/%s.json'):format(lang))
+
+        if file then
+            for key, value in pairs(json.decode(file) or {}) do
+                data[key] = value
+            end
+        else
+            print(("^3[dolu_tool] Locale '%s' not found, falling back to 'en'^0"):format(lang))
+        end
+    end
+
+    localeData = data
+end
+
+Shared.locale = localeData
+
+--- Returns the translated string for `key`, formatted with the extra arguments.
+--- Falls back to the key itself when the translation is missing.
+---@param key string
+---@param ... string | number
+---@return string
+function locale(key, ...)
+    local str = localeData[key]
+
+    if not str then return key end
+    if select('#', ...) > 0 then return str:format(...) end
+
+    return str
+end
 
 if lib.context == 'server' then
     Server = {}
@@ -50,24 +86,9 @@ elseif lib.context == 'client' then
         data = {}
     }
 
-    -- Load locale
+    -- Send the loaded locale to the NUI
     RegisterNUICallback('loadLocale', function(_, cb)
-        cb(1)
-        local locale = Config.language or 'en'
-        local JSON = LoadResourceFile(cache.resource, ('locales/%s.json'):format(locale))
-        if not JSON then
-            JSON = LoadResourceFile(cache.resource, 'locales/en.json')
-            lib.notify({
-                type = 'error',
-                title = "Dolu Tool",
-                description = "'" .. locale .. "' locale not found, please contribute by adding your language",
-                duration = 10000
-            })
-        end
-        SendNUIMessage({
-            action = 'setLocale',
-            data = json.decode(JSON)
-        })
+        cb(Shared.locale)
     end)
 
     -- Get data from shared/data json files
