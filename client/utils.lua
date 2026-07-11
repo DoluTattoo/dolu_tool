@@ -35,7 +35,7 @@ Utils.openUI = function()
     end
 
     SetNuiFocus(true, true)
-    SetNuiFocusKeepInput(true)
+    SetNuiFocusKeepInput(false)
     Client.isMenuOpen = true
 end
 
@@ -512,7 +512,7 @@ Utils.initTarget = function()
                 })
                 Client.gizmoEntity = data.entity
                 SetNuiFocus(true, true)
-                SetNuiFocusKeepInput(true)
+                SetNuiFocusKeepInput(false)
                 lib.notify({ type = 'inform', description = locale('press_escape_exit') })
             end
         },

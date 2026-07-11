@@ -78,8 +78,8 @@ CreateThread(function()
                 DisableControlAction(0, DISABLED[i], true)
             end
 
-            -- Enabling a few input only while holding right click
-            if IsDisabledControlPressed(0, 25) then
+            -- Enabling a few input only while holding right click. The NUI-driven
+            if Client.gameInputGranted or IsDisabledControlPressed(0, 25) then
                 for i = 1, #FORCEABLE do
                     EnableControlAction(0, FORCEABLE[i], true)
                 end
