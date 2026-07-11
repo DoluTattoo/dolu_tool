@@ -1,6 +1,4 @@
 import { Text, Stack, SimpleGrid, Paper, Group, Select, NumberInput, Button, Space, Checkbox } from '@mantine/core'
-import { AiOutlineClockCircle } from 'react-icons/ai'
-import { TiWeatherPartlySunny } from 'react-icons/ti'
 import { fetchNui } from '../../../../utils/fetchNui'
 import { useNuiEvent } from '../../../../hooks/useNuiEvent'
 import { useAtom } from 'jotai'
@@ -31,10 +29,7 @@ const World: React.FC = () => {
       <Stack>
         {/* Time    */}
         <Paper p='md'>
-          <Group justify='space-between'>
-            <Text fz={20} fw={600}>{locale.ui_time}</Text>
-            <AiOutlineClockCircle size={24} />
-          </Group>
+          <Text fz={20} fw={600}>{locale.ui_time}</Text>
 
           <Space h='sm' />
 
@@ -92,10 +87,7 @@ const World: React.FC = () => {
 
         {/* Weather */}
         <Paper p='md'>
-          <Group justify='space-between'>
-            <Text fz={20} fw={600}>{locale.ui_weather}</Text>
-            <TiWeatherPartlySunny size={24} />
-          </Group>
+          <Text fz={20} fw={600} mb='md'>{locale.ui_weather}</Text>
 
           <Group>
             <Select

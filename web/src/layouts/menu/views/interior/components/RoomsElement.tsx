@@ -3,7 +3,6 @@ import { ActionIcon, Divider, Group, Paper, Select, Stack, Text } from "@mantine
 import { useAtom, useAtomValue } from "jotai";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { GiCancel } from "react-icons/gi";
-import { RiDoorOpenFill } from "react-icons/ri";
 import {
   interiorAtom,
   timecycleAtom,
@@ -149,7 +148,6 @@ const RoomsElement: React.FC = memo(() => {
     <Paper p="md">
       <SectionHeader
         title={locale.ui_current_room}
-        icon={<RiDoorOpenFill size={22} />}
       />
 
       <Stack gap={2}>

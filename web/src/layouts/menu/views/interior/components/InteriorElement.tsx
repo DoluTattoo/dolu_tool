@@ -1,6 +1,5 @@
 import { memo, useState } from 'react'
 import { Paper, Stack, Divider, Collapse, UnstyledButton, Group, Text, Box } from '@mantine/core'
-import { RiHomeGearFill } from 'react-icons/ri'
 import { FiChevronRight } from 'react-icons/fi'
 import { getInteriorData } from '../../../../../atoms/interior'
 import { useLocales } from '../../../../../providers/LocaleProvider'
@@ -41,7 +40,7 @@ const InteriorElement: React.FC = memo(() => {
 
   return (
     <Paper p='md'>
-      <SectionHeader title={locale.ui_current_interior} icon={<RiHomeGearFill size={20} />} />
+      <SectionHeader title={locale.ui_current_interior} />
 
       <Stack gap={1}>
         <CopyableRow

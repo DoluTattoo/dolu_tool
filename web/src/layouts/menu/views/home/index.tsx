@@ -1,10 +1,6 @@
 import { Button, Divider, Group, Paper, SimpleGrid, Space, Stack, Text } from '@mantine/core'
 import { openModal } from '@mantine/modals'
 import { useState } from 'react'
-import { FaMapMarkerAlt } from 'react-icons/fa'
-import { FiFastForward } from 'react-icons/fi'
-import { GiTeleport } from 'react-icons/gi'
-import { RiHomeGearFill } from 'react-icons/ri'
 import { useAtom } from 'jotai'
 import { getInteriorData } from '../../../../atoms/interior'
 import { getLastLocation } from '../../../../atoms/location'
@@ -37,7 +33,7 @@ const Home: React.FC = () => {
       <Stack gap='sm'>
         {/* CURRENT COORDS */}
         <Paper p='md'>
-          <SectionHeader title={locale.ui_current_coords} icon={<FaMapMarkerAlt size={20} />} />
+          <SectionHeader title={locale.ui_current_coords} />
 
           <Stack gap={1}>
             <CopyableRow label={locale.ui_coords} value={currentCoords} copyLabel={locale.ui_copy} copiedLabel={locale.ui_copied} />
@@ -91,7 +87,7 @@ const Home: React.FC = () => {
 
         {/* LAST LOCATION */}
         <Paper p='md'>
-          <SectionHeader title={locale.ui_last_location} icon={<GiTeleport size={20} />} />
+          <SectionHeader title={locale.ui_last_location} />
 
           {lastLocation ? (
             <>
@@ -125,7 +121,7 @@ const Home: React.FC = () => {
 
         {/* CURRENT INTERIOR */}
         <Paper p='md'>
-          <SectionHeader title={locale.ui_current_interior} icon={<RiHomeGearFill size={20} />} />
+          <SectionHeader title={locale.ui_current_interior} />
 
           {interior.interiorId > 0 ? (
             <Stack gap={1}>
@@ -139,7 +135,7 @@ const Home: React.FC = () => {
 
         {/* QUICK ACTIONS */}
         <Paper p='md'>
-          <SectionHeader title={locale.ui_quick_actions} icon={<FiFastForward size={20} />} />
+          <SectionHeader title={locale.ui_quick_actions} />
 
           <Group grow gap='xs'>
             <Button

@@ -2,7 +2,6 @@ import { ActionIcon, Checkbox, Divider, Group, NumberInput, NumberInputHandlers,
 import { useCallback, useEffect, useRef, memo } from "react";
 import { useAtom } from "jotai";
 import { FaArrowLeft, FaArrowRight, FaExchangeAlt } from "react-icons/fa";
-import { RiFocus3Fill } from "react-icons/ri";
 import { useLocales } from "../../../../../providers/LocaleProvider";
 import { getInteriorData, portalDataAtom, portalDebuggingAtom, portalEditingIndexAtom } from "../../../../../atoms/interior";
 import { fetchNui } from "../../../../../utils/fetchNui";
@@ -54,7 +53,7 @@ const PortalsElement: React.FC = () => {
 
   return (
     <Paper p='md'>
-      <SectionHeader title={locale.ui_portals} icon={<RiFocus3Fill size={22} />} />
+      <SectionHeader title={locale.ui_portals} />
 
       {interior.portalCount && interior.portalCount > 0 ?
         <>

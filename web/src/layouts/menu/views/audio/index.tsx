@@ -2,7 +2,6 @@ import { Button, Checkbox, Divider, Group, NumberInput, Paper, Select, SimpleGri
 import { useDebouncedValue } from '@mantine/hooks'
 import { useEffect, useState } from 'react'
 import { BsFillStopFill, BsPlayFill } from 'react-icons/bs'
-import { HiSpeakerWave } from 'react-icons/hi2'
 import { useAtom } from 'jotai'
 import { drawStaticEmittersAtom, radioStationsListAtom, StaticEmitter, staticEmittersDrawDistanceAtom, staticEmittersListAtom } from '../../../../atoms/audio'
 import { useNuiEvent } from '../../../../hooks/useNuiEvent'
@@ -41,7 +40,7 @@ const Audio: React.FC = () => {
             <Stack gap='sm'>
                 {/* STATIC EMITTERS */}
                 <Paper p='md'>
-                    <SectionHeader title={locale.ui_static_emitters} icon={<HiSpeakerWave size={20} />} />
+                    <SectionHeader title={locale.ui_static_emitters} />
 
                     <Checkbox
                         color='blue.4'

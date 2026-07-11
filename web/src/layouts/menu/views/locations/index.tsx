@@ -47,7 +47,7 @@ const Locations: React.FC = () => {
           <Stack gap={0}>
             <Group justify='space-between'>
               <Text c='blue.4' size='md' fw={500}>{location.name}</Text>
-              <Badge color={location.custom ? 'green.4' : 'blue.4'}>{location.custom ? locale.ui_custom : locale.ui_vanilla}</Badge>
+              <Badge variant='light' color={location.custom ? 'green.4' : 'blue.4'}>{location.custom ? locale.ui_custom : locale.ui_vanilla}</Badge>
             </Group>
             <Text size='xs'>{locale.ui_coords}: {location.x}, {location.y}, {location.z}</Text>
           </Stack>
