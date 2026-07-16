@@ -8,12 +8,21 @@ interface Window {
 type GizmoEditorMode = "translate" | "rotate" | "scale" | undefined;
 type GizmoSpaceMode = "world" | "local";
 
-interface TransformEntity {
+interface Vec3 {
+  x: number;
+  y: number;
+  z: number;
+}
+
+interface EntityTransform {
+  position: Vec3;
+  rotation: Vec3;
+}
+
+interface TransformEntity extends EntityTransform {
   name: string;
   hash: number;
   handle: number;
-  position: THREE.Vector3;
-  rotation: THREE.Vector3;
   id?: string;
 }
 
@@ -28,7 +37,7 @@ interface ModeSelector {
 interface TransformComponent extends ModeSelector {
   currentEntity: TransformEntity | undefined;
   onChangeSpace?: () => void;
-  setCurrentEntity: (value: TransformEntity | undefined) => void;
+  setCurrentEntity: React.Dispatch<React.SetStateAction<TransformEntity | undefined>>;
   onChangeMode?: (value: GizmoEditorMode) => void;
 
   onMouseUp?: (e?: THREE.Event) => void;

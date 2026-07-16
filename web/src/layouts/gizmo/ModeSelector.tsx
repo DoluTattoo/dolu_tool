@@ -66,7 +66,7 @@ export const ModeSelector = React.memo(({ onChangeSpace, onChangeMode, space, mo
     }
 
     const tempEntity = { ...currentEntity };
-    tempEntity.position = { x: coordinates[0], y: coordinates[1], z: coordinates[2] } as TransformEntity['position'];
+    tempEntity.position = { x: coordinates[0], y: coordinates[1], z: coordinates[2] };
 
     fetchNui('dolu_tool:moveEntity', tempEntity);
   };
@@ -82,7 +82,7 @@ export const ModeSelector = React.memo(({ onChangeSpace, onChangeMode, space, mo
     }
 
     const tempEntity = { ...currentEntity };
-    tempEntity.rotation = { x: coordinates[0], y: coordinates[1], z: coordinates[2] } as TransformEntity['rotation'];
+    tempEntity.rotation = { x: coordinates[0], y: coordinates[1], z: coordinates[2] };
 
     fetchNui('dolu_tool:moveEntity', tempEntity);
   }

@@ -1,15 +1,30 @@
 import React, { Suspense, useRef, useCallback, useState, useEffect } from 'react'
 import { TransformControls } from '@react-three/drei'
 import { Mesh, MathUtils } from 'three'
-import { useAtomValue } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
 import { useNuiEvent } from '../../hooks/useNuiEvent'
 import { fetchNui } from '../../utils/fetchNui'
-import { RotateSnapAtom, TranslateSnapAtom } from '../../atoms/object'
+import { Entity, ObjectListAtom, RotateSnapAtom, TranslateSnapAtom } from '../../atoms/object'
+
+// Convert the three.js mesh transform back to game-space coordinates
+const getGameTransform = (mesh: Mesh): EntityTransform => ({
+  position: {
+    x: mesh.position.x,
+    y: -mesh.position.z,
+    z: mesh.position.y
+  },
+  rotation: {
+    x: MathUtils.radToDeg(mesh.rotation.x),
+    y: MathUtils.radToDeg(-mesh.rotation.z),
+    z: MathUtils.radToDeg(mesh.rotation.y)
+  }
+})
 
 export const TransformComponent = React.memo(({ space, mode, currentEntity, setCurrentEntity, onMouseUp, onMouseDown }: TransformComponent) => {
   const mesh = useRef<Mesh>(null!);
   const translateSnap = useAtomValue(TranslateSnapAtom);
   const rotateSnap = useAtomValue(RotateSnapAtom);
+  const setObjectList = useSetAtom(ObjectListAtom);
   const [shiftPressed, setShiftPressed] = useState(false);
 
   useNuiEvent<TransformEntity>('setGizmoEntity', (entity: TransformEntity | undefined): void => {
@@ -49,20 +64,14 @@ export const TransformComponent = React.memo(({ space, mode, currentEntity, setC
   }, []);
 
   const handleObjectDataUpdate = useCallback((): void => {
-    // Just send position/rotation, let Lua decide what to do
-    fetchNui('dolu_tool:updateGizmoTransform', {
-      position: {
-        x: mesh.current.position.x,
-        y: -mesh.current.position.z,
-        z: mesh.current.position.y
-      },
-      rotation: {
-        x: MathUtils.radToDeg(mesh.current.rotation.x),
-        y: MathUtils.radToDeg(-mesh.current.rotation.z),
-        z: MathUtils.radToDeg(mesh.current.rotation.y)
-      }
-    });
-  }, [mesh]);
+    const transform = getGameTransform(mesh.current);
+
+    // Keep the NUI display (ModeSelector infos) in sync in real time while dragging
+    setCurrentEntity(entity => entity && { ...entity, ...transform });
+
+    // Apply the transform to the game entity
+    fetchNui('dolu_tool:updateGizmoTransform', transform);
+  }, [setCurrentEntity]);
 
   const handleMouseDown = useCallback(() => {
     onMouseDown?.()
@@ -71,23 +80,21 @@ export const TransformComponent = React.memo(({ space, mode, currentEntity, setC
     if (shiftPressed && mode === 'translate') {
       fetchNui('dolu_tool:gizmoDragStart', {
         shiftPressed: true,
-        position: {
-          x: mesh.current.position.x,
-          y: -mesh.current.position.z,
-          z: mesh.current.position.y
-        },
-        rotation: {
-          x: MathUtils.radToDeg(mesh.current.rotation.x),
-          y: MathUtils.radToDeg(-mesh.current.rotation.z),
-          z: MathUtils.radToDeg(mesh.current.rotation.y)
-        }
+        ...getGameTransform(mesh.current)
       });
     }
-  }, [shiftPressed, mode, mesh, onMouseDown]);
+  }, [shiftPressed, mode, onMouseDown]);
 
-  const handleMouseUp = useCallback(() => {
+  const handleMouseUp = useCallback(async () => {
     onMouseUp?.();
-  }, [onMouseUp]);
+
+    // Sync the final transform to the object list, straight from the callback response
+    const entity = await fetchNui<Entity | false>('dolu_tool:gizmoDragEnd');
+
+    if (entity) {
+      setObjectList(list => list.map(item => item.id === entity.id ? entity : item));
+    }
+  }, [onMouseUp, setObjectList]);
 
   return (
     <>

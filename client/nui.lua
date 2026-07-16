@@ -576,6 +576,7 @@ RegisterNUICallback('dolu_tool:updateGizmoTransform', function(data, cb)
     cb(1)
 
     -- Apply transform to current gizmo entity
+    -- Called every frame while dragging, so keep it minimal: the object list is synced once on drag end
     if Client.gizmoEntity and DoesEntityExist(Client.gizmoEntity) then
         if data.position then
             SetEntityCoordsNoOffset(Client.gizmoEntity, data.position.x, data.position.y, data.position.z, false, false, false)
@@ -584,17 +585,35 @@ RegisterNUICallback('dolu_tool:updateGizmoTransform', function(data, cb)
         if data.rotation then
             SetEntityRotation(Client.gizmoEntity, data.rotation.x, data.rotation.y, data.rotation.z, 0, false)
         end
-
-        -- Update spawned entity data if it exists
-        local entityState = Entity(Client.gizmoEntity).state
-        local entityId = entityState.entityId
-        local spawnedEntity = entityId and Client.spawnedEntities[entityId]
-
-        if spawnedEntity then
-            spawnedEntity.position = GetEntityCoords(Client.gizmoEntity)
-            spawnedEntity.rotation = GetEntityRotation(Client.gizmoEntity)
-        end
     end
+end)
+
+RegisterNUICallback('dolu_tool:gizmoDragEnd', function(_, cb)
+    local entity = Client.gizmoEntity
+
+    if not entity or not DoesEntityExist(entity) then return cb(false) end
+
+    -- If entity was spawned using Object Spawner, sync its final transform and return it to the NUI
+    local entityId = Entity(entity).state.entityId
+    local spawnedEntity = entityId and Client.spawnedEntities[entityId]
+
+    if not spawnedEntity then return cb(false) end
+
+    local coords = GetEntityCoords(entity)
+    local rotation = GetEntityRotation(entity)
+
+    spawnedEntity.position = {
+        x = Utils.round(coords.x, 3),
+        y = Utils.round(coords.y, 3),
+        z = Utils.round(coords.z, 3)
+    }
+    spawnedEntity.rotation = {
+        x = Utils.round(rotation.x, 3),
+        y = Utils.round(rotation.y, 3),
+        z = Utils.round(rotation.z, 3)
+    }
+
+    cb(spawnedEntity)
 end)
 
 RegisterNUICallback('dolu_tool:deleteEntity', function(entityId, cb)
