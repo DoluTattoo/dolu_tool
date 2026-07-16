@@ -71,17 +71,51 @@ end
 ---@return { label: string, value: string, varCount: number }[]
 Utils.getTimecycleModifiers = function()
     local modifiers = {}
+    local seen = {}
+    local duplicates = {}
+    local duplicateCount = 0
     local count = GetTimecycleModifierCount()
 
     for index = 0, count - 1 do
         local name = GetTimecycleModifierNameByIndex(index)
 
         if name then
-            modifiers[#modifiers + 1] = {
-                label = name,
-                value = tostring(joaat(name)),
-                varCount = GetTimecycleModifierVarCount(name)
-            }
+            local value = tostring(joaat(name))
+            local existing = seen[value]
+
+            if existing then
+                -- A timecycle sharing the same joaat hash is already registered.
+                -- The UI Select requires unique values, so we skip this duplicate
+                -- and keep track of it to warn about a broken timecycle setup.
+                duplicateCount = duplicateCount + 1
+
+                if not duplicates[value] then
+                    duplicates[value] = { name = existing.label, value = value, count = 1 }
+                else
+                    duplicates[value].count = duplicates[value].count + 1
+                end
+            else
+                local option = {
+                    label = name,
+                    value = value,
+                    varCount = GetTimecycleModifierVarCount(name)
+                }
+                seen[value] = option
+                modifiers[#modifiers + 1] = option
+            end
+        end
+    end
+
+    if duplicateCount > 0 then
+        local uniqueDuplicates = 0
+        for _ in pairs(duplicates) do uniqueDuplicates = uniqueDuplicates + 1 end
+
+        print(('^3[dolu_tool] Found %d duplicate timecycle(s) across %d name(s). It is not normal to have timecycle duplicates!^7')
+            :format(duplicateCount, uniqueDuplicates))
+
+        for _, dup in pairs(duplicates) do
+            print(('^3[dolu_tool]   - "%s" (value: %s) appeared %d extra time(s)^7')
+                :format(dup.name, dup.value, dup.count))
         end
     end
 
