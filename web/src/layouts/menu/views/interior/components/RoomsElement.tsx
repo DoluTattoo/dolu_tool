@@ -67,7 +67,7 @@ const TimecycleControls = memo(
         value={timecycle}
         onChange={onChange}
         style={{ flex: 1, minWidth: 0 }}
-        comboboxProps={{ width: 320, position: "bottom-start" }}
+        comboboxProps={{ width: 320, position: "bottom-start", keepMounted: false }}
       />
       <ActionIcon size={30} variant="default" onClick={onPrev}>
         <FaArrowLeft size={13} />
