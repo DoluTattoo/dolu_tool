@@ -4,6 +4,7 @@ import { BiWorld } from 'react-icons/bi'
 import { FaCar, FaMapMarkerAlt, FaTshirt } from 'react-icons/fa'
 import { GiPistolGun } from 'react-icons/gi'
 import { IoMdCube } from 'react-icons/io'
+import { IoSettingsSharp } from 'react-icons/io5'
 import { RiHomeGearFill } from 'react-icons/ri'
 import { HiSpeakerWave } from 'react-icons/hi2'
 import { fetchNui } from '../../../utils/fetchNui'
@@ -25,6 +26,7 @@ const Nav: React.FC = () => {
         <NavIcon color='blue.4' tooltip={locale.ui_vehicles} Icon={FaCar} to='/vehicle'  handleClick={() => fetchNui('dolu_tool:tabSelected', 'vehicles')}/>
         <NavIcon color='blue.4' tooltip={locale.ui_weapons} Icon={GiPistolGun} to='/weapon'  handleClick={() => fetchNui('dolu_tool:tabSelected', 'weapons')}/>
         <NavIcon color='blue.4' tooltip={locale.ui_audio} Icon={HiSpeakerWave} to='/audio'  handleClick={() => fetchNui('dolu_tool:tabSelected', 'audio')}/>
+        <NavIcon color='blue.4' tooltip={locale.ui_settings} Icon={IoSettingsSharp} to='/settings'  handleClick={() => fetchNui('dolu_tool:tabSelected', 'settings')}/>
       </Stack>
     </Box>
   )

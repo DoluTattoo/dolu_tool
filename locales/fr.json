@@ -148,5 +148,22 @@
   "ui_size": "Taille",
   "ui_copy": "Copier",
   "ui_copied": "Copié !",
-  "ui_details": "Détails"
+  "ui_details": "Détails",
+  "ui_settings": "Paramètres",
+  "ui_keybinds": "Raccourcis",
+  "ui_keybinds_description": "Gérez vos raccourcis clavier. Cliquez sur une touche pour la réassigner.",
+  "ui_press_key": "Appuyez sur une touche…",
+  "ui_unbound": "Non assigné",
+  "ui_unbind": "Désassigner",
+  "ui_reset_all": "Tout réinitialiser",
+  "ui_reset_to_default": "Réinitialiser par défaut",
+  "ui_keybind_conflict": "La même touche est assignée à plusieurs actions.",
+  "ui_kb_open_menu": "Ouvrir le menu",
+  "ui_kb_open_menu_desc": "Ouvrir le menu Dolu Tool",
+  "ui_kb_toggle_noclip": "Activer le noclip",
+  "ui_kb_toggle_noclip_desc": "Activer ou désactiver le freecam / noclip",
+  "ui_kb_teleport_marker": "Téléportation au marqueur",
+  "ui_kb_teleport_marker_desc": "Se téléporter à votre point de repère",
+  "ui_kb_goback": "Retour",
+  "ui_kb_goback_desc": "Revenir à votre position précédente"
 }

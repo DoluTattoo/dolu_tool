@@ -146,6 +146,41 @@ code {
   background-color: var(--mantine-color-dark-6);
 }
 
+/* --- Keybind capture button (Settings tab) --- */
+.dolu-keybind-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 128px;
+  height: 32px;
+  padding: 0 12px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background-color: rgba(0, 0, 0, 0.2);
+  transition: border-color 150ms ease, background-color 150ms ease;
+}
+
+.dolu-keybind-button:hover {
+  border-color: rgba(77, 171, 247, 0.7);
+  background-color: rgba(77, 171, 247, 0.08);
+}
+
+.dolu-keybind-button[data-capturing] {
+  border-color: var(--mantine-color-yellow-5);
+  background-color: rgba(250, 176, 5, 0.1);
+  animation: dolu-keybind-pulse 1.2s ease-in-out infinite;
+}
+
+.dolu-keybind-button[data-conflict] {
+  border-color: var(--mantine-color-yellow-6);
+  background-color: rgba(250, 176, 5, 0.08);
+}
+
+@keyframes dolu-keybind-pulse {
+  0%, 100% { border-color: rgba(250, 176, 5, 0.4); }
+  50% { border-color: rgba(250, 176, 5, 1); }
+}
+
 /* --- Gizmo mode selector (replaces v5 createStyles) --- */
 .dolu-gizmo-selector {
   display: flex;

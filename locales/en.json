@@ -148,5 +148,22 @@
   "ui_size": "Size",
   "ui_copy": "Copy",
   "ui_copied": "Copied!",
-  "ui_details": "Details"
+  "ui_details": "Details",
+  "ui_settings": "Settings",
+  "ui_keybinds": "Keybinds",
+  "ui_keybinds_description": "Manage your keybindings. Click a key to rebind it.",
+  "ui_press_key": "Press a key…",
+  "ui_unbound": "Unbound",
+  "ui_unbind": "Unbind",
+  "ui_reset_all": "Reset all",
+  "ui_reset_to_default": "Reset to default",
+  "ui_keybind_conflict": "The same key is bound to more than one action.",
+  "ui_kb_open_menu": "Open menu",
+  "ui_kb_open_menu_desc": "Open the Dolu Tool menu",
+  "ui_kb_toggle_noclip": "Toggle noclip",
+  "ui_kb_toggle_noclip_desc": "Enable or disable freecam / noclip",
+  "ui_kb_teleport_marker": "Teleport to marker",
+  "ui_kb_teleport_marker_desc": "Teleport to your map waypoint",
+  "ui_kb_goback": "Go back",
+  "ui_kb_goback_desc": "Return to your previous location"
 }

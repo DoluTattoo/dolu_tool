@@ -18,6 +18,7 @@ import Ped from './views/ped'
 import Vehicle from './views/vehicle'
 import Weapon from './views/weapon'
 import Audio from './views/audio'
+import Settings from './views/settings'
 import { useExitListener } from '../../hooks/useExitListener'
 
 const Menu: React.FC = () => {
@@ -69,6 +70,7 @@ const Menu: React.FC = () => {
                 <Route path='/vehicle' element={<Vehicle />} />
                 <Route path='/weapon' element={<Weapon />} />
                 <Route path='/audio' element={<Audio />} />
+                <Route path='/settings' element={<Settings />} />
               </Routes>
             </Box>
           </Box>
