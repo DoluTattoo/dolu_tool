@@ -31,21 +31,21 @@ local function GetSpeedMultiplier()
 	end
 
 	-- Hold shift to go faster
-	if IsControlJustPressed(0, 21) and not slower then
+	if IsDisabledControlJustPressed(0, 21) and not slower then
 		faster = true
 		speedMultiplier = speedMultiplier*5
 	end
-	if IsControlJustReleased(0, 21) and faster and not slower then
+	if IsDisabledControlJustReleased(0, 21) and faster and not slower then
 		faster = false
 		speedMultiplier = speedMultiplier/5
 	end
 
 	-- Hold Alt to go slower
-	if IsControlJustPressed(0, 19) and not faster then
+	if IsDisabledControlJustPressed(0, 19) and not faster then
 		slower = true
 		speedMultiplier = speedMultiplier/5
 	end
-	if IsControlJustReleased(0, 19) and slower and not faster then
+	if IsDisabledControlJustReleased(0, 19) and slower and not faster then
 		slower = false
 		speedMultiplier = speedMultiplier*5
 	end
@@ -75,26 +75,17 @@ local function UpdateCamera()
 		-- Get speed multiplier for movement
 		local speedMultiplier = GetSpeedMultiplier()
 
-		-- Get rotation input
-		local lookX
-		local lookY
-		if Client.isMenuOpen or Client.gizmoEntity then
-			if IsDisabledControlPressed(0, 25) then
-				lookX = GetSmartControlNormal(CONTROLS.LOOK_X)
-				lookY = GetSmartControlNormal(CONTROLS.LOOK_Y)
-            else
-                lookX = 0
-                lookY = 0
-            end
-		else
-            lookX = GetSmartControlNormal(CONTROLS.LOOK_X)
-            lookY = GetSmartControlNormal(CONTROLS.LOOK_Y)
-        end
+		-- Get camera input
+		local lookX, lookY = 0, 0
+		local moveX, moveY, moveZ = 0, 0, 0
 
-		-- Get position input
-		local moveX = GetSmartControlNormal(CONTROLS.MOVE_X)
-		local moveY = GetSmartControlNormal(CONTROLS.MOVE_Y)
-		local moveZ = GetSmartControlNormal(CONTROLS.MOVE_Z)
+		if (not Client.isMenuOpen and not Client.gizmoEntity) or IsDisabledControlPressed(0, 25) then
+			lookX = GetSmartControlNormal(CONTROLS.LOOK_X)
+			lookY = GetSmartControlNormal(CONTROLS.LOOK_Y)
+			moveX = GetSmartControlNormal(CONTROLS.MOVE_X)
+			moveY = GetSmartControlNormal(CONTROLS.MOVE_Y)
+			moveZ = GetSmartControlNormal(CONTROLS.MOVE_Z)
+		end
 
 		-- Calculate new rotation.
 		local rotX = rot.x + (-lookY * SETTINGS.LOOK_SENSITIVITY_X)

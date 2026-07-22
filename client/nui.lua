@@ -106,14 +106,6 @@ RegisterNUICallback('dolu_tool:exit', function(_, cb)
     })
     Client.gizmoEntity = nil
     Client.isMenuOpen = false
-    Client.gameInputGranted = false
-end)
-
-RegisterNUICallback('dolu_tool:setGameInput', function(enable, cb)
-    cb(1)
-    if not IsNuiFocused() then return end
-    Client.gameInputGranted = enable == true
-    SetNuiFocusKeepInput(Client.gameInputGranted)
 end)
 
 RegisterNUICallback('dolu_tool:changeLocationName', function(data, cb)
@@ -979,7 +971,7 @@ exports("setGizmoEntity", function(obj)
     })
 
     SetNuiFocus(true, true)
-    SetNuiFocusKeepInput(false)
+    SetNuiFocusKeepInput(true)
 end)
 
 exports("removeGizmoEntity", function()

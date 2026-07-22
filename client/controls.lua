@@ -1,94 +1,41 @@
--- Controls
 CreateThread(function()
-    local DisableControlAction = DisableControlAction
-    local EnableControlAction = EnableControlAction
-    local IsDisabledControlPressed = IsDisabledControlPressed
-
     DisableIdleCamera(true)
 
-    local DISABLED<const> = {
-        0, -- Next Camera
-        1, -- Look Left/Right
-        2, -- Look up/Down
-        14, -- INPUT_WEAPON_WHEEL_NEXT
-        15, -- INPUT_WEAPON_WHEEL_PREV
-        16, -- INPUT_SELECT_NEXT_WEAPON
-        17, -- INPUT_SELECT_PREV_WEAPON
-        17, -- Select Previous Weapon
-        22, -- Jump
-        23, -- Enter vehicle
-        24, -- Attack
-        25, -- Aim
-        26, -- Look Behind
-        29, -- INPUT_SPECIAL_ABILITY_SECONDARY
-        30, -- Player Movement
-        31, -- Player Movement
-        36, -- Input Duck/Sneak
-        37, -- Weapon Wheel
-        38, -- INPUT_PICKUP
-        44, -- Cover
-        45, -- INPUT_RELOAD
-        47, -- Detonate
-        51, -- INPUT_CONTEXT
-        55, -- Dive
-        58, -- INPUT_THROW_GRENADE
-        69, -- Vehicle attack
-        73, -- INPUT_VEH_DUCK
-        81, -- Next Radio (Vehicle)
-        82, -- Previous Radio (Vehicle)
-        91, -- Passenger Aim (Vehicle)
-        92, -- Passenger Attack (Vehicle)
-        99, -- Select Next Weapon (Vehicle)
-        105, -- INPUT_VEH_DROP_PROJECTILE
-        106, -- Control Override (Vehicle)
-        113, -- INPUT_VEH_FLY_UNDERCARRIAGE
-        114, -- Fly Attack (Flying)
-        115, -- Next Weapon (Flying)
-        121, -- Fly Camera (Flying)
-        122, -- Control OVerride (Flying)
-        135, -- Control OVerride (Sub)
-        140, -- Melee attack light
-        142, -- Attack alternate
-        154, -- INPUT_PARACHUTE_SMOKE
-        199, -- Pause menu (P)
-        200, -- Pause Menu (ESC)
-        244, -- INPUT_INTERACTION_MENU
-        245, -- Chat
-        257, -- Attack 2
-        263, -- INPUT_MELEE_ATTACK1
-        301, -- INPUT_REPLAY_NEWMARKER
-        303, -- INPUT_REPLAY_SCREENSHOT
-        305, -- INPUT_REPLAY_STARTPOINT
-        309, -- INPUT_REPLAY_TOOLS
-        311, -- INPUT_REPLAY_SHOWHOTKEY
-    }
-
-    local FORCEABLE<const> = {
-        1, -- Look Left/Right
-        2, -- Look up/Down
-        30, -- Player Movement
-        31, -- Player Movement
-        22, -- Jump
-        23 -- Enter vehicle
-    }
+    local looking = false
 
     while true do
-        if Client.isMenuOpen or Client.gizmoEntity or Client.noClip then
-            for i = 1, #DISABLED do
-                DisableControlAction(0, DISABLED[i], true)
+        local canLook = Client.isMenuOpen or Client.gizmoEntity
+
+        if canLook or Client.noClip then
+            local rightClicking = IsDisabledControlPressed(0, 25) -- INPUT_AIM | RIGHT MOUSE BUTTON
+
+            -- Enable controls while holding right click, otherwise disable everything
+            if rightClicking then
+                EnableAllControlActions(0)
+                DisableControlAction(0, 16, true) -- INPUT_SELECT_NEXT_WEAPON | SCROLLWHEEL DOWN
+                DisableControlAction(0, 17, true) -- INPUT_SELECT_PREV_WEAPON | SCROLLWHEEL UP
+            else
+                DisableAllControlActions(0)
             end
 
-            -- Enabling a few input only while holding right click. The NUI-driven
-            if Client.gameInputGranted or IsDisabledControlPressed(0, 25) then
-                for i = 1, #FORCEABLE do
-                    EnableControlAction(0, FORCEABLE[i], true)
+            -- Right click to-look
+            if canLook then
+                if rightClicking and not looking then
+                    looking = true
+                    SetNuiFocus(true, false)
+                elseif not rightClicking and looking then
+                    looking = false
+                    SetNuiFocus(true, true)
                 end
+            else
+                looking = false
             end
-        else
-            Wait(500)
-        end
 
-        Wait(0)
+            Wait(0)
+        else
+            looking = false
+            Wait(200)
+        end
     end
 end)
 

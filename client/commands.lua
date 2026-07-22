@@ -299,9 +299,7 @@ CreateThread(function()
     while true do
         local sleep = 200
 
-        -- While the player is capturing a new key in the Settings tab we must
-        -- not trigger any action (the NUI reads the key press itself).
-        if not Client.captureKeybind and not IsPauseMenuActive() then
+        if not Client.captureKeybind and not Client.isMenuOpen and not IsPauseMenuActive() then
             sleep = 0
 
             for name, action in pairs(actionsByName) do
@@ -368,6 +366,15 @@ end)
 RegisterNUICallback('dolu_tool:captureKeybind', function(state, cb)
     Client.captureKeybind = state == true
     cb(1)
+end)
+
+RegisterNUICallback('dolu_tool:triggerKeybind', function(name, cb)
+    cb(1)
+    local action = actionsByName[name]
+
+    if action and name ~= 'openMenu' then
+        action.onPressed()
+    end
 end)
 
 -------------------------------------------------------------------------------

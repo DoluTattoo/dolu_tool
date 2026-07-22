@@ -34,8 +34,11 @@ Utils.openUI = function()
         Utils.setMenuPlayerCoords()
     end
 
+    -- keepInput stays enabled so the game can read the right mouse button while
+    -- the menu is open (used to look around with the freecam). All gameplay
+    -- controls are disabled in controls.lua, so nothing leaks through.
     SetNuiFocus(true, true)
-    SetNuiFocusKeepInput(false)
+    SetNuiFocusKeepInput(true)
     Client.isMenuOpen = true
 end
 
@@ -546,7 +549,7 @@ Utils.initTarget = function()
                 })
                 Client.gizmoEntity = data.entity
                 SetNuiFocus(true, true)
-                SetNuiFocusKeepInput(false)
+                SetNuiFocusKeepInput(true)
                 lib.notify({ type = 'inform', description = locale('press_escape_exit') })
             end
         },

@@ -7,6 +7,8 @@ import { Version, versionAtom } from '../../atoms/version'
 import { interiorAtom, InteriorData, timecycleAtom, timecycleListAtom, type TimecycleOption } from '../../atoms/interior'
 import { lastLocationsAtom, Location } from '../../atoms/location'
 import { positionAtom } from '../../atoms/position'
+import { keybindsAtom, Keybind } from '../../atoms/keybinds'
+import { fetchNui } from '../../utils/fetchNui'
 import HeaderGroup from './components/HeaderGroup'
 import Nav from './components/Nav'
 import Home from './views/home'
@@ -20,6 +22,7 @@ import Weapon from './views/weapon'
 import Audio from './views/audio'
 import Settings from './views/settings'
 import { useExitListener } from '../../hooks/useExitListener'
+import { useMenuKeybinds } from '../../hooks/useMenuKeybinds'
 
 const Menu: React.FC = () => {
   const [visible, setVisible] = useAtom(menuVisibilityAtom)
@@ -29,14 +32,19 @@ const Menu: React.FC = () => {
   const setTimecycleList = useSetAtom(timecycleListAtom)
   const setLastLocation = useSetAtom(lastLocationsAtom)
   const setPosition = useSetAtom(positionAtom)
+  const [keybinds, setKeybinds] = useAtom(keybindsAtom)
 
   useExitListener(setVisible)
+  useMenuKeybinds(visible, keybinds)
 
   useNuiEvent('setMenuVisible', (data: {version: Version, lastLocation: Location, position: string}) => {
     setVersion(data.version)
     setLastLocation(data.lastLocation)
     setPosition(data.position)
     setVisible(true)
+    fetchNui<Keybind[]>('dolu_tool:getKeybinds').then((list) => {
+      if (Array.isArray(list)) setKeybinds(list)
+    })
   })
 
   useNuiEvent('setLastLocation', (data: Location) => {
