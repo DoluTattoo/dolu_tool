@@ -135,8 +135,7 @@ end
 local function toggleNoclipAction()
     if not hasPermission() then return end
 
-    Client.noClip = not Client.noClip
-    SetFreecamActive(Client.noClip)
+    SetNoclipActive(not Client.noClip)
 end
 
 -- Teleport to marker, inspired by ox_commands (tpm)

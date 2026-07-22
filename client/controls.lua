@@ -54,6 +54,6 @@ AddEventHandler('onResourceStop', function(name)
 
     -- Reset player camera
     if Client.noClip then
-	    SetFreecamActive(false)
+	    SetNoclipActive(false)
     end
 end)

@@ -19,10 +19,7 @@ server_script 'server/version.lua'
 shared_script 'shared/init.lua'
 
 client_scripts {
-    'client/freecam/utils.lua',
-    'client/freecam/config.lua',
-    'client/freecam/camera.lua',
-    'client/freecam/main.lua',
+    'client/noclip.lua',
     'client/utils.lua',
     'client/nui.lua',
     'client/controls.lua',

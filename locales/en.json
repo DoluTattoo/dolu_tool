@@ -161,7 +161,7 @@
   "ui_kb_open_menu": "Open menu",
   "ui_kb_open_menu_desc": "Open the Dolu Tool menu",
   "ui_kb_toggle_noclip": "Toggle noclip",
-  "ui_kb_toggle_noclip_desc": "Enable or disable freecam / noclip",
+  "ui_kb_toggle_noclip_desc": "Enable or disable noclip",
   "ui_kb_teleport_marker": "Teleport to marker",
   "ui_kb_teleport_marker_desc": "Teleport to your map waypoint",
   "ui_kb_goback": "Go back",

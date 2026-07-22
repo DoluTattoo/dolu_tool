@@ -35,7 +35,7 @@ Utils.openUI = function()
     end
 
     -- keepInput stays enabled so the game can read the right mouse button while
-    -- the menu is open (used to look around with the freecam). All gameplay
+    -- the menu is open (used to look around with the noclip camera). All gameplay
     -- controls are disabled in controls.lua, so nothing leaks through.
     SetNuiFocus(true, true)
     SetNuiFocusKeepInput(true)
