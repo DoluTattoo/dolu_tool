@@ -20,8 +20,11 @@ Menu.open = function()
         }
     })
 
-    if Client.currentTab == 'home' then
-        Utils.setMenuPlayerCoords()
+    -- Refresh the current tab so its data is up to date when reopening the menu
+    local onTabOpen = tabOpenHandlers[Client.currentTab]
+
+    if onTabOpen then
+        onTabOpen()
     end
 
     -- keepInput stays enabled so the game can read the right mouse button while
