@@ -3,7 +3,6 @@ import { useAtom } from 'jotai'
 import { TbLogout } from 'react-icons/tb'
 import { AiFillGithub } from 'react-icons/ai'
 import { FaDiscord } from 'react-icons/fa'
-import { SiKofi } from "react-icons/si"
 import { menuVisibilityAtom } from '../../../atoms/visibility'
 import { Version } from '../../../atoms/version'
 import { useNuiEvent } from '../../../hooks/useNuiEvent'
@@ -12,6 +11,7 @@ import { useLocales } from '../../../providers/LocaleProvider'
 import { useExitListener } from '../../../hooks/useExitListener'
 import { useEffect, useState } from 'react'
 import { openUrl } from '../../../utils/misc'
+import DoluLogo from './DoluLogo'
 
 const HeaderGroup: React.FC<{data: Version}> = ({ data }) => {
   const { locale } = useLocales()
@@ -41,6 +41,17 @@ const HeaderGroup: React.FC<{data: Version}> = ({ data }) => {
           >{data.currentVersion}</Text>
         </Group>
         <Group gap={4} wrap='nowrap'>
+          <Tooltip label={locale.ui_website} position='bottom' transitionProps={{ transition: 'scale-y' }}>
+            <ActionIcon
+              variant='subtle'
+              color='blue.4'
+              style={{ width: '40px', height: '40px' }}
+              onClick={() => openUrl('https://dolu-mods.com/')}
+            >
+              <DoluLogo size={24} />
+            </ActionIcon>
+          </Tooltip>
+
           {data.url ?
 
           <Tooltip label={locale.ui_update_warning} position='bottom' transitionProps={{ transition: 'scale-y' }} opened={opened} color='orange.4' style={{ color: 'black', fontWeight: 'bold' }} withArrow arrowSize={10}>
@@ -77,17 +88,6 @@ const HeaderGroup: React.FC<{data: Version}> = ({ data }) => {
               onClick={() => openUrl('https://discord.gg/ZQn2m2A')}
             >
               <FaDiscord fontSize={24} />
-            </ActionIcon>
-          </Tooltip>
-
-          <Tooltip label={locale.ui_support} position='bottom' transitionProps={{ transition: 'scale-y' }}>
-            <ActionIcon
-              variant='subtle'
-              color='blue.4'
-              style={{ width: '40px', height: '40px' }}
-              onClick={() => openUrl('https://ko-fi.com/dolutattoo')}
-            >
-              <SiKofi fontSize={24} />
             </ActionIcon>
           </Tooltip>
 
