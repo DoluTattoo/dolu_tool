@@ -19,14 +19,22 @@ server_script 'server/version.lua'
 shared_script 'shared/init.lua'
 
 client_scripts {
-    'client/noclip.lua',
+    'client/main.lua',
     'client/utils.lua',
-    'client/nui.lua',
+    'client/menu.lua',
     'client/controls.lua',
+    'client/keybinds.lua',
+    'client/noclip.lua',
     'client/instructionalButtons.lua',
-    'client/commands.lua',
-    'client/interior.lua',
-    'client/threads.lua',
+    'client/target.lua',
+    'client/modules/audio.lua',
+    'client/modules/interior.lua',
+    'client/modules/locations.lua',
+    'client/modules/object.lua',
+    'client/modules/peds.lua',
+    'client/modules/vehicles.lua',
+    'client/modules/weapons.lua',
+    'client/modules/world.lua',
 }
 
 server_scripts {

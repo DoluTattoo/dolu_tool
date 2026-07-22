@@ -1,9 +1,11 @@
+Server = {}
+
 local function getFileData(path, file)
     return json.decode(LoadResourceFile(cache.resource, path .. '/' .. file))
 end
 
 local function updateFileData(path, file, data)
-    return SaveResourceFile(cache.resource, path .. '/' .. file, json.encode(data, { indent = true }))
+    return SaveResourceFile(cache.resource, path .. '/' .. file, json.encode(data, { indent = true }), -1)
 end
 
 local function formatVanillaInteriors(vanillaInteriors)

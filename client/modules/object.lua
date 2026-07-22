@@ -1,3 +1,5 @@
+-- Object tab: object spawner & gizmo
+
 local idCounter = 0
 
 local function generateUniqueId()
@@ -5,283 +7,45 @@ local function generateUniqueId()
     return string.format("%x-%x", GetGameTimer(), idCounter)
 end
 
-RegisterNUICallback('dolu_tool:tabSelected', function(newTab, cb)
-    cb(1)
-    local previousTab = Client.currentTab
+local function rotationToDirection(rotation)
+    local adjustedRotation = vec3(
+        (math.pi / 180) * rotation.x,
+        (math.pi / 180) * rotation.y,
+        (math.pi / 180) * rotation.z
+    )
 
-    Client.currentTab = newTab
+    local direction = vec3(
+        -math.sin(adjustedRotation.z) * math.abs(math.cos(adjustedRotation.x)),
+        math.cos(adjustedRotation.z) * math.abs(math.cos(adjustedRotation.x)),
+        math.sin(adjustedRotation.x)
+    )
 
-    -- If exiting object tab while gizmo is enabled, set gizmo disabled
-    if previousTab == 'object' and newTab ~= 'object' then
-        SendNUIMessage({
-            action = 'setGizmoEntity',
-            data = {}
-        })
+    return direction
+end
 
-        Client.gizmoEntity = nil
-    end
+local function raycast(maxDistance, ignore)
+    local screenPosition = { x = GetControlNormal(0, 239), y = GetControlNormal(0, 240) }
+    local pos = GetFinalRenderedCamCoord()
+    local rot = GetFinalRenderedCamRot(2)
+    local fov = GetFinalRenderedCamFov()
+    local cam = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", pos.x, pos.y, pos.z, rot.x, rot.y, rot.z, fov, false, 2)
+    local camRight, camForward, camUp, camPos = GetCamMatrix(cam)
 
-    if newTab == 'home' then
-        Utils.setMenuPlayerCoords()
-    elseif newTab == 'world' then
-        local hour, minute = Utils.getClock()
+    DestroyCam(cam, true)
 
-        SendNUIMessage({
-            action = 'setWorldData',
-            data = {
-                clock = { hour = hour, minute = minute },
-                weather = Utils.getWeather()
-            }
-        })
-    elseif newTab == 'interior' and not Client.timecyclesLoaded then
-        SendNUIMessage({
-            action = 'setTimecycleList',
-            data = Client.data.timecycles
-        })
-        Client.timecyclesLoaded = true
-    elseif newTab == 'locations' and not Client.locationsLoaded then
-        Utils.loadPage('locations', 1)
-        Client.locationsLoaded = true
-    elseif newTab == 'peds' and not Client.pedsLoaded then
-        Utils.loadPage('peds', 1)
-        Client.pedsLoaded = true
-    elseif newTab == 'vehicles' and not Client.vehiclesLoaded then
-        Utils.loadPage('vehicles', 1)
-        Client.vehiclesLoaded = true
-    elseif newTab == 'weapons' and not Client.weaponsLoaded then
-        Utils.loadPage('weapons', 1)
-        Client.weaponsLoaded = true
-    elseif newTab == 'audio' and not Client.audioLoaded then
-        Utils.getClosestStaticEmitter()
+    screenPosition = vec2(screenPosition.x - 0.5, screenPosition.y - 0.5) * 2.0
 
-        SendNUIMessage({
-            action = 'setRadioStationsList',
-            data = Client.data.radioStations
-        })
+    local fovRadians = (fov * 3.14) / 180.0
+    local to = camPos + camForward + (camRight * screenPosition.x * fovRadians * GetAspectRatio(false) * 0.534375) - (camUp * screenPosition.y * fovRadians * 0.534375)
 
-        Client.audioLoaded = true
-    end
-end)
+    local direction = (to - camPos) * maxDistance
+    local endPoint = camPos + direction
 
-RegisterNUICallback('dolu_tool:teleport', function(data, cb)
-    cb(1)
-    if data then
-        Utils.teleportPlayer(data, true)
+    local rayHandle = StartExpensiveSynchronousShapeTestLosProbe(camPos.x, camPos.y, camPos.z, endPoint.x, endPoint.y, endPoint.z, -1, ignore, 0)
+    local result, hit, endCoords, surfaceNormal, entityhit = GetShapeTestResult(rayHandle)
 
-        SendNUIMessage({
-            action = 'setLastLocation',
-            data = data
-        })
-
-        SetResourceKvp('dolu_tool:lastLocation', json.encode(data))
-        Client.lastLocation = data
-    end
-end)
-
-RegisterNUICallback('dolu_tool:changePed', function(data, cb)
-    cb(1)
-    Utils.changePed(data.name)
-end)
-
-RegisterNUICallback('dolu_tool:spawnVehicle', function(data, cb)
-    cb(1)
-    Utils.spawnVehicle(data)
-end)
-
-RegisterNUICallback('dolu_tool:deleteVehicle', function(_, cb)
-    cb(1)
-    if cache.vehicle and DoesEntityExist(cache.vehicle) then
-        DeleteVehicle(cache.vehicle)
-    end
-end)
-
-RegisterNUICallback('dolu_tool:exit', function(_, cb)
-    cb(1)
-    SetNuiFocus(false, false)
-    SetNuiFocusKeepInput(false)
-
-    SendNUIMessage({
-        action = 'setGizmoEntity',
-        data = {}
-    })
-    Client.gizmoEntity = nil
-    Client.isMenuOpen = false
-end)
-
-RegisterNUICallback('dolu_tool:changeLocationName', function(data, cb)
-    cb(1)
-    lib.callback('dolu_tool:renameLocation', false, function(result)
-        if not result then return end
-
-        Client.data.locations[result.index] = result.data
-
-        if Client.isMenuOpen and Client.currentTab == 'locations' then
-            Utils.loadPage('locations', 1)
-        end
-    end, data)
-end)
-
-RegisterNUICallback('dolu_tool:createCustomLocation', function(locationName, cb)
-    cb(1)
-    local playerPed = cache.ped
-
-    lib.callback('dolu_tool:createCustomLocation', false, function(result)
-        if not result then return end
-
-        -- Insert new location at index 1
-        table.insert(Client.data.locations, 1, result)
-
-        if Client.isMenuOpen and Client.currentTab == 'locations' then
-            Utils.loadPage('locations', 1)
-        end
-
-        lib.notify({
-            title = 'Dolu Tool',
-            description = locale('custom_location_created'),
-            type = 'success',
-            position = 'top'
-        })
-    end, {
-        name = locationName,
-        coords = GetEntityCoords(playerPed),
-        heading = GetEntityHeading(playerPed)
-    })
-end)
-
-RegisterNUICallback('dolu_tool:deleteLocation', function(locationName, cb)
-    cb(1)
-    local result = lib.callback.await('dolu_tool:deleteLocation', false, locationName)
-
-    if not result then return end
-
-    -- Remove location from file
-    table.remove(Client.data.locations, result)
-
-    if Client.isMenuOpen and Client.currentTab == 'locations' then
-        Utils.loadPage('locations', 1)
-    end
-end)
-
-RegisterNUICallback('dolu_tool:setWeather', function(weatherName, cb)
-    cb(1)
-    Utils.setWeather(weatherName)
-end)
-
-RegisterNUICallback('dolu_tool:setClock', function(clock, cb)
-    cb(1)
-    Utils.setClock(clock.hour, clock.minute)
-end)
-
-RegisterNUICallback('dolu_tool:getClock', function(_, cb)
-    cb(1)
-    local hour, minute = Utils.getClock()
-
-    SendNUIMessage({
-        action = 'setClockData',
-        data = { hour = hour, minute = minute }
-    })
-end)
-
-RegisterNUICallback('dolu_tool:freezeTime', function(state, cb)
-    cb(1)
-    Client.freezeTime = state
-end)
-
-RegisterNUICallback('dolu_tool:freezeWeather', function(state, cb)
-    cb(1)
-    Client.freezeWeather = state
-end)
-
-RegisterNUICallback('dolu_tool:cleanZone', function(_, cb)
-    cb(1)
-    local playerId = cache.ped
-    local playerCoords = GetEntityCoords(playerId)
-
-    ClearAreaOfEverything(playerCoords.x, playerCoords.y, playerCoords.z, 1000.0, false, false, false, false)
-end)
-
-RegisterNUICallback('dolu_tool:cleanPed', function(_, cb)
-    cb(1)
-    local playerId = cache.ped
-
-    ClearPedBloodDamage(playerId)
-    ClearPedEnvDirt(playerId)
-    ClearPedWetness(playerId)
-end)
-
-RegisterNUICallback('dolu_tool:upgradeVehicle', function(_, cb)
-    cb(1)
-    local vehicle = cache.vehicle
-
-    if DoesEntityExist(vehicle) and IsEntityAVehicle(vehicle) then
-        local max
-
-        for _, modType in ipairs({ 11, 12, 13, 16 }) do
-            max = GetNumVehicleMods(vehicle, modType) - 1
-            SetVehicleMod(vehicle, modType, max, customWheels)
-        end
-
-        ToggleVehicleMod(vehicle, 18, true) -- Turbo
-
-        lib.notify({
-            title = 'Dolu Tool',
-            description = locale('vehicle_upgraded'),
-            type = 'success',
-            position = 'top'
-        })
-    end
-end)
-
-RegisterNUICallback('dolu_tool:repairVehicle', function(_, cb)
-    cb(1)
-    local vehicle = cache.vehicle
-
-    SetVehicleFixed(vehicle)
-    SetVehicleEngineHealth(vehicle, 1000.0)
-    SetVehicleDirtLevel(vehicle, 0.0)
-end)
-
-RegisterNUICallback('dolu_tool:giveWeapon', function(weaponName, cb)
-    cb(1)
-    if Shared.ox_inventory then
-        lib.callback('dolu_tool:giveWeaponToPlayer', false, function(result)
-            if result then
-                lib.notify({ type = 'success', description = locale('weapon_gave') })
-            else
-                lib.notify({ type = 'error', description = locale('weapon_cant_carry') })
-            end
-        end, weaponName)
-
-        return
-    else
-        GiveWeaponToPed(cache.ped, joaat(weaponName), 999, false, true)
-    end
-end)
-
-RegisterNUICallback('dolu_tool:setDay', function(_, cb)
-    cb(1)
-    Utils.setClock(12)
-    Utils.setWeather('extrasunny')
-end)
-
-RegisterNUICallback('dolu_tool:setMaxHealth', function(_, cb)
-    cb(1)
-    local playerPed = PlayerPedId()
-
-    SetEntityHealth(playerPed, GetEntityMaxHealth(playerPed))
-
-    lib.notify({
-        title = 'Dolu Tool',
-        description = locale('max_health_set'),
-        type = 'success',
-        position = 'top'
-    })
-end)
-
-RegisterNUICallback('dolu_tool:spawnFavoriteVehicle', function(_, cb)
-    cb(1)
-    Utils.spawnVehicle(Config.favoriteVehicle)
-end)
+    return result, hit, endCoords, surfaceNormal, entityhit
+end
 
 local function updateNuiObjectList()
     local entityTable = {}
@@ -309,7 +73,7 @@ RegisterNUICallback('dolu_tool:selectEntity', function(_, cb)
         return
     end
 
-    local result, hit, endCoords, surfaceNormal, entityHit = Utils.raycast(10000.0, Client.gizmoEntity)
+    local result, hit, endCoords, surfaceNormal, entityHit = raycast(10000.0, Client.gizmoEntity)
 
     repeat
         Wait(0)
@@ -405,7 +169,7 @@ RegisterNUICallback('dolu_tool:addEntity', function(modelName, cb)
     local distance = 5
     local cameraRotation = GetFinalRenderedCamRot(2)
     local cameraCoord = GetFinalRenderedCamCoord()
-    local direction = Utils.rotationToDirection(cameraRotation)
+    local direction = rotationToDirection(cameraRotation)
     local coords = vec3(cameraCoord.x + direction.x * distance, cameraCoord.y + direction.y * distance, cameraCoord.z + direction.z * distance)
     local obj = CreateObjectNoOffset(model, coords.x, coords.y, coords.z, true, true, false)
     local entityId = generateUniqueId()
@@ -887,64 +651,58 @@ RegisterNUICallback('dolu_tool:snapEntityToGround', function(data, cb)
     end
 end)
 
-RegisterNUICallback('dolu_tool:setCustomCoords', function(data, cb)
-    cb(1)
+-- Gizmo's entity
+CreateThread(function()
+    SetEntityDrawOutlineShader(1)
+    SetEntityDrawOutlineColor(130, 150, 250, 180)
 
-    local formatedCoords
+    local previousGizmoEntity = nil
 
-    if data.coordString then
-        local coordString = (data.coordString:gsub(',', '')):gsub('  ', ' ')
-        local coords = {}
+    while true do
+        if Client.gizmoEntity then
+            -- If gizmo entity changed, unfreeze the previous one
+            if previousGizmoEntity and previousGizmoEntity ~= Client.gizmoEntity and DoesEntityExist(previousGizmoEntity) then
+                FreezeEntityPosition(previousGizmoEntity, false)
+            end
 
-        for match in (coordString .. ' '):gmatch('(.-) ') do
-            table.insert(coords, match)
+            -- Freeze the current gizmo entity
+            if DoesEntityExist(Client.gizmoEntity) then
+                FreezeEntityPosition(Client.gizmoEntity, true)
+            end
+
+            previousGizmoEntity = Client.gizmoEntity
+
+            SendNUIMessage({
+                action = 'setCameraPosition',
+                data = {
+                    position = GetFinalRenderedCamCoord(),
+                    rotation = GetFinalRenderedCamRot(2)
+                }
+            })
+
+            if Client.outlinedEntity then
+                SetEntityDrawOutline(Client.outlinedEntity, false)
+            end
+
+            if GetEntityType(Client.gizmoEntity) ~= 1 then
+                Client.outlinedEntity = Client.gizmoEntity
+                SetEntityDrawOutline(Client.outlinedEntity, true)
+            end
+        else
+            -- Unfreeze the previous entity when gizmo is disabled
+            if previousGizmoEntity and DoesEntityExist(previousGizmoEntity) then
+                FreezeEntityPosition(previousGizmoEntity, false)
+                previousGizmoEntity = nil
+            end
+
+            if Client.outlinedEntity then
+                SetEntityDrawOutline(Client.outlinedEntity, false)
+                Client.outlinedEntity = nil
+            end
+            Wait(250)
         end
-
-        formatedCoords = vec3(tonumber(coords[1]), tonumber(coords[2]), tonumber(coords[3]))
-    elseif data.coords then
-        formatedCoords = vec3(data.coords.x, data.coords.y, data.coords.z)
+        Wait(0)
     end
-
-    if formatedCoords then
-        Utils.teleportPlayer(formatedCoords, true)
-    end
-end)
-
-RegisterNUICallback('dolu_tool:loadPages', function(data, cb)
-    cb(1)
-    Utils.loadPage(data.type, data.activePage, data.filter, data.checkboxes)
-end)
-
-RegisterNUICallback('dolu_tool:setStaticEmitterDrawDistance', function(distance, cb)
-    cb(1)
-    Client.staticEmitterDrawDistance = distance
-end)
-
-RegisterNUICallback('dolu_tool:getClosestStaticEmitter', function(_, cb)
-    cb(1)
-    Utils.getClosestStaticEmitter()
-end)
-
-RegisterNUICallback('dolu_tool:toggleStaticEmitter', function(data, cb)
-    cb(1)
-    SetStaticEmitterEnabled(data.emitterName, data.state)
-end)
-
-RegisterNUICallback('dolu_tool:setStaticEmitterRadio', function(data, cb)
-    cb(1)
-    SetEmitterRadioStation(data.emitterName, data.radioStation)
-
-    for _, v in ipairs(Client.data.staticEmitters) do
-        if v.name == data.emitterName then
-            v.radiostation = data.radioStation
-            break
-        end
-    end
-end)
-
-RegisterNUICallback('dolu_tool:setDrawStaticEmitters', function(state, cb)
-    cb(1)
-    Client.drawStaticEmitters = state
 end)
 
 -- Exports

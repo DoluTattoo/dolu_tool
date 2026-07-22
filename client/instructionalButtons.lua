@@ -40,7 +40,7 @@ local function BuildButtons(noclip, canLook, objectTab)
     end
 
     if canLook then
-        SetDataSlot(slot, 25, "Enable camera controls (HOLD)")
+        SetDataSlot(slot, 25, "Enable controls (HOLD)")
         slot = slot + 1
     end
 

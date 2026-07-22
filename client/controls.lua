@@ -38,22 +38,3 @@ CreateThread(function()
         end
     end
 end)
-
-AddEventHandler('onResourceStop', function(name)
-	if name ~= cache.resource then return end
-
-	-- Stop outlining entity
-    if Client.outlinedEntity then
-        SetEntityDrawOutline(Client.outlinedEntity, false)
-    end
-
-    -- Unfreeze current gizmo entity
-    if Client.gizmoEntity and DoesEntityExist(Client.gizmoEntity) then
-        FreezeEntityPosition(Client.gizmoEntity, false)
-    end
-
-    -- Reset player camera
-    if Client.noClip then
-	    SetNoclipActive(false)
-    end
-end)

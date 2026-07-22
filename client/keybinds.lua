@@ -128,7 +128,7 @@ local function openMenuAction()
     if not hasPermission() then return end
 
     if not IsNuiFocused() and not IsPauseMenuActive() then
-        Utils.openUI()
+        Menu.open()
     end
 end
 
@@ -315,7 +315,7 @@ CreateThread(function()
 end)
 
 -------------------------------------------------------------------------------
--- NUI callbacks
+-- NUI callbacks (Settings tab)
 -------------------------------------------------------------------------------
 
 RegisterNUICallback('dolu_tool:getKeybinds', function(_, cb)
