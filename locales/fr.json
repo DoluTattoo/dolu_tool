@@ -55,6 +55,8 @@
   "ui_time_not_freeze": "Temps non figé",
   "ui_time": "Heure",
   "ui_sync": "Récupérer",
+  "ui_hour": "Heure",
+  "ui_minutes": "Minutes",
   "ui_freeze_time": "Figer l'heure",
   "ui_weather": "Météo",
   "ui_choose_weather": "Choisissez la météo que vous souhaitez",

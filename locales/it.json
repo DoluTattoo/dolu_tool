@@ -55,6 +55,8 @@
   "ui_time_not_freeze": "Tempo non congelato",
   "ui_time": "Tempo",
   "ui_sync": "Sincronizza",
+  "ui_hour": "Ora",
+  "ui_minutes": "Minuti",
   "ui_freeze_time": "Congela tempo",
   "ui_weather": "Meteo",
   "ui_choose_weather": "Scegli un tipo di meteo",

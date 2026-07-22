@@ -55,6 +55,8 @@
   "ui_time_not_freeze": "時間停止解除",
   "ui_time": "時間",
   "ui_sync": "同期",
+  "ui_hour": "時",
+  "ui_minutes": "分",
   "ui_freeze_time": "時間を停止",
   "ui_weather": "天気",
   "ui_choose_weather": "天気を選択",

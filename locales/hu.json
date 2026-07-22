@@ -55,6 +55,8 @@
   "ui_time_not_freeze": "Idő kifagysztás",
   "ui_time": "Idő",
   "ui_sync": "Szinkron",
+  "ui_hour": "Óra",
+  "ui_minutes": "Perc",
   "ui_freeze_time": "Idő fagyasztás",
   "ui_weather": "Időjárás",
   "ui_choose_weather": "Válassz időjárást",

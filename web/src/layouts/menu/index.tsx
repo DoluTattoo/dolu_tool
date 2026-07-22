@@ -8,6 +8,7 @@ import { interiorAtom, InteriorData, timecycleAtom, timecycleListAtom, type Time
 import { lastLocationsAtom, Location } from '../../atoms/location'
 import { positionAtom } from '../../atoms/position'
 import { keybindsAtom, Keybind } from '../../atoms/keybinds'
+import { worldHourAtom, worldMinuteAtom, worldWeatherAtom } from '../../atoms/world'
 import { fetchNui } from '../../utils/fetchNui'
 import HeaderGroup from './components/HeaderGroup'
 import Nav from './components/Nav'
@@ -33,6 +34,9 @@ const Menu: React.FC = () => {
   const setLastLocation = useSetAtom(lastLocationsAtom)
   const setPosition = useSetAtom(positionAtom)
   const [keybinds, setKeybinds] = useAtom(keybindsAtom)
+  const setWorldHour = useSetAtom(worldHourAtom)
+  const setWorldMinute = useSetAtom(worldMinuteAtom)
+  const setWorldWeather = useSetAtom(worldWeatherAtom)
 
   useExitListener(setVisible)
   useMenuKeybinds(visible, keybinds)
@@ -58,6 +62,17 @@ const Menu: React.FC = () => {
 
   useNuiEvent('setTimecycleList', (data: TimecycleOption[]) => {
     setTimecycleList(data)
+  })
+
+  useNuiEvent('setWorldData', (data: { clock: { hour: number, minute: number }, weather: string }) => {
+    setWorldWeather(data.weather)
+    setWorldHour(data.clock.hour)
+    setWorldMinute(data.clock.minute)
+  })
+
+  useNuiEvent('setClockData', (data: { hour: number, minute: number }) => {
+    setWorldHour(data.hour)
+    setWorldMinute(data.minute)
   })
 
   return (

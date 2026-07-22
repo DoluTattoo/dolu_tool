@@ -55,6 +55,8 @@
   "ui_time_not_freeze": "時間狀態:未鎖定",
   "ui_time": "世界時間",
   "ui_sync": "同步時間",
+  "ui_hour": "小時",
+  "ui_minutes": "分鐘",
   "ui_freeze_time": "鎖定時間",
   "ui_weather": "世界天氣",
   "ui_choose_weather": "選擇天氣類型",

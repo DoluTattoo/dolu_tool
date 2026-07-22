@@ -55,6 +55,8 @@
   "ui_time_not_freeze": "ไม่ล็อคเวลา",
   "ui_time": "เวลา",
   "ui_sync": "ซิงค์เวลา",
+  "ui_hour": "ชั่วโมง",
+  "ui_minutes": "นาที",
   "ui_freeze_time": "ค้างเวลาไว้?",
   "ui_weather": "ภูมิอากาศ",
   "ui_choose_weather": "เลือกประเภทภูมิอากาศ",

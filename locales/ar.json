@@ -55,6 +55,8 @@
   "ui_time_not_freeze": "الوقت لم يتجمد",
   "ui_time": "وقت",
   "ui_sync": "مزامنة",
+  "ui_hour": "الساعة",
+  "ui_minutes": "الدقائق",
   "ui_freeze_time": "تجميد وقت",
   "ui_weather": "طقس",
   "ui_choose_weather": "اختر نوع الطقس",

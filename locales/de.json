@@ -55,6 +55,8 @@
   "ui_time_not_freeze": "Zeit nicht einfrieren",
   "ui_time": "Zeit",
   "ui_sync": "Synchronisieren",
+  "ui_hour": "Stunde",
+  "ui_minutes": "Minuten",
   "ui_freeze_time": "Zeit einfrieren",
   "ui_weather": "Wetter",
   "ui_choose_weather": "Wähle einen Wettertyp",

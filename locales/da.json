@@ -55,6 +55,8 @@
   "ui_time_not_freeze": "Tid ikke frossen",
   "ui_time": "Tid",
   "ui_sync": "Sync",
+  "ui_hour": "Time",
+  "ui_minutes": "Minutter",
   "ui_freeze_time": "Frys tid",
   "ui_weather": "Vejr",
   "ui_choose_weather": "Vælg en vejrtype",

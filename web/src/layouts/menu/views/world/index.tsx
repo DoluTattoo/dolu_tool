@@ -1,6 +1,6 @@
-import { Text, Stack, SimpleGrid, Paper, Group, Select, NumberInput, Button, Space, Checkbox } from '@mantine/core'
+import { Text, Stack, SimpleGrid, Paper, Group, Select, Slider, ActionIcon, Button, Space, Checkbox } from '@mantine/core'
+import { TbMinus, TbPlus } from 'react-icons/tb'
 import { fetchNui } from '../../../../utils/fetchNui'
-import { useNuiEvent } from '../../../../hooks/useNuiEvent'
 import { useAtom } from 'jotai'
 import { worldFreezeTimeAtom, worldFreezeWeatherAtom, worldHourAtom, worldMinuteAtom, worldWeatherAtom } from '../../../../atoms/world'
 import { useLocales } from '../../../../providers/LocaleProvider'
@@ -13,58 +13,77 @@ const World: React.FC = () => {
   const [timeFrozen, setTimeFrozen] = useAtom(worldFreezeTimeAtom)
   const [weatherFrozen, setWeatherFrozen] = useAtom(worldFreezeWeatherAtom)
 
-  useNuiEvent('setWorldData', (data: any) => {
-    setWeatherValue(data.weather)
-    setHourValue(data.clock.hour)
-    setMinuteValue(data.clock.minute)
-  })
+  const setHour = (value: number) => {
+    setHourValue(value)
+    fetchNui('dolu_tool:setClock', { hour: value, minute: minuteValue })
+  }
 
-  useNuiEvent('setClockData', (data: any) => {
-    setHourValue(data.hour)
-    setMinuteValue(data.minute)
-  })
+  const setMinute = (value: number) => {
+    setMinuteValue(value)
+    fetchNui('dolu_tool:setClock', { hour: hourValue, minute: value })
+  }
 
   return (
     <SimpleGrid cols={1}>
       <Stack>
         {/* Time    */}
         <Paper p='md'>
-          <Text fz={20} fw={600}>{locale.ui_time}</Text>
+          <Group justify='space-between' align='baseline'>
+            <Text fz={20} fw={600}>{locale.ui_time}</Text>
+            <Text fz={18} fw={600} c='blue.4'>
+              {String(hourValue).padStart(2, '0')}:{String(minuteValue).padStart(2, '0')}
+            </Text>
+          </Group>
 
           <Space h='sm' />
 
-          <Group grow>
-            <NumberInput
+          <Text fz={14} mb={4}>{locale.ui_hour}</Text>
+          <Group wrap='nowrap' gap='xs'>
+            <ActionIcon variant='light' color='blue.4' radius='md' onClick={() => setHour((hourValue + 23) % 24)}>
+              <TbMinus fontSize={16} />
+            </ActionIcon>
+            <Slider
+              style={{ flex: 1 }}
+              color='blue.4'
+              min={0}
+              max={23}
+              step={1}
               value={hourValue}
-              defaultValue={hourValue}
-              placeholder={hourValue.toString()}
-              radius='md'
-              max={24}
-              min={0}
-              stepHoldDelay={500}
-              stepHoldInterval={(t) => Math.max(1000 / t ** 2, 25)}
-              onChange={(value) => {
-                if (typeof value === 'number') {
-                  setHourValue(value)
-                  fetchNui('dolu_tool:setClock', { hour: value, minute: minuteValue})
-                }
-              }}
+              onChange={setHour}
             />
-            {':'}
-            <NumberInput
+            <ActionIcon variant='light' color='blue.4' radius='md' onClick={() => setHour((hourValue + 1) % 24)}>
+              <TbPlus fontSize={16} />
+            </ActionIcon>
+          </Group>
+
+          <Space h='sm' />
+
+          <Text fz={14} mb={4}>{locale.ui_minutes}</Text>
+          <Group wrap='nowrap' gap='xs'>
+            <ActionIcon variant='light' color='blue.4' radius='md' onClick={() => setMinute((minuteValue + 59) % 60)}>
+              <TbMinus fontSize={16} />
+            </ActionIcon>
+            <Slider
+              style={{ flex: 1 }}
+              color='blue.4'
+              min={0}
+              max={59}
+              step={1}
               value={minuteValue}
-              defaultValue={minuteValue}
-              radius='md'
-              max={60}
-              min={0}
-              stepHoldDelay={500}
-              stepHoldInterval={(t) => Math.max(1000 / t ** 2, 25)}
-              onChange={(value) => {
-                if (typeof value !== 'number') return
-                setMinuteValue(value)
-                fetchNui('dolu_tool:setClock', { hour: hourValue, minute: value})
-              }}
+              onChange={setMinute}
             />
+            <ActionIcon variant='light' color='blue.4' radius='md' onClick={() => setMinute((minuteValue + 1) % 60)}>
+              <TbPlus fontSize={16} />
+            </ActionIcon>
+          </Group>
+
+          <Space h='md' />
+
+          <Group justify='space-between'>
+            <Checkbox label={locale.ui_freeze_time} checked={timeFrozen} onChange={(e) => {
+              setTimeFrozen(e.currentTarget.checked)
+              fetchNui('dolu_tool:freezeTime', e.currentTarget.checked)
+            }} />
 
             <Button
               color='blue.4'
@@ -73,15 +92,6 @@ const World: React.FC = () => {
             >
               {locale.ui_sync}
             </Button>
-          </Group>
-
-          <Space h='sm' />
-
-          <Group>
-            <Checkbox label={locale.ui_freeze_time} checked={timeFrozen} onChange={(e) => {
-              setTimeFrozen(e.currentTarget.checked)
-              fetchNui('dolu_tool:freezeTime', e.currentTarget.checked)
-            }} />
           </Group>
         </Paper>
 

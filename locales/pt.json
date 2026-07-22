@@ -55,6 +55,8 @@
   "ui_time_not_freeze": "Tempo a correr",
   "ui_time": "Tempo",
   "ui_sync": "Sync",
+  "ui_hour": "Hora",
+  "ui_minutes": "Minutos",
   "ui_freeze_time": "Parar tempo",
   "ui_weather": "Clima",
   "ui_choose_weather": "Escolher um clima",

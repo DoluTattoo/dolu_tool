@@ -55,6 +55,8 @@
   "ui_time_not_freeze": "Pustit čas",
   "ui_time": "Čas",
   "ui_sync": "Synchr.",
+  "ui_hour": "Hodina",
+  "ui_minutes": "Minuty",
   "ui_freeze_time": "Zastavit čas",
   "ui_weather": "Počasí",
   "ui_choose_weather": "Vyber typ počasí",

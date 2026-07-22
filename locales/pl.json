@@ -55,6 +55,8 @@
   "ui_time_not_freeze": "Czas niezatrzymany",
   "ui_time": "Czas",
   "ui_sync": "Synchronizacja",
+  "ui_hour": "Godzina",
+  "ui_minutes": "Minuty",
   "ui_freeze_time": "Zatrzymaj upływ czasu",
   "ui_weather": "Pogoda",
   "ui_choose_weather": "Wybierz typ pogody",
