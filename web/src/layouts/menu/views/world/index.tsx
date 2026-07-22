@@ -1,15 +1,34 @@
-import { Text, Stack, SimpleGrid, Paper, Group, Select, Slider, ActionIcon, Button, Space, Checkbox } from '@mantine/core'
-import { TbMinus, TbPlus } from 'react-icons/tb'
+import { Text, Stack, SimpleGrid, Paper, Group, Slider, ActionIcon, Button, Space, Checkbox, Tooltip } from '@mantine/core'
+import { TbHelpCircle, TbMinus, TbPlus } from 'react-icons/tb'
 import { fetchNui } from '../../../../utils/fetchNui'
 import { useAtom } from 'jotai'
-import { worldFreezeTimeAtom, worldFreezeWeatherAtom, worldHourAtom, worldMinuteAtom, worldWeatherAtom } from '../../../../atoms/world'
+import { worldCloudsOpacityAtom, worldFreezeTimeAtom, worldFreezeWeatherAtom, worldHourAtom, worldMinuteAtom, worldWeatherAtom } from '../../../../atoms/world'
 import { useLocales } from '../../../../providers/LocaleProvider'
+
+const WEATHER_TYPES = [
+  { value: 'clear', label: 'Clear' },
+  { value: 'extrasunny', label: 'ExtraSunny' },
+  { value: 'neutral', label: 'Neutral' },
+  { value: 'smog', label: 'Smog' },
+  { value: 'foggy', label: 'Foggy' },
+  { value: 'overcast', label: 'Overcast' },
+  { value: 'clouds', label: 'Clouds' },
+  { value: 'clearing', label: 'Clearing' },
+  { value: 'rain', label: 'Rain' },
+  { value: 'thunder', label: 'Thunder' },
+  { value: 'snow', label: 'Snow' },
+  { value: 'blizzard', label: 'Blizzard' },
+  { value: 'snowlight', label: 'Snowlight' },
+  { value: 'xmas', label: 'Xmas' },
+  { value: 'halloween', label: 'Halloween' },
+]
 
 const World: React.FC = () => {
   const { locale } = useLocales()
   const [hourValue, setHourValue] = useAtom(worldHourAtom)
   const [minuteValue, setMinuteValue] = useAtom(worldMinuteAtom)
   const [weatherValue, setWeatherValue] = useAtom(worldWeatherAtom)
+  const [cloudsOpacity, setCloudsOpacity] = useAtom(worldCloudsOpacityAtom)
   const [timeFrozen, setTimeFrozen] = useAtom(worldFreezeTimeAtom)
   const [weatherFrozen, setWeatherFrozen] = useAtom(worldFreezeWeatherAtom)
 
@@ -99,37 +118,48 @@ const World: React.FC = () => {
         <Paper p='md'>
           <Text fz={20} fw={600} mb='md'>{locale.ui_weather}</Text>
 
-          <Group>
-            <Select
-              label={locale.ui_choose_weather}
-              placeholder={locale.ui_current_weather}
-              defaultValue={weatherValue}
-              value={weatherValue}
-              onChange={(value) => {
-                value && setWeatherValue(value)
-                fetchNui('dolu_tool:setWeather', value)
-              }}
-              data={[
-                { value: 'clear', label: "Clear" },
-                { value: 'extraSunny', label: "ExtraSunny" },
-                { value: 'neutral', label: "Neutral" },
-                { value: 'smog', label: "Smog" },
-                { value: 'foggy', label: "Foggy" },
-                { value: 'overcast', label: "Overcast" },
-                { value: 'clouds', label: "Clouds" },
-                { value: 'clearing', label: "Clearing" },
-                { value: 'rain', label: "Rain" },
-                { value: 'thunder', label: "Thunder" },
-                { value: 'snow', label: "Snow" },
-                { value: 'blizzard', label: "Blizzard" },
-                { value: 'snowlight', label: "Snowlight" },
-                { value: 'xmas', label: "Xmas" },
-                { value: 'halloween', label: "Halloween" },
-              ]}
-            />
-          </Group>
+          <SimpleGrid cols={3} spacing='xs'>
+            {WEATHER_TYPES.map((weather) => (
+              <Button
+                key={weather.value}
+                variant={weatherValue === weather.value ? 'outline' : 'default'}
+                color='blue.4'
+                radius='md'
+                size='xs'
+                onClick={() => {
+                  setWeatherValue(weather.value)
+                  fetchNui('dolu_tool:setWeather', weather.value)
+                }}
+              >
+                {weather.label}
+              </Button>
+            ))}
+          </SimpleGrid>
 
-          <Space h='sm' />
+          <Space h='md' />
+
+          <Group gap={6} mb={4} align='center'>
+            <Text fz={14}>{locale.ui_clouds_opacity}</Text>
+            <Tooltip label={locale.ui_clouds_opacity_info} position='top' multiline w={230} transitionProps={{ transition: 'scale-y' }}>
+              <Text component='span' c='dimmed' lh={0} style={{ cursor: 'help' }}>
+                <TbHelpCircle fontSize={16} />
+              </Text>
+            </Tooltip>
+          </Group>
+          <Slider
+            color='blue.4'
+            min={0}
+            max={100}
+            step={1}
+            value={cloudsOpacity}
+            label={(value) => `${value}%`}
+            onChange={(value) => {
+              setCloudsOpacity(value)
+              fetchNui('dolu_tool:setCloudsOpacity', value)
+            }}
+          />
+
+          <Space h='md' />
 
           <Group>
             <Checkbox label={locale.ui_freeze_weather} checked={weatherFrozen} onChange={(e) => {

@@ -57,6 +57,8 @@
   "ui_sync": "Synchronizacja",
   "ui_hour": "Godzina",
   "ui_minutes": "Minuty",
+  "ui_clouds_opacity": "Krycie chmur",
+  "ui_clouds_opacity_info": "Wpływa tylko na warstwę chmur widoczną na bardzo dużej wysokości",
   "ui_freeze_time": "Zatrzymaj upływ czasu",
   "ui_weather": "Pogoda",
   "ui_choose_weather": "Wybierz typ pogody",

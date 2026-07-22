@@ -57,6 +57,8 @@
   "ui_sync": "مزامنة",
   "ui_hour": "الساعة",
   "ui_minutes": "الدقائق",
+  "ui_clouds_opacity": "عتامة السحب",
+  "ui_clouds_opacity_info": "يؤثر فقط على طبقة السحب المرئية على ارتفاع عالٍ جدًا",
   "ui_freeze_time": "تجميد وقت",
   "ui_weather": "طقس",
   "ui_choose_weather": "اختر نوع الطقس",

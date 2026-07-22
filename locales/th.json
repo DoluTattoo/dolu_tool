@@ -57,6 +57,8 @@
   "ui_sync": "ซิงค์เวลา",
   "ui_hour": "ชั่วโมง",
   "ui_minutes": "นาที",
+  "ui_clouds_opacity": "ความทึบของเมฆ",
+  "ui_clouds_opacity_info": "มีผลเฉพาะชั้นเมฆที่มองเห็นได้ที่ระดับความสูงมากเท่านั้น",
   "ui_freeze_time": "ค้างเวลาไว้?",
   "ui_weather": "ภูมิอากาศ",
   "ui_choose_weather": "เลือกประเภทภูมิอากาศ",

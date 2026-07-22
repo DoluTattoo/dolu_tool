@@ -57,6 +57,8 @@
   "ui_sync": "Synchr.",
   "ui_hour": "Hodina",
   "ui_minutes": "Minuty",
+  "ui_clouds_opacity": "Krytí mraků",
+  "ui_clouds_opacity_info": "Ovlivňuje pouze vrstvu mraků viditelnou ve velmi vysoké výšce",
   "ui_freeze_time": "Zastavit čas",
   "ui_weather": "Počasí",
   "ui_choose_weather": "Vyber typ počasí",

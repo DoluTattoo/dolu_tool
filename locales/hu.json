@@ -57,6 +57,8 @@
   "ui_sync": "Szinkron",
   "ui_hour": "Óra",
   "ui_minutes": "Perc",
+  "ui_clouds_opacity": "Felhők átlátszatlansága",
+  "ui_clouds_opacity_info": "Csak a nagyon nagy magasságban látható felhőrétegre van hatással",
   "ui_freeze_time": "Idő fagyasztás",
   "ui_weather": "Időjárás",
   "ui_choose_weather": "Válassz időjárást",

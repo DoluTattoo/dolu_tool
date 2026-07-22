@@ -57,6 +57,8 @@
   "ui_sync": "Synchronisieren",
   "ui_hour": "Stunde",
   "ui_minutes": "Minuten",
+  "ui_clouds_opacity": "Wolken-Deckkraft",
+  "ui_clouds_opacity_info": "Betrifft nur die Wolkenschicht, die in sehr großer Höhe sichtbar ist",
   "ui_freeze_time": "Zeit einfrieren",
   "ui_weather": "Wetter",
   "ui_choose_weather": "Wähle einen Wettertyp",

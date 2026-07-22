@@ -57,6 +57,8 @@
   "ui_sync": "Récupérer",
   "ui_hour": "Heure",
   "ui_minutes": "Minutes",
+  "ui_clouds_opacity": "Opacité des nuages",
+  "ui_clouds_opacity_info": "N'affecte que la couche de nuages visible à très haute altitude",
   "ui_freeze_time": "Figer l'heure",
   "ui_weather": "Météo",
   "ui_choose_weather": "Choisissez la météo que vous souhaitez",

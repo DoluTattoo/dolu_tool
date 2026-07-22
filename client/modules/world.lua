@@ -72,6 +72,12 @@ RegisterNUICallback('dolu_tool:setWeather', function(weatherName, cb)
     setWeather(weatherName)
 end)
 
+-- NUI sends 0-100, SetCloudsAlpha expects a float (division keeps it one)
+RegisterNUICallback('dolu_tool:setCloudsOpacity', function(opacity, cb)
+    cb(1)
+    SetCloudsAlpha((tonumber(opacity) or 100) / 100)
+end)
+
 RegisterNUICallback('dolu_tool:setClock', function(clock, cb)
     cb(1)
     setClock(clock.hour, clock.minute)

@@ -57,6 +57,8 @@
   "ui_sync": "Sync",
   "ui_hour": "Hora",
   "ui_minutes": "Minutos",
+  "ui_clouds_opacity": "Opacidade das nuvens",
+  "ui_clouds_opacity_info": "Afeta apenas a camada de nuvens visível em altitudes muito elevadas",
   "ui_freeze_time": "Parar tempo",
   "ui_weather": "Clima",
   "ui_choose_weather": "Escolher um clima",

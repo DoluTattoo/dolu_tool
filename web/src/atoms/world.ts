@@ -3,6 +3,7 @@ import { atom, useAtomValue } from 'jotai'
 export const worldHourAtom = atom<number>(0)
 export const worldMinuteAtom = atom<number>(0)
 export const worldWeatherAtom = atom<string>('Neutral')
+export const worldCloudsOpacityAtom = atom<number>(100)
 
 export const worldFreezeTimeAtom = atom<boolean>(false)
 export const worldFreezeWeatherAtom = atom<boolean>(false)

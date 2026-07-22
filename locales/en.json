@@ -57,6 +57,8 @@
   "ui_sync": "Sync",
   "ui_hour": "Hour",
   "ui_minutes": "Minutes",
+  "ui_clouds_opacity": "Clouds opacity",
+  "ui_clouds_opacity_info": "Only affects the cloud layer visible at very high altitude",
   "ui_freeze_time": "Freeze time",
   "ui_weather": "Weather",
   "ui_choose_weather": "Pick a weather type",

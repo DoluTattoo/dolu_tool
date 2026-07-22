@@ -57,6 +57,8 @@
   "ui_sync": "同期",
   "ui_hour": "時",
   "ui_minutes": "分",
+  "ui_clouds_opacity": "雲の不透明度",
+  "ui_clouds_opacity_info": "非常に高い高度で見える雲のレイヤーにのみ影響します",
   "ui_freeze_time": "時間を停止",
   "ui_weather": "天気",
   "ui_choose_weather": "天気を選択",
