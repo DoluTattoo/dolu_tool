@@ -26,6 +26,7 @@ client_scripts {
     'client/utils.lua',
     'client/nui.lua',
     'client/controls.lua',
+    'client/instructionalButtons.lua',
     'client/commands.lua',
     'client/interior.lua',
     'client/threads.lua',
