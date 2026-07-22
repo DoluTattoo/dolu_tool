@@ -1,6 +1,9 @@
 -- Instructional buttons (noclip & menu camera controls)
 
+local KVP_KEY <const> = 'dolu_tool:showInstructionalButtons'
+
 local scaleform
+local displayEnabled = GetResourceKvpString(KVP_KEY) ~= 'false'
 
 local function InstructionalButton(controlButton, text)
     ScaleformMovieMethodAddParamPlayerNameString(controlButton)
@@ -65,7 +68,7 @@ CreateThread(function()
         local canLook = (Client.isMenuOpen or Client.gizmoEntity) and true or false
         local objectTab = (Client.isMenuOpen and Client.currentTab == 'object') and true or false
 
-        if noclip or canLook then
+        if displayEnabled and (noclip or canLook) then
             if not scaleform then
                 scaleform = RequestScaleformMovie("instructional_buttons")
 
@@ -92,4 +95,16 @@ CreateThread(function()
             Wait(200)
         end
     end
+end)
+
+-- NUI callbacks (Settings tab)
+
+RegisterNUICallback('dolu_tool:getInstructionalButtons', function(_, cb)
+    cb(displayEnabled)
+end)
+
+RegisterNUICallback('dolu_tool:setInstructionalButtons', function(state, cb)
+    displayEnabled = state == true
+    SetResourceKvp(KVP_KEY, displayEnabled and 'true' or 'false')
+    cb(1)
 end)

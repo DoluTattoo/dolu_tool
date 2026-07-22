@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { ActionIcon, Alert, Box, Button, Group, Kbd, Paper, SimpleGrid, Space, Stack, Text, Tooltip, UnstyledButton } from '@mantine/core'
+import { ActionIcon, Alert, Box, Button, Group, Kbd, Paper, SimpleGrid, Space, Stack, Switch, Text, Tooltip, UnstyledButton } from '@mantine/core'
 import { MdRefresh, MdWarningAmber } from 'react-icons/md'
 import { IoClose } from 'react-icons/io5'
 import { useAtom } from 'jotai'
@@ -23,6 +23,7 @@ const Settings: React.FC = () => {
   const [keybinds, setKeybinds] = useAtom(keybindsAtom)
   const [capturingName, setCapturingName] = useState<string | null>(null)
   const capturingRef = useRef<string | null>(null)
+  const [showInstructionalButtons, setShowInstructionalButtons] = useState(true)
 
   // Load the current keybinds every time the tab is opened.
   useEffect(() => {
@@ -30,6 +31,18 @@ const Settings: React.FC = () => {
       if (Array.isArray(list)) setKeybinds(list)
     })
   }, [setKeybinds])
+
+  // Load the persisted display settings.
+  useEffect(() => {
+    fetchNui<boolean>('dolu_tool:getInstructionalButtons').then((state) => {
+      setShowInstructionalButtons(state === true)
+    })
+  }, [])
+
+  const toggleInstructionalButtons = (checked: boolean) => {
+    setShowInstructionalButtons(checked)
+    fetchNui('dolu_tool:setInstructionalButtons', checked)
+  }
 
   const stopCapture = () => {
     capturingRef.current = null
@@ -228,6 +241,31 @@ const Settings: React.FC = () => {
             )
           })}
         </Stack>
+      </Paper>
+
+      <Paper p='md'>
+        <Box>
+          <Text fz={20} fw={600}>{locale.ui_display}</Text>
+          <Text fz='sm' c='dimmed'>{locale.ui_display_description}</Text>
+        </Box>
+
+        <Space h='md' />
+
+        <Paper px='md' py='sm' withBorder radius='md'>
+          <Group justify='space-between' align='center' wrap='nowrap' gap='md'>
+            <Box style={{ minWidth: 0 }}>
+              <Text fw={500}>{locale.ui_instructional_buttons}</Text>
+              <Text fz='xs' c='dimmed'>{locale.ui_instructional_buttons_desc}</Text>
+            </Box>
+            <Switch
+              checked={showInstructionalButtons}
+              onChange={(e) => toggleInstructionalButtons(e.currentTarget.checked)}
+              color='blue.4'
+              size='md'
+              style={{ flexShrink: 0 }}
+            />
+          </Group>
+        </Paper>
       </Paper>
     </SimpleGrid>
   )
