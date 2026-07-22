@@ -24,7 +24,7 @@ local function rotationToDirection(rotation)
 end
 
 local function raycast(maxDistance, ignore)
-    local screenPosition = { x = GetControlNormal(0, 239), y = GetControlNormal(0, 240) }
+    local screenPosition = { x = GetDisabledControlNormal(0, 239), y = GetDisabledControlNormal(0, 240) }
     local pos = GetFinalRenderedCamCoord()
     local rot = GetFinalRenderedCamRot(2)
     local fov = GetFinalRenderedCamFov()
