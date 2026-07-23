@@ -85,9 +85,9 @@ code {
 }
 
 .dolu-menu-nav {
-  width: 80px;
+  width: 66px;
   flex-shrink: 0;
-  padding: var(--mantine-spacing-md);
+  padding: var(--mantine-spacing-md) 0 var(--mantine-spacing-md) var(--mantine-spacing-md);
   background-color: rgba(24, 24, 27, 0.95);
   border-bottom-left-radius: 10px;
 }
