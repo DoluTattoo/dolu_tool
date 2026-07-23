@@ -38,6 +38,7 @@ const TimecycleControls = memo(
       <Select
         size="sm"
         searchable
+        allowDeselect={false}
         nothingFoundMessage={locale.ui_no_timecycle_found}
         data={timecycleList}
         renderOption={({ option }) => {
