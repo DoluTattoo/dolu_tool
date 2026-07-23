@@ -95,6 +95,7 @@
   "ui_peds": "ペッド",
   "ui_no_ped_found": "ペッドが見つかりません",
   "ui_set_by_name": "名前で設定",
+  "ui_no_selection": "アイテムを選択してください",
   "ui_set_ped": "適用",
   "ui_vehicles": "車両",
   "ui_spawn": "スポーン",

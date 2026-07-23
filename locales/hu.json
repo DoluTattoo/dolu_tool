@@ -95,6 +95,7 @@
   "ui_peds": "Ped-ek",
   "ui_no_ped_found": "Nem található ilyen ped",
   "ui_set_by_name": "Beállítás név szerint",
+  "ui_no_selection": "Válassz egy elemet",
   "ui_set_ped": "Alkalmaz",
   "ui_vehicles": "Jármű",
   "ui_spawn": "Spawn",

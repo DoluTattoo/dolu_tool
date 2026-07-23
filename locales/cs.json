@@ -95,6 +95,7 @@
   "ui_peds": "Postavy",
   "ui_no_ped_found": "Postava nenalezena",
   "ui_set_by_name": "Spawnout podle názvu",
+  "ui_no_selection": "Vyberte položku",
   "ui_set_ped": "Potvrdit",
   "ui_vehicles": "Vozidla",
   "ui_spawn": "Spawnout",

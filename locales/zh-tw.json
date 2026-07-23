@@ -95,6 +95,7 @@
   "ui_peds": "遊戲模型",
   "ui_no_ped_found": "無有效的模型數據",
   "ui_set_by_name": "直接應用",
+  "ui_no_selection": "請選擇一個項目",
   "ui_set_ped": "應用",
   "ui_vehicles": "遊戲載具",
   "ui_spawn": "生成",

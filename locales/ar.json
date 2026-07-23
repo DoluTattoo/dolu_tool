@@ -95,6 +95,7 @@
   "ui_peds": "شخصيات",
   "ui_no_ped_found": "لا توجد شخصية",
   "ui_set_by_name": "حدد بالاسم",
+  "ui_no_selection": "اختر عنصرًا",
   "ui_set_ped": "تم",
   "ui_vehicles": "مركبات",
   "ui_spawn": "تنزيل",

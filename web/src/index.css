@@ -109,9 +109,28 @@ code {
   background-color: rgba(255, 255, 255, 0.06);
 }
 
-.dolu-hover-img:hover {
-  border-radius: 5px;
-  background-color: rgba(35, 35, 35, 0.75);
+/* --- Selectable image grid (Peds / Vehicles / Weapons tabs) --- */
+.dolu-grid-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px;
+  min-width: 0;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background-color: rgba(0, 0, 0, 0.18);
+  transition: border-color 150ms ease, background-color 150ms ease;
+}
+
+.dolu-grid-card:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.04);
+}
+
+.dolu-grid-card[data-selected] {
+  border-color: var(--mantine-color-blue-4);
+  background-color: rgba(77, 171, 247, 0.08);
 }
 
 /* --- Accordion (variant=contained): replace the light-grey active item

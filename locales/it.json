@@ -95,6 +95,7 @@
   "ui_peds": "Pedoni",
   "ui_no_ped_found": "Nessun pedone trovato",
   "ui_set_by_name": "Imposta per nome",
+  "ui_no_selection": "Seleziona un elemento",
   "ui_set_ped": "Applica",
   "ui_vehicles": "Veicoli",
   "ui_spawn": "Genera",

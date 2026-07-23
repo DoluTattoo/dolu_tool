@@ -95,6 +95,7 @@
   "ui_peds": "Peds",
   "ui_no_ped_found": "Aucun ped trouvé",
   "ui_set_by_name": "Appliquer par nom",
+  "ui_no_selection": "Sélectionnez un élément",
   "ui_set_ped": "Appliquer",
   "ui_vehicles": "Véhicules",
   "ui_spawn": "Spawn",

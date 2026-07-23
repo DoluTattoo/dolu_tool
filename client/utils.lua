@@ -170,7 +170,7 @@ end
 Utils.loadPage = function(listType, activePage, filter, checkboxes)
     local totalList = Client.data[listType]
     local filteredList = {}
-    local itemPerPage = 6
+    local itemPerPage = 20 -- 4x5 image grid (peds, vehicles, weapons)
 
     if listType == 'locations' then
         itemPerPage = 5

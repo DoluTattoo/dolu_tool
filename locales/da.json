@@ -95,6 +95,7 @@
   "ui_peds": "Peds",
   "ui_no_ped_found": "Ingen ped fundet",
   "ui_set_by_name": "Indstil efter navn",
+  "ui_no_selection": "Vælg et element",
   "ui_set_ped": "Anvend",
   "ui_vehicles": "Køretøjer",
   "ui_spawn": "Spawn",

@@ -95,6 +95,7 @@
   "ui_peds": "เพ็ด",
   "ui_no_ped_found": "ไม่พบเพ็ดที่กำหนด",
   "ui_set_by_name": "เรียกโดยกำหนดชื่อ",
+  "ui_no_selection": "เลือกรายการ",
   "ui_set_ped": "ยืนยัน",
   "ui_vehicles": "ยานพาหนะ",
   "ui_spawn": "เรียก",

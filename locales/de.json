@@ -95,6 +95,7 @@
   "ui_peds": "Pedestrians",
   "ui_no_ped_found": "Kein Ped gefunden",
   "ui_set_by_name": "Nach Namen setzen",
+  "ui_no_selection": "Wähle einen Eintrag",
   "ui_set_ped": "Anwenden",
   "ui_vehicles": "Fahrzeuge",
   "ui_spawn": "Spawnen",
