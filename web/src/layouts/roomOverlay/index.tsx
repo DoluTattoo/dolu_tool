@@ -2,7 +2,7 @@ import { memo, useEffect, useMemo } from 'react'
 import { Box, Divider, Group, Text } from '@mantine/core'
 import { useAtom, useAtomValue } from 'jotai'
 import { RiHomeGearFill } from 'react-icons/ri'
-import { interiorAtom, roomOverlayEnabledAtom, timecycleListAtom } from '../../atoms/interior'
+import { interiorAtom, roomOverlayEnabledAtom, timecycleListAtom, type TimecycleOption } from '../../atoms/interior'
 import { fetchNui } from '../../utils/fetchNui'
 import { useLocales } from '../../providers/LocaleProvider'
 
@@ -49,7 +49,7 @@ const RoomOverlay: React.FC = () => {
   const { locale } = useLocales()
   const [enabled, setEnabled] = useAtom(roomOverlayEnabledAtom)
   const interior = useAtomValue(interiorAtom)
-  const timecycleList = useAtomValue(timecycleListAtom)
+  const [timecycleList, setTimecycleList] = useAtom(timecycleListAtom)
   const room = interior?.currentRoom
 
   // Load the persisted preference once (the client owns the source of truth).
@@ -58,6 +58,32 @@ const RoomOverlay: React.FC = () => {
       setEnabled(state === true)
     })
   }, [setEnabled])
+
+  // Pull the timecycle list so we can resolve names instead of raw hashes.
+  // Right after a resource restart the server data may not be ready yet, so we
+  // retry a few times until the list is populated (independent of the menu).
+  useEffect(() => {
+    let cancelled = false
+    let timer: ReturnType<typeof setTimeout>
+
+    const load = (attempt: number) => {
+      fetchNui<TimecycleOption[]>('dolu_tool:getTimecycleList').then((list) => {
+        if (cancelled) return
+        if (Array.isArray(list) && list.length > 0) {
+          setTimecycleList(list)
+        } else if (attempt < 30) {
+          timer = setTimeout(() => load(attempt + 1), 500)
+        }
+      })
+    }
+
+    load(0)
+
+    return () => {
+      cancelled = true
+      clearTimeout(timer)
+    }
+  }, [setTimecycleList])
 
   const timecycleName = useMemo(() => {
     if (!room?.timecycle) return '—'

@@ -224,6 +224,13 @@ RegisterNUICallback('dolu_tool:getRoomOverlay', function(_, cb)
     cb(Client.roomOverlayEnabled == true)
 end)
 
+-- Lets the NUI pull the timecycle list directly. Returns an empty table until
+-- the server data is loaded, so the overlay can retry and resolve names instead
+-- of showing raw hashes right after a resource restart.
+RegisterNUICallback('dolu_tool:getTimecycleList', function(_, cb)
+    cb(Client.data.timecycles or {})
+end)
+
 RegisterNUICallback('dolu_tool:setRoomOverlay', function(state, cb)
     Client.roomOverlayEnabled = state == true
     SetResourceKvp(ROOM_OVERLAY_KVP, Client.roomOverlayEnabled and 'true' or 'false')
