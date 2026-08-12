@@ -6,6 +6,7 @@ import { useAtom } from 'jotai'
 import { fetchNui } from '../../../../utils/fetchNui'
 import { useLocales } from '../../../../providers/LocaleProvider'
 import { keybindsAtom, Keybind } from '../../../../atoms/keybinds'
+import { roomOverlayEnabledAtom } from '../../../../atoms/interior'
 import { keybindCapture } from '../../../../utils/keybindCapture'
 import { codeToKeyName, formatCombo } from '../../../../utils/keys'
 
@@ -24,6 +25,7 @@ const Settings: React.FC = () => {
   const [capturingName, setCapturingName] = useState<string | null>(null)
   const capturingRef = useRef<string | null>(null)
   const [showInstructionalButtons, setShowInstructionalButtons] = useState(true)
+  const [showRoomOverlay, setShowRoomOverlay] = useAtom(roomOverlayEnabledAtom)
 
   // Load the current keybinds every time the tab is opened.
   useEffect(() => {
@@ -42,6 +44,18 @@ const Settings: React.FC = () => {
   const toggleInstructionalButtons = (checked: boolean) => {
     setShowInstructionalButtons(checked)
     fetchNui('dolu_tool:setInstructionalButtons', checked)
+  }
+
+  // Keep the toggle in sync with the persisted client preference.
+  useEffect(() => {
+    fetchNui<boolean>('dolu_tool:getRoomOverlay').then((state) => {
+      setShowRoomOverlay(state === true)
+    })
+  }, [setShowRoomOverlay])
+
+  const toggleRoomOverlay = (checked: boolean) => {
+    setShowRoomOverlay(checked)
+    fetchNui('dolu_tool:setRoomOverlay', checked)
   }
 
   const stopCapture = () => {
@@ -251,21 +265,39 @@ const Settings: React.FC = () => {
 
         <Space h='md' />
 
-        <Paper px='md' py='sm' withBorder radius='md'>
-          <Group justify='space-between' align='center' wrap='nowrap' gap='md'>
-            <Box style={{ minWidth: 0 }}>
-              <Text fw={500}>{locale.ui_instructional_buttons}</Text>
-              <Text fz='xs' c='dimmed'>{locale.ui_instructional_buttons_desc}</Text>
-            </Box>
-            <Switch
-              checked={showInstructionalButtons}
-              onChange={(e) => toggleInstructionalButtons(e.currentTarget.checked)}
-              color='blue.4'
-              size='md'
-              style={{ flexShrink: 0 }}
-            />
-          </Group>
-        </Paper>
+        <Stack gap='xs'>
+          <Paper px='md' py='sm' withBorder radius='md'>
+            <Group justify='space-between' align='center' wrap='nowrap' gap='md'>
+              <Box style={{ minWidth: 0 }}>
+                <Text fw={500}>{locale.ui_instructional_buttons}</Text>
+                <Text fz='xs' c='dimmed'>{locale.ui_instructional_buttons_desc}</Text>
+              </Box>
+              <Switch
+                checked={showInstructionalButtons}
+                onChange={(e) => toggleInstructionalButtons(e.currentTarget.checked)}
+                color='blue.4'
+                size='md'
+                style={{ flexShrink: 0 }}
+              />
+            </Group>
+          </Paper>
+
+          <Paper px='md' py='sm' withBorder radius='md'>
+            <Group justify='space-between' align='center' wrap='nowrap' gap='md'>
+              <Box style={{ minWidth: 0 }}>
+                <Text fw={500}>{locale.ui_room_overlay}</Text>
+                <Text fz='xs' c='dimmed'>{locale.ui_room_overlay_desc}</Text>
+              </Box>
+              <Switch
+                checked={showRoomOverlay}
+                onChange={(e) => toggleRoomOverlay(e.currentTarget.checked)}
+                color='blue.4'
+                size='md'
+                style={{ flexShrink: 0 }}
+              />
+            </Group>
+          </Paper>
+        </Stack>
       </Paper>
     </SimpleGrid>
   )

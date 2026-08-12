@@ -62,6 +62,8 @@ const mockInterior: InteriorData = {
 }
 
 export const interiorAtom = atom<InteriorData>(mockInterior)
+// Optional, read-only on-screen overlay showing the current room infos
+export const roomOverlayEnabledAtom = atom<boolean>(true)
 export type TimecycleOption = { label: string, value: string, varCount?: number }
 export const timecycleListAtom = atom<TimecycleOption[]>([{label: "Unknown", value: '0'}])
 export const timecycleAtom = atom<string | null>(null)
