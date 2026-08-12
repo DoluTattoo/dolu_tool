@@ -9,6 +9,8 @@
   "model_doesnt_exist": "模型:%s并不存在",
   "copied_coords_clipboard": "坐标苏剧已复制到剪贴板",
   "copied_model_clipboard": "模型哈希值已复制到剪贴板",
+  "copied_model_name_clipboard": "模型名称已复制到剪贴板",
+  "model_name_not_found": "未找到模型名称",
   "press_escape_exit": "键下 'Escape' 退出编辑模式",
   "custom_location_created": "自定义位置数据已成功创建",
   "vehicle_upgraded": "车辆升级改装成功!",

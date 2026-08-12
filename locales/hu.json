@@ -9,6 +9,8 @@
   "model_doesnt_exist": "Ez a modell: %s nem létezik",
   "copied_coords_clipboard": "Koordináta vágólapra másolva",
   "copied_model_clipboard": "Model hash copied to clipboard",
+  "copied_model_name_clipboard": "Modell neve a vágólapra másolva",
+  "model_name_not_found": "A modell neve nem található",
   "press_escape_exit": "Nyomd meg az 'Escape' billentyűt a kilépéshez",
   "custom_location_created": "Egyedi helyszín sikeresen létrehozva",
   "vehicle_upgraded": "Jármű sikeresen felfejlesztve!",

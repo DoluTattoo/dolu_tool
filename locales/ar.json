@@ -9,6 +9,8 @@
   "model_doesnt_exist": "الطراز %s غير موجود",
   "copied_coords_clipboard": "نسخ االموقع إلى الحافظة",
   "copied_model_clipboard": "تم نسخ تجزئة النموذج إلى الحافظة",
+  "copied_model_name_clipboard": "تم نسخ اسم النموذج إلى الحافظة",
+  "model_name_not_found": "لم يتم العثور على اسم النموذج",
   "press_escape_exit": "اضغط على Escape للخروج من وضع التحرير",
   "custom_location_created": "تم إنشاء موقع مخصص بنجاح",
   "vehicle_upgraded": "تمت ترقية السيارة بنجاح!",
