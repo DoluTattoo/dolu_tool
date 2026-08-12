@@ -104,6 +104,24 @@ code {
   overflow-x: hidden;
 }
 
+/* --- Room info overlay (optional, read-only, top-center) --- */
+.dolu-room-overlay {
+  position: absolute;
+  top: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  padding: 8px 18px 9px;
+  background-color: rgba(24, 24, 27, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+  color: var(--mantine-color-dark-1);
+  max-width: 90vw;
+  pointer-events: none;
+  user-select: none;
+}
+
 /* --- Hover helpers (replace v5 sx nested selectors) --- */
 .dolu-hover-row:hover {
   background-color: rgba(255, 255, 255, 0.06);

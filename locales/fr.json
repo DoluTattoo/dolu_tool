@@ -161,6 +161,8 @@
   "ui_display_description": "Personnalisez les éléments de l'interface.",
   "ui_instructional_buttons": "Boutons d'instructions",
   "ui_instructional_buttons_desc": "Afficher les aides de contrôle en bas de l'écran (noclip, caméra, sélection d'objet)",
+  "ui_room_overlay": "Aperçu de la room",
+  "ui_room_overlay_desc": "Afficher un panneau en haut de l'écran avec les infos de la room actuelle (index, nom, flags, timecycle)",
   "ui_keybinds": "Raccourcis",
   "ui_keybinds_description": "Gérez vos raccourcis clavier. Cliquez sur une touche pour la réassigner.",
   "ui_press_key": "Appuyez sur une touche…",
