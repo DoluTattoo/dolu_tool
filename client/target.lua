@@ -7,7 +7,7 @@ CreateThread(function()
     exports.ox_target:addGlobalObject({
         {
             name = 'ox:option0_name',
-            icon = 'fa-solid fa-clipboard-list',
+            icon = 'fa-solid fa-copy',
             label = 'Copy model name',
             distance = 10,
             onSelect = function(data)
@@ -23,7 +23,7 @@ CreateThread(function()
         },
         {
             name = 'ox:option0',
-            icon = 'fa-solid fa-clipboard-list',
+            icon = 'fa-regular fa-copy',
             label = 'Copy model hash',
             distance = 10,
             onSelect = function(data)
@@ -34,7 +34,7 @@ CreateThread(function()
         },
         {
             name = 'ox:option1',
-            icon = 'fa-solid fa-clipboard-list',
+            icon = 'fa-solid fa-location-dot',
             label = 'Copy coords',
             distance = 10,
             onSelect = function(data)
