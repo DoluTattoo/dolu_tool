@@ -9,6 +9,8 @@
   "model_doesnt_exist": "Model %s neexistuje",
   "copied_coords_clipboard": "Souřadnice zkopírovány do schránky",
   "copied_model_clipboard": "Model hash copied to clipboard",
+  "copied_model_name_clipboard": "Název modelu zkopírován do schránky",
+  "model_name_not_found": "Název modelu nebyl nalezen",
   "press_escape_exit": "Zmáčkni 'Escape' pro ukončení 'edit' módu",
   "custom_location_created": "Vlastní lokace úspěšně vytvořena",
   "vehicle_upgraded": "Vozidlo úspěšně vylepšeno!",
