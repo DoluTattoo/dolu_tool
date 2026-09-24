@@ -10,6 +10,7 @@ Client = {
     portalLines = false,
     portalCorners = false,
     portalInfos = false,
+    roomOverlayEnabled = GetResourceKvpString('dolu_tool:showRoomOverlay') ~= 'false',
     interiorId = GetInteriorFromEntity(cache.ped),
     defaultTimecycles = {},
     spawnedEntities = {},
