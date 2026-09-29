@@ -9,6 +9,8 @@
   "model_doesnt_exist": "Model %s nie istnieje",
   "copied_coords_clipboard": "Koordynaty skopiowane do schowka",
   "copied_model_clipboard": "Model hash copied to clipboard",
+  "copied_model_name_clipboard": "Nazwa modelu skopiowana do schowka",
+  "model_name_not_found": "Nie znaleziono nazwy modelu",
   "press_escape_exit": "Naciśnij 'Escape', by wyjść z trybu edycji",
   "custom_location_created": "Własna lokalizacja stworzona pomyślnie",
   "vehicle_upgraded": "Pojazd ulepszony pomyślnie!",

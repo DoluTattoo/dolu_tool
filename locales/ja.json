@@ -9,6 +9,8 @@
   "model_doesnt_exist": "モデル %s は存在しません",
   "copied_coords_clipboard": "座標をクリップボードにコピーしました",
   "copied_model_clipboard": "モデルハッシュをクリップボードにコピーしました",
+  "copied_model_name_clipboard": "モデル名をクリップボードにコピーしました",
+  "model_name_not_found": "モデル名が見つかりません",
   "press_escape_exit": "'Escape'キーを押して編集モードを終了します",
   "custom_location_created": "カスタムロケーションが正常に作成されました",
   "vehicle_upgraded": "車両が正常にアップグレードされました！",

@@ -9,6 +9,8 @@
   "model_doesnt_exist": "กำหนดโมเดล %s ไม่ได้",
   "copied_coords_clipboard": "คัดลอกตำแหน่งพิกัดเรียบร้อยแล้ว",
   "copied_model_clipboard": "คัดลอกแฮชโมเดลเรียบร้อยแล้ว",
+  "copied_model_name_clipboard": "คัดลอกชื่อโมเดลเรียบร้อยแล้ว",
+  "model_name_not_found": "ไม่พบชื่อโมเดล",
   "press_escape_exit": "กด 'Escape' เพื่อออกจากโหมดแก้ไข",
   "custom_location_created": "ได้สร้างพิกัดกำหนดเองเรียบร้อยแล้ว",
   "vehicle_upgraded": "ได้อัพเกรดยานพาหนะเรียบร้อยแล้ว",
