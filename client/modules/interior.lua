@@ -203,14 +203,49 @@ function GetInteriorData(fromThread)
     end
 end
 
-Menu.onTabOpen('interior', function()
-    if Client.timecyclesLoaded then return end
+-- Optional room info overlay (top-center, read-only)
+local ROOM_OVERLAY_KVP <const> = 'dolu_tool:showRoomOverlay'
+
+local function ensureTimecycleList()
+    if Client.timecyclesLoaded or not Client.data.timecycles then return end
 
     SendNUIMessage({
         action = 'setTimecycleList',
         data = Client.data.timecycles
     })
     Client.timecyclesLoaded = true
+end
+
+RegisterNUICallback('dolu_tool:getRoomOverlay', function(_, cb)
+    if Client.roomOverlayEnabled then
+        ensureTimecycleList()
+    end
+
+    cb(Client.roomOverlayEnabled == true)
+end)
+
+-- Lets the NUI pull the timecycle list directly. Returns an empty table until
+-- the server data is loaded, so the overlay can retry and resolve names instead
+-- of showing raw hashes right after a resource restart.
+RegisterNUICallback('dolu_tool:getTimecycleList', function(_, cb)
+    cb(Client.data.timecycles or {})
+end)
+
+RegisterNUICallback('dolu_tool:setRoomOverlay', function(state, cb)
+    Client.roomOverlayEnabled = state == true
+    SetResourceKvp(ROOM_OVERLAY_KVP, Client.roomOverlayEnabled and 'true' or 'false')
+
+    -- Push fresh data immediately so the overlay reflects the current room
+    if Client.roomOverlayEnabled then
+        ensureTimecycleList()
+        GetInteriorData()
+    end
+
+    cb(1)
+end)
+
+Menu.onTabOpen('interior', function()
+    ensureTimecycleList()
 end)
 
 -- Portals display
@@ -321,7 +356,7 @@ CreateThread(function()
     GetInteriorData()
 
     while true do
-        if Client.isMenuOpen then
+        if Client.isMenuOpen or Client.roomOverlayEnabled then
             if Client.interiorId > 0 then
                 GetInteriorData(true)
             else

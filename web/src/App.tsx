@@ -2,6 +2,7 @@ import { Box } from '@mantine/core'
 import { ThreeComponent } from './layouts/gizmo/ThreeComponent'
 import ImgPreview from './layouts/imgPreview'
 import Menu from './layouts/menu'
+import RoomOverlay from './layouts/roomOverlay'
 import { useSuppressContextMenu } from './hooks/useSuppressContextMenu'
 
 const containerStyle: React.CSSProperties = {
@@ -21,6 +22,7 @@ const App: React.FC = () => {
         <Menu />
         <ThreeComponent />
       </Box>
+      <RoomOverlay />
       <ImgPreview />
     </>
   )
