@@ -68,6 +68,24 @@ Utils.getTimecycleModifiers = function()
     return modifiers
 end
 
+--- Natives only replicate from the entity owner: take control first when needed.
+---@param entity number
+---@return boolean
+Utils.requestControl = function(entity)
+    if not NetworkGetEntityIsNetworked(entity) or NetworkHasControlOfEntity(entity) then
+        return true
+    end
+
+    local timeout = GetGameTimer() + 1000
+
+    while not NetworkHasControlOfEntity(entity) and GetGameTimer() < timeout do
+        NetworkRequestControlOfEntity(entity)
+        Wait(50)
+    end
+
+    return NetworkHasControlOfEntity(entity)
+end
+
 -- Teleport functions (thanks to ox_core)
 Utils.freezePlayer = function(state, vehicle)
     local playerId, ped = cache.playerId, cache.ped

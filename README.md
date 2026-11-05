@@ -43,6 +43,9 @@ Please read the [Documentation](https://dolutattoo.github.io/docs/category/dolu_
   - Browse all vanilla peds
   - Preview images
   - Set peds
+  - Spawn peds as scene NPCs and place them using the Gizmo
+  - Edit the components and props of the player or a spawned ped, and copy the outfit as JSON
+  - Play animations and scenarios on the player or a spawned ped, and copy the matching native call
   - Copy name/hash
 ### Vehicles
   - Browse all vanilla vehicles

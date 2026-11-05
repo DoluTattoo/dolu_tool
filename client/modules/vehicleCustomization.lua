@@ -124,22 +124,6 @@ local function sendCustomization(vehicle)
     })
 end
 
---- Natives only replicate from the entity owner: a passenger has to take control first.
-local function requestControl(vehicle)
-    if not NetworkGetEntityIsNetworked(vehicle) or NetworkHasControlOfEntity(vehicle) then
-        return true
-    end
-
-    local timeout = GetGameTimer() + 1000
-
-    while not NetworkHasControlOfEntity(vehicle) and GetGameTimer() < timeout do
-        NetworkRequestControlOfEntity(vehicle)
-        Wait(50)
-    end
-
-    return NetworkHasControlOfEntity(vehicle)
-end
-
 local colourIndexSetters = {
     primary = function(vehicle, value)
         local _, secondary = GetVehicleColours(vehicle)
@@ -265,7 +249,7 @@ RegisterNUICallback('dolu_tool:customizeVehicle', function(data, cb)
 
     if not setter or not vehicle or not DoesEntityExist(vehicle) then return end
 
-    if not requestControl(vehicle) then
+    if not Utils.requestControl(vehicle) then
         lib.notify({
             title = 'Dolu Tool',
             description = locale('vehicle_no_control'),

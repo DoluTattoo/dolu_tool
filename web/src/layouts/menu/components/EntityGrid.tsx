@@ -15,6 +15,8 @@ interface EntityGridProps {
   getImageUrl: (name: string) => string
   primaryLabel: string
   onPrimary: (item: EntityGridItem) => void
+  secondaryLabel?: string
+  onSecondary?: (item: EntityGridItem) => void
   emptyText: string
 }
 
@@ -25,7 +27,7 @@ const fallbackImage =
     '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>'
   )
 
-const EntityGrid: React.FC<EntityGridProps> = ({ items, getImageUrl, primaryLabel, onPrimary, emptyText }) => {
+const EntityGrid: React.FC<EntityGridProps> = ({ items, getImageUrl, primaryLabel, onPrimary, secondaryLabel, onSecondary, emptyText }) => {
   const { locale } = useLocales()
   const [selected, setSelected] = useState<EntityGridItem | null>(null)
   const [copied, setCopied] = useState<'name' | 'hash' | null>(null)
@@ -120,6 +122,16 @@ const EntityGrid: React.FC<EntityGridProps> = ({ items, getImageUrl, primaryLabe
             >
               {copied === 'hash' ? locale.ui_copied_hash : locale.ui_copy_hash}
             </Button>
+            {onSecondary && (
+              <Button
+                size='xs'
+                color='blue.4'
+                disabled={!selected}
+                onClick={() => selected && onSecondary(selected)}
+              >
+                {secondaryLabel}
+              </Button>
+            )}
             <Button
               size='xs'
               color='blue.4'
