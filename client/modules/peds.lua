@@ -1,5 +1,32 @@
 -- Peds tab: player model & ped quick actions
 
+local PROP_IDS = { 0, 1, 2, 6, 7 }
+
+-- The ped the player had before the first transformation
+local originalPed
+
+local function setPlayerModel(model)
+    lib.requestModel(model)
+    SetPlayerModel(cache.playerId, model)
+    SetModelAsNoLongerNeeded(model)
+    cache.ped = PlayerPedId()
+end
+
+local function saveOriginalPed()
+    local ped = cache.ped
+    local saved = { model = GetEntityModel(ped), components = {}, props = {} }
+
+    for id = 0, 11 do
+        saved.components[id] = { GetPedDrawableVariation(ped, id), GetPedTextureVariation(ped, id), GetPedPaletteVariation(ped, id) }
+    end
+
+    for _, id in ipairs(PROP_IDS) do
+        saved.props[id] = { GetPedPropIndex(ped, id), GetPedPropTextureIndex(ped, id) }
+    end
+
+    originalPed = saved
+end
+
 local function changePed(model)
     if type(model) == 'string' then model = joaat(model) end
 
@@ -8,11 +35,36 @@ local function changePed(model)
         return
     end
 
-    local playerId = cache.playerId
+    if not originalPed then
+        saveOriginalPed()
+    end
 
-    lib.requestModel(model)
-    SetPlayerModel(playerId, model)
-    cache.ped = PlayerPedId()
+    setPlayerModel(model)
+
+    -- A new player model has no clothes selected until told otherwise
+    SetPedDefaultComponentVariation(cache.ped)
+end
+
+local function restorePed()
+    if not originalPed then return end
+
+    setPlayerModel(originalPed.model)
+
+    local ped = cache.ped
+
+    for id, variation in pairs(originalPed.components) do
+        SetPedComponentVariation(ped, id, variation[1], variation[2], variation[3])
+    end
+
+    for id, prop in pairs(originalPed.props) do
+        if prop[1] < 0 then
+            ClearPedProp(ped, id)
+        else
+            SetPedPropIndex(ped, id, prop[1], prop[2], true)
+        end
+    end
+
+    originalPed = nil
 end
 
 Menu.onTabOpen('peds', function()
@@ -23,8 +75,13 @@ Menu.onTabOpen('peds', function()
 end)
 
 RegisterNUICallback('dolu_tool:changePed', function(data, cb)
-    cb(1)
     changePed(data.name)
+    cb(originalPed ~= nil)
+end)
+
+RegisterNUICallback('dolu_tool:restorePed', function(_, cb)
+    restorePed()
+    cb(originalPed ~= nil)
 end)
 
 RegisterNUICallback('dolu_tool:cleanPed', function(_, cb)
