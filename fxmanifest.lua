@@ -33,6 +33,7 @@ client_scripts {
     'client/modules/object.lua',
     'client/modules/peds.lua',
     'client/modules/vehicles.lua',
+    'client/modules/vehicleCustomization.lua',
     'client/modules/weapons.lua',
     'client/modules/world.lua',
 }

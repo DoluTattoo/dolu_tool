@@ -48,6 +48,8 @@ Please read the [Documentation](https://dolutattoo.github.io/docs/category/dolu_
   - Browse all vanilla vehicles
   - Preview images
   - Spawn vehicle
+  - Customize the current vehicle live: parts, wheels, paint, liveries, lights, neons, plate and extras
+  - Copy the vehicle properties as JSON
   - Copy name/hash
 ### Weapons
   - Browse all vanilla weapons

@@ -1,7 +1,8 @@
-import { Button, Center, Group, Pagination, Stack, Text } from '@mantine/core'
+import { Button, Center, Group, Pagination, SegmentedControl, Stack, Text } from '@mantine/core'
 import { useAtom } from 'jotai'
-import { getSearchVehicleInput, vehiclesPageCountAtom, vehiclesActivePageAtom, vehiclesPageContentAtom, VehicleProp } from '../../../../atoms/vehicle'
+import { getSearchVehicleInput, vehiclesPageCountAtom, vehiclesActivePageAtom, vehiclesPageContentAtom, vehicleViewAtom, VehicleProp } from '../../../../atoms/vehicle'
 import VehicleSearch from './components/vehicleListSearch'
+import VehicleCustomizationPanel from './components/VehicleCustomizationPanel'
 import EntityGrid from '../../components/EntityGrid'
 import { fetchNui } from '../../../../utils/fetchNui'
 import { useNuiEvent } from '../../../../hooks/useNuiEvent'
@@ -13,6 +14,7 @@ const Vehicle: React.FC = () => {
   const [pageContent, setPageContent] = useAtom(vehiclesPageContentAtom)
   const [pageCount, setPageCount] = useAtom(vehiclesPageCountAtom)
   const [activePage, setPage] = useAtom(vehiclesActivePageAtom)
+  const [view, setView] = useAtom(vehicleViewAtom)
 
   useNuiEvent('setPageContent', (data: {type: string, content: VehicleProp[], maxPages: number}) => {
     if (data.type === 'vehicles') {
@@ -23,38 +25,54 @@ const Vehicle: React.FC = () => {
 
   return(
     <Stack h='100%' gap='md'>
-      <Text fz={20}>{locale.ui_vehicles}</Text>
-      <Group grow>
-        <VehicleSearch/>
-        <Button
-          disabled={searchVehicleValue === ''}
-          tt='uppercase'
-          variant='light'
+      <Group justify='space-between' wrap='nowrap'>
+        <Text fz={20}>{locale.ui_vehicles}</Text>
+        <SegmentedControl
+          size='xs'
           color='blue.4'
-          onClick={() => fetchNui('dolu_tool:spawnVehicle', searchVehicleValue)}
-        >
-          {locale.ui_spawn_by_name}
-        </Button>
-      </Group>
-      <EntityGrid
-        items={pageContent}
-        getImageUrl={(name) => `https://gta-images.s3.fr-par.scw.cloud/vehicle/${name.toLowerCase()}.webp`}
-        primaryLabel={locale.ui_spawn}
-        onPrimary={(item) => fetchNui('dolu_tool:spawnVehicle', item.name)}
-        emptyText={locale.ui_no_vehicle_found}
-      />
-      <Center>
-        <Pagination
-          color='blue.4'
-          size='sm'
-          value={activePage}
-          onChange={(value) => {
-            fetchNui('dolu_tool:loadPages', { type: 'vehicles', activePage: value, filter: searchVehicleValue })
-            setPage(value)
-          }}
-          total={pageCount}
+          value={view}
+          onChange={setView}
+          data={[
+            { value: 'browse', label: locale.ui_vehicle_browse },
+            { value: 'customize', label: locale.ui_vehicle_customize },
+          ]}
         />
-      </Center>
+      </Group>
+      {view === 'customize' ? <VehicleCustomizationPanel /> : (
+        <>
+          <Group grow>
+            <VehicleSearch/>
+            <Button
+              disabled={searchVehicleValue === ''}
+              tt='uppercase'
+              variant='light'
+              color='blue.4'
+              onClick={() => fetchNui('dolu_tool:spawnVehicle', searchVehicleValue)}
+            >
+              {locale.ui_spawn_by_name}
+            </Button>
+          </Group>
+          <EntityGrid
+            items={pageContent}
+            getImageUrl={(name) => `https://gta-images.s3.fr-par.scw.cloud/vehicle/${name.toLowerCase()}.webp`}
+            primaryLabel={locale.ui_spawn}
+            onPrimary={(item) => fetchNui('dolu_tool:spawnVehicle', item.name)}
+            emptyText={locale.ui_no_vehicle_found}
+          />
+          <Center>
+            <Pagination
+              color='blue.4'
+              size='sm'
+              value={activePage}
+              onChange={(value) => {
+                fetchNui('dolu_tool:loadPages', { type: 'vehicles', activePage: value, filter: searchVehicleValue })
+                setPage(value)
+              }}
+              total={pageCount}
+            />
+          </Center>
+        </>
+      )}
     </Stack>
   )
 
