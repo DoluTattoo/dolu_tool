@@ -24,12 +24,6 @@ export interface PedVariation {
   textureCount: number,
 }
 
-export interface PedTarget {
-  id: string,
-  name?: string,
-  handle?: number,
-}
-
 export interface PedAnimationClip {
   dict: string,
   clip: string,
@@ -38,8 +32,6 @@ export interface PedAnimationClip {
 export type PedActiveAnimation = (PedAnimationClip & { flags: number, scenario?: undefined }) | { scenario: string, dict?: undefined, clip?: undefined }
 
 export interface PedEditorState {
-  target: string,
-  targets: PedTarget[],
   model: string,
   components: PedVariation[],
   props: PedVariation[],
@@ -55,10 +47,8 @@ export interface PedAnimationForm extends PedAnimationClip {
   startPhase: number,
 }
 
-export const PLAYER_TARGET = 'player'
-
 export const pedViewAtom = atom<string>('browse')
-export const pedTargetAtom = atom<string>(PLAYER_TARGET)
+export const pedTransformedAtom = atom<boolean>(false)
 export const pedEditorAtom = atom<PedEditorState | null>(null)
 export const pedAnimationFormAtom = atom<PedAnimationForm>({
   dict: '',

@@ -1,12 +1,11 @@
--- Peds tab: appearance & animations of the player or a spawned ped
+-- Peds tab: appearance & animations of the player's ped
 
-local PLAYER_TARGET = 'player'
 local PROP_IDS = { 0, 1, 2, 6, 7 }
 local RECENT_KVP = 'dolu_tool:recentAnimations'
 local MAX_RECENT = 10
 local ANIM_START_DELAY = 250 -- The task needs a moment before the game reports it as playing
 
-local activeAnimations = {}
+local activeAnimation = false
 
 local function getRecentAnimations()
     return json.decode(GetResourceKvpString(RECENT_KVP) or '[]')
@@ -22,43 +21,6 @@ local function addRecentAnimation(dict, clip)
     end
 
     SetResourceKvp(RECENT_KVP, json.encode(recent))
-end
-
-local function getSpawnedPed(target)
-    local entity = Client.spawnedEntities[target]
-
-    if entity and DoesEntityExist(entity.handle) and IsEntityAPed(entity.handle) then
-        return entity
-    end
-end
-
---- Falls back on the player when the target was deleted.
-local function resolveTarget(target)
-    local entity = getSpawnedPed(target)
-
-    if entity then return entity.handle, target end
-
-    return cache.ped, PLAYER_TARGET
-end
-
-local function getTargets()
-    local spawnedPeds = {}
-
-    for id in pairs(Client.spawnedEntities) do
-        local entity = getSpawnedPed(id)
-
-        if entity then
-            spawnedPeds[#spawnedPeds + 1] = { id = id, name = entity.name, handle = entity.handle }
-        end
-    end
-
-    table.sort(spawnedPeds, function(a, b)
-        return a.id < b.id
-    end)
-
-    table.insert(spawnedPeds, 1, { id = PLAYER_TARGET })
-
-    return spawnedPeds
 end
 
 local function getComponents(ped)
@@ -97,36 +59,32 @@ local function getProps(ped)
     return props
 end
 
-local function getActiveAnimation(ped, target)
-    local animation = activeAnimations[target]
-
-    if not animation then return false end
+local function getActiveAnimation(ped)
+    if not activeAnimation then return false end
 
     local playing
 
-    if animation.scenario then
+    if activeAnimation.scenario then
         playing = IsPedUsingAnyScenario(ped)
     else
-        playing = IsEntityPlayingAnim(ped, animation.dict, animation.clip, 3)
+        playing = IsEntityPlayingAnim(ped, activeAnimation.dict, activeAnimation.clip, 3)
     end
 
-    if playing then return animation end
+    if not playing then
+        activeAnimation = false
+    end
 
-    activeAnimations[target] = nil
-
-    return false
+    return activeAnimation
 end
 
-local function getEditorState(requestedTarget)
-    local ped, target = resolveTarget(requestedTarget)
+local function getEditorState()
+    local ped = cache.ped
 
     return {
-        target = target,
-        targets = getTargets(),
         model = GetEntityArchetypeName(ped),
         components = getComponents(ped),
         props = getProps(ped),
-        animation = getActiveAnimation(ped, target),
+        animation = getActiveAnimation(ped),
         recentAnimations = getRecentAnimations()
     }
 end
@@ -140,36 +98,21 @@ local function notifyError(description)
     })
 end
 
-local function getControlledPed(requestedTarget)
-    local ped, target = resolveTarget(requestedTarget)
-
-    if Utils.requestControl(ped) then return ped, target end
-
-    notifyError(locale('ped_no_control'))
-end
-
 --- Registers an editor action: every action replies with the fresh editor state,
 --- so the UI always reflects the game, even when the action failed.
 local function registerAction(name, action)
     RegisterNUICallback(name, function(data, cb)
-        local ped, target = getControlledPed(data.target)
-
-        if ped then
-            action(ped, data, target)
-        end
-
-        cb(getEditorState(data.target))
+        action(cache.ped, data)
+        cb(getEditorState())
     end)
 end
 
-RegisterNUICallback('dolu_tool:getPedEditor', function(target, cb)
-    cb(getEditorState(target))
+RegisterNUICallback('dolu_tool:getPedEditor', function(_, cb)
+    cb(getEditorState())
 end)
 
-RegisterNUICallback('dolu_tool:getPedAnimation', function(requestedTarget, cb)
-    local ped, target = resolveTarget(requestedTarget)
-
-    cb(getActiveAnimation(ped, target))
+RegisterNUICallback('dolu_tool:getPedAnimation', function(_, cb)
+    cb(getActiveAnimation(cache.ped))
 end)
 
 registerAction('dolu_tool:setPedComponent', function(ped, data)
@@ -194,7 +137,7 @@ registerAction('dolu_tool:randomizePedAppearance', function(ped)
     SetPedRandomProps(ped)
 end)
 
-registerAction('dolu_tool:playPedAnimation', function(ped, data, target)
+registerAction('dolu_tool:playPedAnimation', function(ped, data)
     local dict, clip = data.dict, data.clip
 
     if not DoesAnimDictExist(dict) then
@@ -212,27 +155,25 @@ registerAction('dolu_tool:playPedAnimation', function(ped, data, target)
     TaskPlayAnim(ped, dict, clip, data.blendIn + 0.0, data.blendOut + 0.0, data.duration, data.flags, data.startPhase + 0.0, false, false, false)
     RemoveAnimDict(dict)
 
-    activeAnimations[target] = { dict = dict, clip = clip, flags = data.flags }
+    activeAnimation = { dict = dict, clip = clip, flags = data.flags }
     addRecentAnimation(dict, clip)
     Wait(ANIM_START_DELAY)
 end)
 
-registerAction('dolu_tool:playPedScenario', function(ped, data, target)
+registerAction('dolu_tool:playPedScenario', function(ped, data)
     ClearPedTasks(ped)
     TaskStartScenarioInPlace(ped, data.scenario, 0, true)
 
-    activeAnimations[target] = { scenario = data.scenario }
+    activeAnimation = { scenario = data.scenario }
     Wait(ANIM_START_DELAY)
 end)
 
-registerAction('dolu_tool:stopPedAnimation', function(ped, _, target)
-    local animation = activeAnimations[target]
-
+registerAction('dolu_tool:stopPedAnimation', function(ped)
     -- Upper body and secondary clips are not stopped by ClearPedTasks
-    if animation and animation.clip then
-        StopAnimTask(ped, animation.dict, animation.clip, 1.0)
+    if activeAnimation and activeAnimation.clip then
+        StopAnimTask(ped, activeAnimation.dict, activeAnimation.clip, 1.0)
     end
 
     ClearPedTasks(ped)
-    activeAnimations[target] = nil
+    activeAnimation = false
 end)

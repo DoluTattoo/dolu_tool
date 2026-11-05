@@ -64,8 +64,7 @@ const CopyCodeButton: React.FC<{ code: string, disabled: boolean }> = ({ code, d
 const PedAnimations: React.FC<{
   editor: PedEditorState,
   apply: (action: string, payload?: object) => Promise<void>,
-  target: string,
-}> = ({ editor, apply, target }) => {
+}> = ({ editor, apply }) => {
   const { locale } = useLocales()
   const [form, setForm] = useAtom(pedAnimationFormAtom)
   const [scenario, setScenario] = useAtom(pedScenarioAtom)
@@ -80,13 +79,13 @@ const PedAnimations: React.FC<{
     if (!isPlaying) return
 
     const timer = setInterval(() => {
-      fetchNui<PedActiveAnimation | false>('dolu_tool:getPedAnimation', target).then((animation) => {
+      fetchNui<PedActiveAnimation | false>('dolu_tool:getPedAnimation').then((animation) => {
         setEditor((previous) => previous && { ...previous, animation })
       })
     }, STATUS_REFRESH_INTERVAL)
 
     return () => clearInterval(timer)
-  }, [isPlaying, target])
+  }, [isPlaying])
 
   const numberField = (key: 'blendIn' | 'blendOut' | 'duration' | 'startPhase', label: string, integer = false) => (
     <NumberInput

@@ -45,8 +45,8 @@ RegisterNUICallback('dolu_tool:tabSelected', function(newTab, cb)
 
     Client.currentTab = newTab
 
-    -- If exiting a tab that can use the gizmo while it is enabled, set gizmo disabled
-    if (previousTab == 'object' or previousTab == 'peds') and newTab ~= previousTab then
+    -- If exiting object tab while gizmo is enabled, set gizmo disabled
+    if previousTab == 'object' and newTab ~= 'object' then
         SendNUIMessage({
             action = 'setGizmoEntity',
             data = {}

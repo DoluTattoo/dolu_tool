@@ -1,6 +1,6 @@
 import { Button, Center, Group, Pagination, SegmentedControl, Stack, Text } from '@mantine/core'
 import { useAtom } from 'jotai'
-import { getSearchPedInput, PedProp, pedsActivePageAtom, pedsPageContentAtom, pedsPageCountAtom, pedViewAtom } from '../../../../atoms/ped'
+import { getSearchPedInput, PedProp, pedsActivePageAtom, pedsPageContentAtom, pedsPageCountAtom, pedTransformedAtom, pedViewAtom } from '../../../../atoms/ped'
 import PedSearch from './components/pedListSearch'
 import PedEditorPanel from './components/PedEditorPanel'
 import EntityGrid from '../../components/EntityGrid'
@@ -15,6 +15,11 @@ const Ped: React.FC = () => {
   const [pageCount, setPageCount] = useAtom(pedsPageCountAtom)
   const [activePage, setPage] = useAtom(pedsActivePageAtom)
   const [view, setView] = useAtom(pedViewAtom)
+  const [transformed, setTransformed] = useAtom(pedTransformedAtom)
+
+  const changePed = (name: string) => {
+    fetchNui<boolean>('dolu_tool:changePed', { name }).then(setTransformed)
+  }
 
   useNuiEvent('setPageContent', (data: {type: string, content: PedProp[], maxPages: number}) => {
     if (data.type === 'peds') {
@@ -48,18 +53,25 @@ const Ped: React.FC = () => {
               tt='uppercase'
               variant='light'
               color='blue.4'
-              onClick={() => { fetchNui('dolu_tool:changePed', { name: `${searchPedValue}` }) }}
+              onClick={() => changePed(searchPedValue)}
             >
               {locale.ui_set_by_name}
+            </Button>
+            <Button
+              disabled={!transformed}
+              tt='uppercase'
+              variant='light'
+              color='red.4'
+              onClick={() => { fetchNui<boolean>('dolu_tool:restorePed').then(setTransformed) }}
+            >
+              {locale.ui_ped_restore}
             </Button>
           </Group>
           <EntityGrid
             items={pageContent}
             getImageUrl={(name) => `https://gta-images.s3.fr-par.scw.cloud/ped/${name.toLowerCase()}.webp`}
             primaryLabel={locale.ui_set_ped}
-            onPrimary={(item) => { fetchNui('dolu_tool:changePed', { name: item.name, hash: item.hash }) }}
-            secondaryLabel={locale.ui_spawn}
-            onSecondary={(item) => { fetchNui('dolu_tool:addEntity', item.name) }}
+            onPrimary={(item) => changePed(item.name)}
             emptyText={locale.ui_no_ped_found}
           />
           <Center>

@@ -47,21 +47,6 @@ local function raycast(maxDistance, ignore)
     return result, hit, endCoords, surfaceNormal, entityhit
 end
 
---- Peds cannot be created as objects: the game would create an invisible entity.
-local function createEntity(model, coords, isNetworked)
-    if not IsModelAPed(model) then
-        return CreateObjectNoOffset(model, coords.x, coords.y, coords.z, isNetworked, isNetworked, false)
-    end
-
-    local ped = CreatePed(4, model, coords.x, coords.y, coords.z, 0.0, isNetworked, true)
-
-    -- Keep the ped in place while setting up a scene
-    SetBlockingOfNonTemporaryEvents(ped, true)
-    SetEntityInvincible(ped, true)
-
-    return ped
-end
-
 local function updateNuiObjectList()
     local entityTable = {}
 
@@ -80,9 +65,6 @@ local function updateNuiObjectList()
         }
     })
 end
-
--- Entities can also be spawned from the Peds tab
-Menu.onTabOpen('object', updateNuiObjectList)
 
 RegisterNUICallback('dolu_tool:selectEntity', function(_, cb)
     cb(1)
@@ -189,7 +171,7 @@ RegisterNUICallback('dolu_tool:addEntity', function(modelName, cb)
     local cameraCoord = GetFinalRenderedCamCoord()
     local direction = rotationToDirection(cameraRotation)
     local coords = vec3(cameraCoord.x + direction.x * distance, cameraCoord.y + direction.y * distance, cameraCoord.z + direction.z * distance)
-    local obj = createEntity(model, coords, true)
+    local obj = CreateObjectNoOffset(model, coords.x, coords.y, coords.z, true, true, false)
     local entityId = generateUniqueId()
 
     Entity(obj).state:set('entityId', entityId, false)
@@ -280,7 +262,7 @@ RegisterNUICallback('dolu_tool:gizmoDragStart', function(data, cb)
         -- Create duplicate at current position
         local coords = vec3(data.position.x, data.position.y, data.position.z)
         local rotation = vec3(data.rotation.x, data.rotation.y, data.rotation.z)
-        local obj = createEntity(model, coords, true)
+        local obj = CreateObjectNoOffset(model, coords.x, coords.y, coords.z, true, true, false)
         local newEntityId = generateUniqueId()
 
         Entity(obj).state:set('entityId', newEntityId, false)
@@ -466,7 +448,7 @@ RegisterNUICallback('dolu_tool:setEntityModel', function(data, cb)
 
         lib.requestModel(model)
 
-        local obj = createEntity(model, currentPos, false)
+        local obj = CreateObjectNoOffset(model, currentPos.x, currentPos.y, currentPos.z, false, false, false)
         SetEntityRotation(obj, currentRot.x, currentRot.y, currentRot.z, 2, false)
 
         entity.handle = obj
@@ -645,16 +627,7 @@ RegisterNUICallback('dolu_tool:snapEntityToGround', function(data, cb)
         })
     end
 
-    if IsEntityAPed(data.handle) then
-        local coords = GetEntityCoords(data.handle)
-        local found, groundZ = GetGroundZFor_3dCoord(coords.x, coords.y, coords.z + 1.0, false)
-
-        if found then
-            SetEntityCoords(data.handle, coords.x, coords.y, groundZ, false, false, false, false)
-        end
-    else
-        PlaceObjectOnGroundProperly(data.handle)
-    end
+    PlaceObjectOnGroundProperly(data.handle)
 
     data.position = GetEntityCoords(data.handle)
     data.rotation = GetEntityRotation(data.handle)
