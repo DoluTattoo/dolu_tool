@@ -9,6 +9,8 @@
   "model_doesnt_exist": "Model %s existiert nicht",
   "copied_coords_clipboard": "Koordinaten in die Zwischenablage kopiert",
   "copied_model_clipboard": "Model Hash in die Zwischenablage kopiert",
+  "copied_model_name_clipboard": "Modellname in die Zwischenablage kopiert",
+  "model_name_not_found": "Modellname nicht gefunden",
   "press_escape_exit": "Drücke 'Escape', um den Bearbeitungsmodus zu verlassen",
   "custom_location_created": "Benutzerdefinierter Ort erfolgreich erstellt",
   "vehicle_upgraded": "Fahrzeug erfolgreich aufgerüstet!",

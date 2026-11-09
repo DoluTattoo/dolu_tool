@@ -9,6 +9,8 @@
   "model_doesnt_exist": "Model %s findes ikke",
   "copied_coords_clipboard": "Koordinater kopieret til udklipsholder",
   "copied_model_clipboard": "Model-hash kopieret til udklipsholder",
+  "copied_model_name_clipboard": "Modelnavn kopieret til udklipsholder",
+  "model_name_not_found": "Modelnavn ikke fundet",
   "press_escape_exit": "Tryk på 'Escape' for at afslutte redigeringsfunktionen",
   "custom_location_created": "Brugerdefineret placering oprettet!",
   "vehicle_upgraded": "Køretøj opgraderet!",

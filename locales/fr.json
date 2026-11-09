@@ -9,6 +9,8 @@
   "model_doesnt_exist": "Le model %s n'existe pas",
   "copied_coords_clipboard": "Coordonnées copiée dans le presse-papier",
   "copied_model_clipboard": "Model hash copied to clipboard",
+  "copied_model_name_clipboard": "Nom du modèle copié dans le presse-papier",
+  "model_name_not_found": "Nom du modèle introuvable",
   "press_escape_exit": "Appuyer sur 'Echap' pour sortir du mode d'édition",
   "custom_location_created": "Posiiton custom sauvegardée",
   "vehicle_upgraded": "Véhicule amélioré",
